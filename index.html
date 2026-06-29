@@ -269,10 +269,52 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .cov-fill{height:100%;background:var(--chart);border-radius:4px;width:0;transition:width 1.1s ease}
 .cov-v{width:60px;text-align:right;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0}
 
+/* AI AGENTS PAGE */
+.agent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ag-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.ag-card:hover{border-color:#444;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.ag-card.expanded{grid-column:span 3;border-color:var(--chart)}
+.ag-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+.ag-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border)}
+.ag-ico svg{width:22px;height:22px}
+.ag-nm{font-size:15px;font-weight:700;margin-bottom:2px}
+.ag-role{font-size:11px;color:var(--muted);letter-spacing:.5px}
+.ag-desc{font-size:12px;color:var(--muted2);line-height:1.55;margin-bottom:12px}
+.ag-stats{display:flex;gap:8px;flex-wrap:wrap}
+.ag-stat{padding:4px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:10.5px;display:flex;align-items:center;gap:5px}
+.ag-stat .n{font-weight:800;color:var(--chart);font-variant-numeric:tabular-nums}
+.ag-expand{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.ag-card.expanded .ag-expand{display:block}
+.ag-detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.ag-dcard{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px}
+.ag-dcard .dl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.ag-dcard .dv{font-size:22px;font-weight:900;color:var(--chart);margin-bottom:2px}
+.ag-dcard .dd{font-size:11px;color:var(--muted2);line-height:1.4}
+.ag-kpis{display:flex;flex-wrap:wrap;gap:6px}
+.ag-kpi{padding:5px 10px;background:#111;border:1px solid #222;border-radius:5px;font-size:10px;color:var(--muted2)}
+.ag-kpi b{color:var(--text);font-weight:600}
+.ag-badge{position:absolute;top:14px;right:14px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase}
+.ag-badge.live{background:#0a2e1a;color:var(--pos)}
+.ag-badge.ready{background:#1a1a0a;color:var(--warn)}
+.ag-badge.build{background:#1a1a2e;color:var(--teal)}
+.arch-flow{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:20px 0}
+.arch-node{padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:11px;font-weight:600;text-align:center;min-width:90px}
+.arch-node.core{border-color:var(--chart);color:var(--chart)}
+.arch-arrow{color:var(--muted);font-size:16px}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;align-items:flex-start;gap:14px;padding:11px 0;border-bottom:1px solid #202022}
+.tl-item:last-child{border-bottom:none}
+.tl-month{width:60px;flex-shrink:0;font-size:11px;font-weight:700;color:var(--chart)}
+.tl-content{font-size:12px;color:var(--muted2);line-height:1.5}
+.tl-content b{color:var(--text);font-weight:600}
+
 @media(max-width:1200px){
   .metrics{grid-template-columns:repeat(3,1fr)}
   .row2,.row2b,.mapwrap{grid-template-columns:1fr}
   .threats,.mechs{grid-template-columns:1fr}
+  .agent-grid{grid-template-columns:1fr}
+  .ag-card.expanded{grid-column:span 1}
+  .ag-detail-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -311,6 +353,10 @@ tr:hover td{background:rgba(255,255,255,.015)}
       <div class="sb-item" data-page="genz">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
         <span>Gen Z Intelligence</span>
+      </div>
+      <div class="sb-item" data-page="agents">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        <span>AI Agents</span>
       </div>
     </div>
     <div class="sb-foot">
@@ -567,6 +613,36 @@ tr:hover td{background:rgba(255,255,255,.015)}
         </div>
       </section>
 
+      <!-- ============ PAGE 7: AI AGENTS ============ -->
+      <section class="page" id="agents">
+        <div class="eyebrow"><span class="acc"></span>ELECTRA AI AGENT FLEET — 9 AUTONOMOUS SYSTEMS</div>
+        <p style="color:var(--muted);font-size:13px;max-width:680px;margin-bottom:22px">Each agent runs autonomously inside the Electra platform. Click any agent to expand its operational details, KPIs, and live metrics. Together they form the campaign's nervous system.</p>
+        <div class="agent-grid" id="agentGrid"></div>
+        <div class="card" style="margin-top:22px">
+          <div class="card-h"><div class="t">System Architecture</div><div class="meta">How the agents interconnect</div></div>
+          <div class="arch-flow" id="archFlow"></div>
+        </div>
+        <div class="row2b" style="margin-top:18px">
+          <div class="card">
+            <div class="card-h"><div class="t">Combined Vote Impact Model</div><div class="meta">Conservative → Ceiling</div></div>
+            <div id="voteStack"></div>
+            <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:baseline;gap:12px">
+              <span style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600">Total Attributable</span>
+              <span style="font-size:28px;font-weight:900;color:var(--chart)">~1.0 – 2.0M</span>
+              <span style="font-size:12px;color:var(--muted)">vs 233K margin in 2022</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h"><div class="t">Operational Readiness</div><div class="meta">14-month deployment plan</div></div>
+            <div class="timeline" id="timeline"></div>
+            <div style="margin-top:16px;padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+              <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--chart);font-weight:700;margin-bottom:6px">Phase 1 — Live in 30 Days</div>
+              <p style="font-size:12px;color:var(--muted2)">3 counties · KES 35M · 150 agents · 50K IVR surveys · Dashboard v0. Proves the full stack in one ward before national commitment.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
 </div>
@@ -646,7 +722,8 @@ const TITLES={
   threats:['Threat Radar','Active risks with AI-drafted strategic responses'],
   sentiment:['Sentiment & Social','Real-time conversation monitoring across press & social'],
   ground:['Ground Force','46,229-agent field network · live task dispatch'],
-  genz:['Gen Z Intelligence','Youth listening, platforms & engagement engine']
+  genz:['Gen Z Intelligence','Youth listening, platforms & engagement engine'],
+  agents:['AI Agent Fleet','9 autonomous systems powering the campaign nervous system']
 };
 const renderedPages={};
 document.querySelectorAll('.sb-item').forEach(it=>{
@@ -736,6 +813,7 @@ function lazyRender(p){
   if(p==='sentiment')renderSentiment();
   if(p==='ground')renderGround();
   if(p==='genz')renderGenz();
+  if(p==='agents')renderAgents();
 }
 
 function zoneColor(v){
@@ -886,6 +964,143 @@ setInterval(()=>{
   const tf=document.getElementById('taskFeed');
   if(tf){ addTask(tf,TASK_POOL[tp%TASK_POOL.length],true); tp++; }
 }, 12000);
+
+function renderAgents(){
+  const AGENTS=[
+    {id:'dira',nm:'Dira',role:'WARD-LEVEL INTELLIGENCE',status:'live',color:'#C8FF00',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+     desc:'Predictive turnout & persuasion model scoring all 1,450 wards across 47 counties. Live sentiment polling faster than Infotrak/TIFA — reads voter reaction in hours, not weeks.',
+     stats:[{n:'1,450',l:'Wards scored'},{n:'47',l:'Counties'},{n:'9',l:'Zones tracked'},{n:'<6h',l:'Refresh cycle'}],
+     details:[{dl:'MODEL TYPE',dv:'Ensemble',dd:'XGBoost + sentiment NLP on ward-level signals: turnout history, registration delta, social volume, radio call-in tone'},{dl:'DATA SOURCES',dv:'14',dd:'IEBC register, TIFA polls, Africa\'s Talking IVR logs, WhatsApp sentiment, vernacular radio NLP, Google Trends, county budgets'},{dl:'OUTPUT',dv:'Daily',dd:'Ward-tier classification (Defend/Recover/Win/Mine), daily priority task list for agents, resource reallocation alerts'}],
+     kpis:['Prediction accuracy vs by-election backtest','Ward re-tier rate per week','Resource allocation delta per signal','Agent task completion driven by Dira output'],
+     votes:'Efficiency multiplier — aims the whole system'},
+    {id:'ghost',nm:'Ghost-Hunter',role:'VOTER REGISTRATION · SPRINT 0',status:'live',color:'#E84040',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 8v6m-3-3h6"/></svg>',
+     desc:'AI matches register gaps against consented telco/county data to find unregistered-but-persuadable voters in friendly wards. Dispatches 2,000 registration agents before the IEBC window closes.',
+     stats:[{n:'2.6M',l:'New voters (2026)'},{n:'2,000',l:'Reg agents'},{n:'<3wk',l:'Window left'},{n:'Sprint 0',l:'Priority'}],
+     details:[{dl:'REGISTER GAP',dv:'~5.2M',dd:'Estimated eligible-but-unregistered Kenyans remaining after 2026 drive. Friendly-ward share: ~1.8M targetable'},{dl:'CHANNEL MIX',dv:'IVR + Agent',dd:'Vernacular IVR reminder → SMS link to nearest IEBC centre → human agent at markets, churches, boda stages'},{dl:'COMPLIANCE',dv:'DPA 2019',dd:'Consented data only. Registration is a public civic act — no voter-file purchase or scraping involved'}],
+     kpis:['Net registrations per ward vs baseline','Cost per registered voter','Friendly-ward share of new registrations','Agent dispatch-to-registration conversion'],
+     votes:'+150K – 400K new friendly voters'},
+    {id:'kura',nm:'Kura Connect',role:'PERMANENT CONVERSATION ENGINE',status:'ready',color:'#16B866',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3.07 8.63 2 2 0 0 1 2 4.11V2h3a2 2 0 0 1 2 1.72"/><path d="M14.05 2a9 9 0 0 1 8 7.94"/></svg>',
+     desc:'Always-on vernacular IVR/USSD that listens. AI transcribes + sentiment-scores mother-tongue replies in Kikuyu, Luo, Kalenjin, Kamba, Luhya, Swahili, and Sheng. Plus an AI content factory producing thousands of A/B-tested assets per week.',
+     stats:[{n:'12+',l:'Languages'},{n:'50M',l:'Call capacity'},{n:'5K+',l:'Assets/week'},{n:'<3%',l:'Opt-out target'}],
+     details:[{dl:'TECH STACK',dv:'AT + Whisper',dd:'Africa\'s Talking IVR/USSD APIs + fine-tuned Whisper ASR for Kenyan vernaculars + GPT content generation'},{dl:'REACH',dv:'Feature phone',dd:'No smartphone needed. USSD *384#, toll-free IVR promoted on vernacular radio. The rural majority\'s channel.'},{dl:'A/B ENGINE',dv:'Real-time',dd:'Every message variant tested. Winning framings auto-scaled within 24h. Losing variants killed automatically.'}],
+     kpis:['Cost per completed IVR call','Vernacular ASR accuracy (target ≥80%)','Persuadable-tag rate','Sentiment shift per ward after contact'],
+     votes:'+150K – 350K persuasion & turnout'},
+    {id:'rally',nm:'Rally Engine',role:'CROWD → DATABASE CONVERTER',status:'ready',color:'#F59E0B',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><rect x="3" y="18" width="18" height="4" rx="2"/></svg>',
+     desc:'Fills rallies by targeting nearby supporters from the Voter Graph. Captures every attendee as a consented WhatsApp contact on-site. Amplifies clips to vernacular radio in real time. Follows up automatically so momentum never dies.',
+     stats:[{n:'Flywheel',l:'Fill → Capture → Amplify → Follow-up'},{n:'100%',l:'Contact follow-up'},{n:'<2h',l:'Radio clip turnaround'}],
+     details:[{dl:'FILL',dv:'Geo-targeted',dd:'Dira identifies supporters within 30km of rally venue. IVR/SMS invitations dispatched 72h, 24h, and 2h before event.'},{dl:'CAPTURE',dv:'WhatsApp opt-in',dd:'QR stations + USSD shortcode at rally. Average 4,200 consented contacts per event based on ECES methodology.'},{dl:'AMPLIFY',dv:'Radio + social',dd:'AI clips edited and distributed to 47 vernacular FM stations within 2 hours of speech. TikTok/X within 30 minutes.'}],
+     kpis:['Contacts captured per rally','Re-contact rate at 7/14/30 days','Radio placement rate','Rally-sourced voter conversion'],
+     votes:'Multiplier — every rally becomes permanent data'},
+    {id:'wananchi',nm:'Wananchi',role:'46K GROUND FORCE',status:'build',color:'#C8FF00',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+     desc:'AI-coordinated, M-Pesa-paid, geo-verified polling-station agents. Each owns ~50 voters they personally know. Paid only on verified action. The spine that carries every other agent\'s output to the last 50 metres.',
+     stats:[{n:'46,229',l:'Total agents'},{n:'~50',l:'Voters each'},{n:'2.76M',l:'Relationships'},{n:'M-Pesa',l:'Pay rail'}],
+     details:[{dl:'STRUCTURE',dv:'5-tier',dd:'National Ops (11) → County Coordinators (47) → Constituency Leads (290) → Ward Organizers (1,450) → PSAs (46,000)'},{dl:'VERIFICATION',dv:'Triple-check',dd:'Geo-stamp + photo + duplicate detection. Random audit callbacks. SIM/ID dedup. Ghost-task rate target <5%.'},{dl:'ECONOMICS',dv:'KES 180-240M',dd:'~75% of total budget. Pay-on-verified-action via M-Pesa. Every shilling traceable to a verified voter contact.'}],
+     kpis:['Voters contacted per agent per week','Verified-contact rate','Turnout delta: covered vs control stations','Ghost-task rate (target <5%)','Cost per verified contact'],
+     votes:'+350K – 620K · the heavy lifter'},
+    {id:'sauti',nm:'Sauti Shield',role:'RAPID RESPONSE · 24/7',status:'live',color:'#E84040',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+     desc:'24/7 listening across vernacular radio call-in shows, WhatsApp groups, X, and TikTok. AI classifies threats by severity and geography. Counter-narratives drafted, human-approved, pushed to radio within the hour. The Mt Kenya defection firewall.',
+     stats:[{n:'24/7',l:'Monitoring'},{n:'<6h',l:'Response time'},{n:'47',l:'County officers'},{n:'ECES',l:'Proven stack'}],
+     details:[{dl:'DETECTION',dv:'NLP + human',dd:'Multi-language NLP on social + radio transcripts. Severity auto-classification (High/Medium/Low). Human escalation desk for High.'},{dl:'RESPONSE',dv:'AI + approval',dd:'AI drafts counter-narrative in candidate\'s voice and regional dialect. Human approves in <30 min. Pushed to radio liaison network.'},{dl:'LINEAGE',dv:'EU-proven',dd:'Built on the ECES 2022 system that reached 27M+ Kenyans and de-escalated 2,500+ incidents. Same architecture, campaign-tuned.'}],
+     kpis:['Threat-to-response time (target <6h)','Narrative share-of-voice recovery','Defection rate in monitored wards','Radio counter-placement rate'],
+     votes:'Holds 80K – 200K from defection'},
+    {id:'lock',nm:'Six-Piece Lock',role:'BALLOT PROTECTION',status:'build',color:'#2DD4BF',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 12 2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+     desc:'Three functions in one: (1) Six-piece ballot education so supporters cast all 6 UDA lines. (2) Commitment-ladder GOTV via churches and chamas. (3) Form 34A capture — agents photograph results, AI-OCR parallel tally flags discrepancies in <30 minutes.',
+     stats:[{n:'6',l:'Ballot lines protected'},{n:'34A',l:'Form capture'},{n:'<30min',l:'Discrepancy flag'},{n:'100%',l:'Station coverage target'}],
+     details:[{dl:'SIX-PIECE',dv:'IVR + radio',dd:'Vernacular IVR walkthroughs of the ballot. Agent mock-ballot demos. Radio jingles per region naming all 6 UDA candidates.'},{dl:'AHADI GOTV',dv:'Behavioral',dd:'Commitment-ladder: "Reply 1 if you vote at 7am at Kapsabet Primary." Church cell-group activation. Social-norm nudges.'},{dl:'34A VAULT',dv:'AI-OCR',dd:'Every agent photographs posted 34A. AI reads + cross-checks against parallel tally. Flags anomalies to war room instantly.'}],
+     kpis:['Six-piece recall in supporter surveys','Pledge → vote match rate','% stations with verified 34A in <30 min','Discrepancy detection rate'],
+     votes:'Protects the entire 8M'},
+    {id:'rungu',nm:'Rungu Command',role:'WAR-ROOM DASHBOARD',status:'live',color:'#C8FF00',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
+     desc:'The single screen that ties it all together. Voter graph, ground-force status, narrative threat board, and the M-Pesa spend-to-verified-action ledger. Every shilling traceable. Every ward visible. The buyer\'s trust object.',
+     stats:[{n:'1',l:'Screen to rule them all'},{n:'Real-time',l:'Data freshness'},{n:'100%',l:'Spend auditable'},{n:'9',l:'Agent feeds'}],
+     details:[{dl:'PANELS',dv:'4 core',dd:'Voter Graph status, Field Force tracker, Threat radar live feed, Financial ledger with M-Pesa verification chain'},{dl:'USERS',dv:'Tiered',dd:'Presidential team sees national. County coordinators see their county. Ward organizers see their ward. Role-based access.'},{dl:'TRUST',dv:'Audit-proof',dd:'Every M-Pesa payment linked to a verified action. Exportable for financial audit. The thing that makes the buyer sleep at night.'}],
+     kpis:['Data freshness (target <5 min)','% spend tied to verified action','Fraud flags resolved per week','User adoption across tiers'],
+     votes:'The trust object — ties everything together'},
+    {id:'wasikie',nm:'Wasikie',role:'GEN Z ENGAGEMENT',status:'ready',color:'#F59E0B',
+     ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>',
+     desc:'Four mechanisms targeting the 65% winnable youth middle: (1) Listening Loop that publicly closes the grievance cycle. (2) 1,240 disclosed micro-creators. (3) Youth utility app (jobs, gigs, Hustler Fund). (4) Meme-fluent, self-aware content factory.',
+     stats:[{n:'65%',l:'Winnable middle'},{n:'1,240',l:'Creators'},{n:'60 days',l:'Loop live'},{n:'4',l:'Mechanisms'}],
+     details:[{dl:'LISTENING LOOP',dv:'Weekly cycle',dd:'NLP aggregates youth voices from TikTok/X/Telegram. Synthesizes top grievances. Routes to leadership. Public response published — proof they were heard.'},{dl:'CREATOR NETWORK',dv:'Disclosed',dd:'Comedy, hustle/finance, sports, gospel, gaming creators. Briefed with talking points, speak in their own voice. Never fake. Tracked and measured.'},{dl:'UTILITY APP',dv:'Value-first',dd:'AI-powered jobs board, gig matching, digital skills, Hustler Fund eligibility checker. Young people engage because it helps them eat.'}],
+     kpis:['Weekly grievance-response cycle published','Creator reach & sentiment delta','App MAU & gigs delivered','Youth hostility index trend'],
+     votes:'+250K – 700K won + hostility reduced'}
+  ];
+
+  const grid=document.getElementById('agentGrid');
+  grid.innerHTML=AGENTS.map(a=>`
+    <div class="ag-card" data-aid="${a.id}">
+      <span class="ag-badge ${a.status}">${a.status==='live'?'Live':a.status==='ready'?'Ready':'Building'}</span>
+      <div class="ag-top">
+        <div class="ag-ico" style="border-color:${a.color}40;background:${a.color}10">${a.ico.replace('currentColor',a.color)}</div>
+        <div><div class="ag-nm">${a.nm}</div><div class="ag-role">${a.role}</div></div>
+      </div>
+      <div class="ag-desc">${a.desc}</div>
+      <div class="ag-stats">${a.stats.map(s=>`<div class="ag-stat"><span class="n">${s.n}</span>${s.l}</div>`).join('')}</div>
+      <div class="ag-expand">
+        <div class="ag-detail-grid">${a.details.map(d=>`<div class="ag-dcard"><div class="dl">${d.dl}</div><div class="dv">${d.dv}</div><div class="dd">${d.dd}</div></div>`).join('')}</div>
+        <div style="margin-bottom:10px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600">Key Performance Indicators</div>
+        <div class="ag-kpis">${a.kpis.map(k=>`<div class="ag-kpi">${k}</div>`).join('')}</div>
+        <div style="margin-top:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:600">Vote Impact</span>
+          <span style="font-weight:900;color:${a.color};font-size:14px">${a.votes}</span>
+        </div>
+      </div>
+    </div>`).join('');
+
+  grid.querySelectorAll('.ag-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const wasExpanded=card.classList.contains('expanded');
+      grid.querySelectorAll('.ag-card').forEach(c=>c.classList.remove('expanded'));
+      if(!wasExpanded)card.classList.add('expanded');
+    });
+  });
+
+  document.getElementById('archFlow').innerHTML=`
+    <div class="arch-node core">Dira<br><span style="font-size:9px;color:var(--muted)">Intelligence</span></div><span class="arch-arrow">→</span>
+    <div class="arch-node">Ghost-Hunter<br><span style="font-size:9px;color:var(--muted)">Register</span></div><span class="arch-arrow">→</span>
+    <div class="arch-node">Kura Connect<br><span style="font-size:9px;color:var(--muted)">Voice</span></div><span class="arch-arrow">→</span>
+    <div class="arch-node">Rally Engine<br><span style="font-size:9px;color:var(--muted)">Capture</span></div><span class="arch-arrow">→</span>
+    <div class="arch-node core">Wananchi<br><span style="font-size:9px;color:var(--muted)">Ground Force</span></div><span class="arch-arrow">→</span>
+    <div class="arch-node">Sauti Shield<br><span style="font-size:9px;color:var(--muted)">Protect</span></div><span class="arch-arrow">→</span>
+    <div class="arch-node">Six-Piece Lock<br><span style="font-size:9px;color:var(--muted)">Ballot</span></div><span class="arch-arrow">→</span>
+    <div class="arch-node">Wasikie<br><span style="font-size:9px;color:var(--muted)">Gen Z</span></div><span class="arch-arrow">↻</span>
+    <div class="arch-node core">Rungu<br><span style="font-size:9px;color:var(--muted)">Command</span></div>`;
+
+  const STACK=[
+    {nm:'Defend & maximize strongholds',lo:300,hi:500,c:'#C8FF00'},
+    {nm:'Recover Mt Kenya battleground',lo:200,hi:450,c:'#F59E0B'},
+    {nm:'Register new friendly voters',lo:150,hi:400,c:'#16B866'},
+    {nm:'Win the swing',lo:150,hi:350,c:'#2DD4BF'},
+    {nm:'Win the Gen Z middle',lo:250,hi:700,c:'#9b8cff'}
+  ];
+  document.getElementById('voteStack').innerHTML=STACK.map(s=>{
+    const pct=s.hi/700*100;
+    return`<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+      <div style="width:180px;font-size:11.5px;font-weight:500;flex-shrink:0">${s.nm}</div>
+      <div style="flex:1;height:20px;background:#0e0e0f;border-radius:4px;overflow:hidden;border:1px solid #202022;position:relative">
+        <div style="height:100%;width:${s.lo/700*100}%;background:${s.c};border-radius:3px;position:absolute;left:0;top:0"></div>
+        <div style="height:100%;width:${pct}%;background:${s.c};opacity:.25;border-radius:3px"></div>
+      </div>
+      <div style="width:80px;text-align:right;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums">${s.lo}–${s.hi}K</div>
+    </div>`}).join('');
+
+  document.getElementById('timeline').innerHTML=[
+    {m:'Month 1',t:'<b>Sprint 0:</b> Registration agents deployed. Ghost-Hunter + Dira MVP live. IVR pilot in 3 counties.'},
+    {m:'Month 2-3',t:'<b>Phase 1 proof:</b> 50K IVR surveys, 150 verified agents, Dashboard v0. Kura Connect + Sauti Shield online.'},
+    {m:'Month 4-6',t:'<b>Scale:</b> Wananchi recruitment begins nationally. Rally Engine activated for campaign circuit. Creator network seeded.'},
+    {m:'Month 7-9',t:'<b>Full operations:</b> 46K agents deployed. All 9 AI agents running. Six-Piece Lock education campaign launches.'},
+    {m:'Month 10-14',t:'<b>Election sprint:</b> Maximum GOTV intensity. Commitment ladders activated. 34A vault tested. War room at full capacity.'}
+  ].map(t=>`<div class="tl-item"><div class="tl-month">${t.m}</div><div class="tl-content">${t.t}</div></div>`).join('');
+
+  animateCounters(document.getElementById('agents'));
+  animateBars(document.getElementById('agents'));
+}
 
 /* ---------- INIT ---------- */
 animateCounters(document.getElementById('overview'));
