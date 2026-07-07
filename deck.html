@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -14,6 +14,7 @@
 
 /* ---- Design tokens ---- */
 :root{
+  font-size:clamp(13px,2.2vh,16px); /* all rem values scale with viewport height */
   --ink:#0B0B0C;            /* dark base */
   --surface:#111112;        /* dark surface */
   --card:#161617;           /* dark card */
@@ -57,13 +58,14 @@ body{
 }
 .slide{
   position:relative;
-  min-height:100vh;
+  height:100dvh;
+  min-height:0;
   scroll-snap-align:start;
   scroll-snap-stop:always;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  padding:clamp(2.4rem,6vw,5.5rem) clamp(1.4rem,6vw,6rem) clamp(3.2rem,6vw,5rem);
+  padding:clamp(.5rem,2vh,2.5rem) clamp(1.4rem,5vw,5rem) clamp(.5rem,2vh,2.5rem);
   overflow:hidden;
 }
 .slide.dark{background:var(--ink);color:var(--text)}
@@ -130,6 +132,8 @@ h1,h2,h3{font-weight:900;line-height:1.02;letter-spacing:-.02em}
 .slide.visible .reveal.d6{transition-delay:.48s}
 .slide.visible .reveal.d7{transition-delay:.56s}
 .slide.visible .reveal.d8{transition-delay:.64s}
+.slide.visible .reveal.d9{transition-delay:.72s}
+.slide.visible .reveal.d10{transition-delay:.80s}
 
 /* ---- Chrome ---- */
 .chrome-foot,.chrome-page,.chrome-side{
@@ -199,6 +203,22 @@ svg{display:block;max-width:100%}
   .reveal{opacity:1;transform:none}
   .bar-fill{width:var(--w)}
 }
+
+@keyframes s3critGlow{
+  0%,100%{box-shadow:0 0 0 0 rgba(232,64,64,0)}
+  55%{box-shadow:0 0 9px 2px rgba(232,64,64,.32)}
+}
+
+/* ---- Morphic slide entry transition ---- */
+.inner{
+  opacity:0;
+  transform:scale(.95) translateY(18px);
+  transition:opacity 1.1s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1);
+}
+.slide.visible .inner{
+  opacity:1;
+  transform:none;
+}
 </style>
 </head>
 <body>
@@ -215,31 +235,78 @@ svg{display:block;max-width:100%}
     <div class="split">
       <div class="col" style="gap:1.5rem">
         <div class="eyebrow reveal d1"><span class="dot"></span>Electra Labs · Confidential Briefing</div>
-        <h1 class="display reveal d2">The Road to<br><span class="green">8 Million.</span></h1>
-        <p class="subtitle reveal d3" style="max-width:34ch">Campaign Intelligence Infrastructure for<br><strong style="color:var(--text);font-weight:700">H.E. President William Ruto's</strong> 2027 Re-election.</p>
+        <h1 class="display reveal d2" style="font-size:clamp(2.6rem,5vw,4.6rem)">Every ward.<br>Every voter.<br><span class="green">One AI operation.</span></h1>
+        <p class="subtitle reveal d3" style="max-width:36ch">Campaign infrastructure for <strong style="color:var(--text);font-weight:700">H.E. President William Ruto's</strong> 2027 re-election.<br>22 million contacts. 47 counties. 14 months.</p>
         <div class="reveal d4" style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.4rem">
           <span class="badge">Prepared exclusively for UDA Leadership</span>
           <span class="badge green"><span class="dot"></span>Confidential</span>
         </div>
       </div>
+      <!-- RADAR HERO -->
       <div class="reveal d3" style="display:flex;justify-content:center;align-items:center">
-        <svg viewBox="0 0 360 360" width="100%" style="max-width:420px" aria-label="Outline of Kenya">
+        <svg viewBox="0 0 400 400" width="100%" style="max-width:440px;overflow:visible" aria-hidden="true">
           <defs>
-            <linearGradient id="kenGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#16B866"/><stop offset="100%" stop-color="#0d7a44"/>
-            </linearGradient>
+            <radialGradient id="rdrGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#16B866" stop-opacity="0.13"/>
+              <stop offset="70%"  stop-color="#16B866" stop-opacity="0.04"/>
+              <stop offset="100%" stop-color="#16B866" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="rdrCore" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#16B866" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#16B866" stop-opacity="0"/>
+            </radialGradient>
           </defs>
-          <path id="kenPath" d="M70,70 L150,52 L168,72 L300,118 L262,176 L300,224 L214,330 L150,300 L120,250 L92,250 L70,196 L84,150 L62,120 Z"
-            fill="rgba(22,184,102,.07)" stroke="url(#kenGrad)" stroke-width="2.2" stroke-linejoin="round"/>
-          <circle cx="206" cy="232" r="4.5" fill="#16B866"/>
-          <text x="216" y="236" fill="#9a9a93" font-size="11" font-family="Satoshi" letter-spacing="1.5">NAIROBI</text>
-          <circle cx="150" cy="170" r="3.5" fill="#5FD99A"/>
-          <text x="48" y="158" fill="#9a9a93" font-size="10" font-family="Satoshi" letter-spacing="1.2">RIFT VALLEY</text>
+
+          <!-- Ambient background glow -->
+          <circle cx="200" cy="200" r="196" fill="url(#rdrGlow)"/>
+
+          <!-- Static concentric rings -->
+          <circle cx="200" cy="200" r="44"  fill="none" stroke="#16B866" stroke-opacity="0.22" stroke-width="0.8"/>
+          <circle cx="200" cy="200" r="88"  fill="none" stroke="#16B866" stroke-opacity="0.17" stroke-width="0.8"/>
+          <circle cx="200" cy="200" r="132" fill="none" stroke="#16B866" stroke-opacity="0.13" stroke-width="0.8"/>
+          <circle cx="200" cy="200" r="176" fill="none" stroke="#16B866" stroke-opacity="0.09" stroke-width="0.8"/>
+
+          <!-- Radial spokes (12 at 30° steps) -->
+          <g stroke="#16B866" stroke-opacity="0.07" stroke-width="0.6">
+            <line x1="200" y1="10"  x2="200" y2="390"/>
+            <line x1="200" y1="10"  x2="200" y2="390" transform="rotate(30  200 200)"/>
+            <line x1="200" y1="10"  x2="200" y2="390" transform="rotate(60  200 200)"/>
+            <line x1="200" y1="10"  x2="200" y2="390" transform="rotate(90  200 200)"/>
+            <line x1="200" y1="10"  x2="200" y2="390" transform="rotate(120 200 200)"/>
+            <line x1="200" y1="10"  x2="200" y2="390" transform="rotate(150 200 200)"/>
+          </g>
+
+          <!-- Rotating sweep arm -->
+          <line x1="200" y1="200" x2="200" y2="24" stroke="#16B866" stroke-opacity="0.65" stroke-width="1.2" stroke-linecap="round">
+            <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="5s" repeatCount="indefinite"/>
+          </line>
+
+          <!-- Expanding ping rings — 3 staggered -->
+          <circle cx="200" cy="200" r="10" fill="none" stroke="#16B866" stroke-width="1">
+            <animate attributeName="r"              values="10;180"   dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-opacity" values="0.55;0"   dur="4s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="200" cy="200" r="10" fill="none" stroke="#16B866" stroke-width="0.8">
+            <animate attributeName="r"              values="10;180"   dur="4s" begin="1.33s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-opacity" values="0.55;0"   dur="4s" begin="1.33s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="200" cy="200" r="10" fill="none" stroke="#16B866" stroke-width="0.8">
+            <animate attributeName="r"              values="10;180"   dur="4s" begin="2.66s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-opacity" values="0.55;0"   dur="4s" begin="2.66s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Core glow -->
+          <circle cx="200" cy="200" r="14" fill="url(#rdrCore)">
+            <animate attributeName="r" values="12;18;12" dur="2.4s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Center dot -->
+          <circle cx="200" cy="200" r="5"   fill="#16B866"/>
+          <circle cx="200" cy="200" r="2.2" fill="#C8FF00"/>
         </svg>
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA LABS</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">01 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -247,209 +314,639 @@ svg{display:block;max-width:100%}
 <!-- ============ SLIDE 2 — WIN NUMBER (dark) ★ ============ -->
 <section class="slide dark" data-i="2">
   <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>The Win Number</div>
+    <div class="eyebrow reveal d1"><span class="dot"></span>The Numbers</div>
     <div class="split" style="margin-top:1.4rem">
       <div class="col" style="gap:1.5rem">
-        <h2 class="title reveal d2"><span class="green">8 million</span> wins.<br>The last election was decided by 233,000.</h2>
+        <h2 class="title reveal d2">The system reaches <span class="green">22 million.</span><br>We convert half.</h2>
         <div class="row reveal d3" style="gap:2.4rem">
-          <div><div class="stat-num green counter" data-to="8" data-suffix="M">0</div><div class="stat-label">Votes to win comfortably</div></div>
-          <div><div class="stat-num counter" data-to="233" data-suffix="K">0</div><div class="stat-label">2022 winning margin</div></div>
-          <div style="color:var(--muted-light)"><div class="stat-num tnum">22.1M</div><div class="stat-label">Registered voters</div></div>
+          <div>
+            <div class="stat-num tnum" style="font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--muted-light)">22M</div>
+            <div class="stat-label">Registered voters reached</div>
+          </div>
+          <div>
+            <div class="stat-num tnum" style="font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--teal)">11M</div>
+            <div class="stat-label">Confirmed engagements</div>
+          </div>
+          <div>
+            <div class="stat-num tnum" style="font-size:clamp(1.8rem,3.5vw,2.8rem);color:var(--neg)">233K</div>
+            <div class="stat-label">2022 winning margin</div>
+          </div>
         </div>
-        <p class="lede reveal d4">H.E. the President leads <strong style="color:var(--text)">TIFA May 2026 polling at 24%</strong> — but no candidate reaches 50%+1. The next election is <strong style="color:var(--text)">~13 months away</strong>.</p>
-        <p class="reveal d5" style="font-size:.7rem;letter-spacing:.1em;color:var(--muted-light);text-transform:uppercase">Source: TIFA National Survey, May 14, 2026 (n=2,013, ±2.18%)</p>
+        <p class="lede reveal d4">H.E. the President leads <strong style="color:var(--text)">TIFA May 2026 polling at 24%</strong> — but no candidate reaches 50%+1. The last election was decided by 233,000 votes. You need 8 million to win comfortably. <strong style="color:var(--text)">We build 11 million confirmed supporters.</strong></p>
+        <p class="reveal d5" style="font-size:.7rem;letter-spacing:.1em;color:var(--muted-light);text-transform:uppercase">Source: TIFA National Survey, May 14 2026 (n=2,013 ±2.18%) · 2022 IEBC final results</p>
       </div>
-      <div class="reveal d3" style="display:flex;justify-content:center">
-        <svg viewBox="0 0 340 340" width="100%" style="max-width:380px" aria-label="Concentric vote universe">
-          <circle cx="170" cy="170" r="160" fill="rgba(255,255,255,.015)" stroke="#2a2a2c" stroke-width="1.5"/>
-          <text x="170" y="26" text-anchor="middle" fill="#6e6e68" font-size="11" font-family="Satoshi" letter-spacing="1.5">22.1M REGISTERED</text>
-          <circle cx="170" cy="178" r="115" fill="rgba(255,255,255,.03)" stroke="#4a4a4c" stroke-width="1.5"/>
-          <text x="170" y="78" text-anchor="middle" fill="#9a9a93" font-size="11" font-family="Satoshi" letter-spacing="1.2">~14M TURNOUT</text>
-          <circle class="vote-core" cx="170" cy="188" r="74" fill="rgba(22,184,102,.16)" stroke="#16B866" stroke-width="2.4"/>
-          <text x="170" y="186" text-anchor="middle" fill="#16B866" font-size="30" font-weight="900" font-family="Satoshi" letter-spacing="-1">8M</text>
-          <text x="170" y="206" text-anchor="middle" fill="#16B866" font-size="9.5" font-family="Satoshi" letter-spacing="2">TO WIN</text>
-          <line x1="244" y1="188" x2="288" y2="188" stroke="#fafaf8" stroke-width="2.5"/>
-          <line x1="288" y1="183" x2="288" y2="193" stroke="#fafaf8" stroke-width="2.5"/>
-          <text x="296" y="184" fill="#fafaf8" font-size="11" font-weight="700" font-family="Satoshi">233K</text>
-          <text x="296" y="198" fill="#6e6e68" font-size="8" font-family="Satoshi" letter-spacing="1">the margin</text>
-        </svg>
+      <!-- Funnel rings -->
+      <div class="reveal d3" style="display:flex;justify-content:center;align-items:center">
+        <svg id="s2-dots" viewBox="0 0 430 490" width="100%" style="max-width:430px" aria-label="Dot matrix: 22M voter universe, 100 dots each equals 220K voters"></svg>
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">02 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
 
-<!-- ============ SLIDE 3 — NATIONAL MAP (light) ============ -->
+<!-- ============ SLIDE 3 — BATTLEFIELD (light) ============ -->
 <section class="slide light" data-i="3">
-  <div class="inner">
+  <div class="inner" style="gap:1rem">
     <div class="eyebrow reveal d1"><span class="dot"></span>The Battlefield</div>
-    <h2 class="title reveal d2" style="margin:.8rem 0 1.4rem">H.E. the President's National Battlefield<br><span style="color:var(--muted);font-weight:500;font-size:.6em">47 Counties · 5 Tiers · Every county has a job</span></h2>
-    <div class="split">
-      <div class="reveal d3" style="display:flex;justify-content:center">
-        <svg viewBox="0 0 360 380" width="100%" style="max-width:420px" aria-label="Kenya battlefield map">
-          <path d="M70,70 L150,52 L168,72 L300,118 L262,176 L300,224 L214,330 L150,300 L120,250 L92,250 L70,196 L84,150 L62,120 Z"
-            fill="rgba(11,11,12,.03)" stroke="#0B0B0C" stroke-width="1.6" stroke-linejoin="round"/>
-          <circle cx="138" cy="168" r="9" fill="#16B866"/><circle cx="138" cy="168" r="14" fill="none" stroke="#16B866" stroke-width="1" opacity=".5"/>
-          <circle cx="208" cy="96" r="7" fill="#5FD99A"/>
-          <circle cx="96" cy="208" r="7" fill="#5FD99A"/>
-          <circle cx="196" cy="178" r="8" fill="#F59E0B"/>
-          <circle cx="100" cy="158" r="6.5" fill="#F59E0B"/>
-          <circle cx="206" cy="232" r="7" fill="#2DD4BF"/>
-          <circle cx="178" cy="258" r="5.5" fill="#2DD4BF"/>
-          <circle cx="232" cy="262" r="7.5" fill="#E84040"/>
-          <circle cx="252" cy="300" r="6" fill="#E84040"/>
-        </svg>
+    <h2 class="title reveal d2" style="margin:.3rem 0 .8rem">Five tiers. Six threats.<br><span style="font-size:.52em;font-weight:500;color:var(--muted)">47 counties · 22.1M registered voters · 14 months to close the gaps</span></h2>
+
+    <div class="split" style="gap:2rem;align-items:flex-start">
+
+      <!-- LEFT: Territory control -->
+      <div class="col reveal d3" style="flex:1.1;gap:1rem">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.12em;color:var(--muted)">TERRITORY CONTROL · VOTER UNIVERSE BY TIER</div>
+        <!-- Segmented master bar — JS fills -->
+        <div id="s3-master" style="width:100%;height:18px;border-radius:6px;overflow:hidden;display:flex;gap:1px;background:rgba(11,11,12,.07)"></div>
+        <!-- Tier rows — JS fills -->
+        <div id="s3-tiers" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.35rem"></div>
+        <p style="font-size:.66rem;color:var(--muted);margin-top:.5rem;line-height:1.5">Sources: IEBC 2022 final results · TIFA National Survey May 2026 · Constituency-level returns</p>
       </div>
-      <div class="col" style="gap:.55rem">
-        <div class="card reveal d3" style="padding:.7rem .9rem;display:flex;gap:.7rem;align-items:flex-start"><span style="width:11px;height:11px;border-radius:50%;background:#16B866;margin-top:4px;flex:none"></span><div><strong>Deep stronghold</strong> — Rift Valley core<br><span style="font-size:.78rem;color:var(--muted)">Nandi 91% · Elgeyo-Marakwet 97% · Bomet 89%</span></div></div>
-        <div class="card reveal d4" style="padding:.7rem .9rem;display:flex;gap:.7rem;align-items:flex-start"><span style="width:11px;height:11px;border-radius:50%;background:#5FD99A;margin-top:4px;flex:none"></span><div><strong>Friendly / expanding</strong><br><span style="font-size:.78rem;color:var(--muted)">Nyanza via BBG (38 presidential visits) · Northern 48%</span></div></div>
-        <div class="card reveal d5" style="padding:.7rem .9rem;display:flex;gap:.7rem;align-items:flex-start"><span style="width:11px;height:11px;border-radius:50%;background:#F59E0B;margin-top:4px;flex:none"></span><div><strong>Battleground</strong><br><span style="font-size:.78rem;color:var(--muted)">Mt Kenya (DCP at 39%) · Western (both sides fighting)</span></div></div>
-        <div class="card reveal d6" style="padding:.7rem .9rem;display:flex;gap:.7rem;align-items:flex-start"><span style="width:11px;height:11px;border-radius:50%;background:#2DD4BF;margin-top:4px;flex:none"></span><div><strong>Swing</strong><br><span style="font-size:.78rem;color:var(--muted)">Nairobi 42% · Kajiado · Marsabit · Trans-Nzoia</span></div></div>
-        <div class="card reveal d7" style="padding:.7rem .9rem;display:flex;gap:.7rem;align-items:flex-start"><span style="width:11px;height:11px;border-radius:50%;background:#E84040;margin-top:4px;flex:none"></span><div><strong>Hostile</strong><br><span style="font-size:.78rem;color:var(--muted)">Lower Eastern (Kalonzo at 78%) · parts of Coast</span></div></div>
+
+      <!-- RIGHT: Threat intelligence — dark card on light slide -->
+      <div class="reveal d4" style="flex:1;background:#0c0c0d;border-radius:10px;padding:clamp(.7rem,1.8vh,1.2rem) 1.4rem;display:flex;flex-direction:column;gap:0;min-width:0">
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:.14em;color:#6e6e68;margin-bottom:clamp(.35rem,1vh,.7rem)">OPPOSITION THREAT MATRIX</div>
+
+        <!-- Table header -->
+        <div style="display:flex;gap:.7rem;padding:.18rem 0 .4rem;border-bottom:1px solid rgba(255,255,255,.07);font-size:.62rem;font-weight:700;letter-spacing:.1em;color:#585852">
+          <span style="min-width:22px">#</span>
+          <span style="flex:1">THREAT</span>
+          <span style="min-width:68px">TYPE</span>
+          <span style="min-width:64px;text-align:right">RISK</span>
+        </div>
+
+        <!-- 01 -->
+        <div class="reveal d3" style="display:flex;gap:.7rem;align-items:flex-start;padding:clamp(.3rem,1.1vh,.55rem) 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <span style="min-width:22px;font-size:.64rem;font-family:monospace;color:#4e4e4a;padding-top:2px">01</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.86rem;font-weight:700;color:#e0e0d8;line-height:1.3">Gachagua Mt. Kenya Gambit</div>
+            <div style="font-size:.66rem;color:#7a7a72;margin-top:.1rem;line-height:1.4">Impeached DP building alternative vehicle · 4.8M votes at risk across 9 counties</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.22rem;flex-shrink:0">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.07em;color:#9B7BFF;background:rgba(155,123,255,.13);border-radius:3px;padding:.1rem .32rem;white-space:nowrap">ELECTORAL</span>
+            <span style="font-size:.68rem;font-weight:700;color:#E84040;background:rgba(232,64,64,.12);border-radius:3px;padding:.1rem .36rem;white-space:nowrap;animation:s3critGlow 3.2s ease-in-out infinite">CRITICAL</span>
+          </div>
+        </div>
+
+        <!-- 02 -->
+        <div class="reveal d4" style="display:flex;gap:.7rem;align-items:flex-start;padding:clamp(.3rem,1.1vh,.55rem) 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <span style="min-width:22px;font-size:.64rem;font-family:monospace;color:#4e4e4a;padding-top:2px">02</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.86rem;font-weight:700;color:#e0e0d8;line-height:1.3">ABC Coalition Axis</div>
+            <div style="font-size:.66rem;color:#7a7a72;margin-top:.1rem;line-height:1.4">Gachagua + Kalonzo + Matiang'i unification · combined projections exceed 50%</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.22rem;flex-shrink:0">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.07em;color:#C8FF00;background:rgba(200,255,0,.08);border-radius:3px;padding:.1rem .32rem;white-space:nowrap">COALITION</span>
+            <span style="font-size:.68rem;font-weight:700;color:#E84040;background:rgba(232,64,64,.12);border-radius:3px;padding:.1rem .36rem;white-space:nowrap;animation:s3critGlow 3.2s ease-in-out 1.6s infinite">CRITICAL</span>
+          </div>
+        </div>
+
+        <!-- 03 -->
+        <div class="reveal d5" style="display:flex;gap:.7rem;align-items:flex-start;padding:clamp(.3rem,1.1vh,.55rem) 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <span style="min-width:22px;font-size:.64rem;font-family:monospace;color:#4e4e4a;padding-top:2px">03</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.86rem;font-weight:700;color:#e0e0d8;line-height:1.3">Kalonzo–Wiper Lock</div>
+            <div style="font-size:.66rem;color:#7a7a72;margin-top:.1rem;line-height:1.4">Lower Eastern at 78% anti-UDA · Wiper machinery active · TIFA 19% nationally</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.22rem;flex-shrink:0">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.07em;color:#9B7BFF;background:rgba(155,123,255,.13);border-radius:3px;padding:.1rem .32rem;white-space:nowrap">ELECTORAL</span>
+            <span style="font-size:.68rem;font-weight:700;color:#F59E0B;background:rgba(245,158,11,.12);border-radius:3px;padding:.1rem .36rem;white-space:nowrap">HIGH</span>
+          </div>
+        </div>
+
+        <!-- 04 -->
+        <div class="reveal d6" style="display:flex;gap:.7rem;align-items:flex-start;padding:clamp(.3rem,1.1vh,.55rem) 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <span style="min-width:22px;font-size:.64rem;font-family:monospace;color:#4e4e4a;padding-top:2px">04</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.86rem;font-weight:700;color:#e0e0d8;line-height:1.3">Matiang'i Surge</div>
+            <div style="font-size:.66rem;color:#7a7a72;margin-top:.1rem;line-height:1.4">Ex-Interior CS at 14% TIFA and rising · exploiting cost-of-living anger in Mt Kenya</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.22rem;flex-shrink:0">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.07em;color:#9B7BFF;background:rgba(155,123,255,.13);border-radius:3px;padding:.1rem .32rem;white-space:nowrap">ELECTORAL</span>
+            <span style="font-size:.68rem;font-weight:700;color:#F59E0B;background:rgba(245,158,11,.12);border-radius:3px;padding:.1rem .36rem;white-space:nowrap">HIGH</span>
+          </div>
+        </div>
+
+        <!-- 05 -->
+        <div class="reveal d7" style="display:flex;gap:.7rem;align-items:flex-start;padding:clamp(.3rem,1.1vh,.55rem) 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <span style="min-width:22px;font-size:.64rem;font-family:monospace;color:#4e4e4a;padding-top:2px">05</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.86rem;font-weight:700;color:#e0e0d8;line-height:1.3">Luhya Fracture Risk</div>
+            <div style="font-size:.66rem;color:#7a7a72;margin-top:.1rem;line-height:1.4">5 Western counties (1.9M) wavering despite Mudavadi &amp; Wetang'ula inside coalition</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.22rem;flex-shrink:0">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.07em;color:#F59E0B;background:rgba(245,158,11,.1);border-radius:3px;padding:.1rem .32rem;white-space:nowrap">DEFECTION</span>
+            <span style="font-size:.68rem;font-weight:700;color:#2DD4BF;background:rgba(45,212,191,.1);border-radius:3px;padding:.1rem .36rem;white-space:nowrap">MEDIUM</span>
+          </div>
+        </div>
+
+        <!-- 06 -->
+        <div class="reveal d8" style="display:flex;gap:.7rem;align-items:flex-start;padding:clamp(.3rem,1.1vh,.55rem) 0;padding-bottom:0">
+          <span style="min-width:22px;font-size:.64rem;font-family:monospace;color:#4e4e4a;padding-top:2px">06</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.86rem;font-weight:700;color:#e0e0d8;line-height:1.3">Stronghold Turnout Decay</div>
+            <div style="font-size:.66rem;color:#7a7a72;margin-top:.1rem;line-height:1.4">Rift Valley turnout drops 4–6% every cycle · 3.5M base needs active re-energising</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.22rem;flex-shrink:0">
+            <span style="font-size:.6rem;font-weight:700;letter-spacing:.07em;color:#2DD4BF;background:rgba(45,212,191,.08);border-radius:3px;padding:.1rem .32rem;white-space:nowrap">INTERNAL</span>
+            <span style="font-size:.68rem;font-weight:700;color:#2DD4BF;background:rgba(45,212,191,.1);border-radius:3px;padding:.1rem .36rem;white-space:nowrap">MEDIUM</span>
+          </div>
+        </div>
+
+        <div style="margin-top:.7rem;font-size:.62rem;color:#4e4e4a;border-top:1px solid rgba(255,255,255,.06);padding-top:.55rem">TIFA May 2026 (n=2,013) · IEBC 2022 final results · Field intelligence Q1–Q2 2026</div>
       </div>
+
     </div>
-    <p class="lede reveal d7" style="margin-top:1.2rem;max-width:90ch">H.E. the President has made <strong style="color:var(--ink-text)">38 visits to Nyanza alone</strong> — converting what was pure opposition territory. The BBG alignment gives UDA a foothold in Luo Nyanza for the first time in history.</p>
+
+    <p class="lede reveal d7" style="margin-top:clamp(.5rem,1.5vh,1rem);max-width:96ch">Mt Kenya holds <strong style="color:var(--ink-text)">4.8M votes and the Gachagua fracture just put them in play</strong>. An ABC axis — Gachagua, Kalonzo, Matiang'i combined — would exceed 50% before the first rally fires. The Rift Valley base loses 4–6% every cycle. <strong style="color:var(--ink-text)">These six threats require active dismantling in the next 14 months.</strong></p>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">03 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
 
-<!-- ============ SLIDE 4 — GEN Z (dark) ============ -->
+<!-- ============ SLIDE 4 — GEN Z BLOC (dark) ============ -->
 <section class="slide dark" data-i="4">
-  <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>Theater 01 · Gen Z</div>
-    <h2 class="title reveal d2" style="margin:.8rem 0 1.6rem">Gen Z can cost the whole thing —<br>win the middle, neutralize the edge.</h2>
-    <div class="split">
-      <div class="reveal d3" style="display:flex;justify-content:center;align-items:center">
-        <svg viewBox="0 0 240 240" width="100%" style="max-width:260px" aria-label="65 percent winnable donut">
-          <circle cx="120" cy="120" r="92" fill="none" stroke="#E84040" stroke-width="26" opacity=".85"/>
-          <circle class="donut-arc" cx="120" cy="120" r="92" fill="none" stroke="#16B866" stroke-width="26"
-            stroke-dasharray="578" stroke-dashoffset="578" transform="rotate(-90 120 120)"/>
-          <text x="120" y="116" text-anchor="middle" fill="#16B866" font-size="46" font-weight="900" font-family="Satoshi" letter-spacing="-2">65%</text>
-          <text x="120" y="142" text-anchor="middle" fill="#9a9a93" font-size="11" font-family="Satoshi" letter-spacing="2">WINNABLE</text>
-        </svg>
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 65% 55% at 70% 50%,rgba(22,184,102,.08) 0%,transparent 68%)"></div>
+  <div class="inner" style="z-index:2;position:relative">
+
+    <div class="eyebrow reveal d1"><span class="dot" style="background:var(--green)"></span>Theater 01 · Gen Z</div>
+
+    <!-- Title + cohort tag on one line -->
+    <div class="reveal d2" style="margin:.2rem 0 .45rem;display:flex;align-items:baseline;gap:1.1rem;flex-wrap:wrap">
+      <h2 style="font-size:clamp(2.8rem,6.5vw,4.6rem);font-weight:900;color:var(--green);letter-spacing:-.03em;line-height:1;margin:0">Gen Z</h2>
+      <span style="font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-light);font-weight:500;padding-bottom:.25rem">Born 1997–2009 · Ages 18–30 by 2027 · Kenya's largest voting cohort</span>
+    </div>
+
+    <!-- Hero stat + badge -->
+    <div class="reveal d3" style="margin:0 0 .9rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap">
+      <div>
+        <div style="font-size:clamp(1.9rem,4.4vw,3rem);font-weight:900;color:var(--text);line-height:.95;letter-spacing:-.03em;font-variant-numeric:tabular-nums">2,600,000 <span style="color:var(--green)">new voters</span></div>
+        <div style="font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-light);margin-top:.3rem;font-weight:500">Registered · No party mandate · Already self-organized</div>
       </div>
-      <div class="col" style="gap:.7rem">
-        <div class="reveal d3" style="display:flex;gap:.8rem;align-items:center"><span style="width:13px;height:13px;border-radius:3px;background:#E84040;flex:none"></span><div><strong>20% Hardcore activist</strong> <span style="color:var(--muted-light)">— de-escalate</span></div></div>
-        <div class="reveal d4" style="display:flex;gap:.8rem;align-items:center"><span style="width:13px;height:13px;border-radius:3px;background:#16B866;flex:none"></span><div><strong>35% Persuadable hustlers</strong> <span style="color:var(--muted-light)">— win with jobs</span></div></div>
-        <div class="reveal d5" style="display:flex;gap:.8rem;align-items:center"><span style="width:13px;height:13px;border-radius:3px;background:#16B866;flex:none"></span><div><strong>30% Disengaged</strong> <span style="color:var(--muted-light)">— mobilize on issues</span></div></div>
-        <div class="reveal d6" style="display:flex;gap:.8rem;align-items:center"><span style="width:13px;height:13px;border-radius:3px;background:#3a3a3c;flex:none"></span><div><strong>15% Already aligned</strong> <span style="color:var(--muted-light)">— activate as peers</span></div></div>
+      <div style="background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.28);border-radius:6px;padding:.28rem .7rem;display:inline-flex;align-items:center;gap:.4rem">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--chartreuse)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        <span style="font-size:.84rem;font-weight:700;letter-spacing:.06em;color:var(--chartreuse)">11× THE 2022 MARGIN</span>
       </div>
     </div>
-    <p class="lede reveal d7" style="margin-top:1.5rem;max-width:94ch">They led the June 2024 uprising. They're organizing via <strong style="color:var(--text)">#NikoKadi</strong> to vote against UDA. <strong style="color:var(--text)">2.6M new youth voters</strong> registered in 2026. But <strong class="green">65% are persuadable</strong> — through jobs, utility, and being heard. Never through bots or slogans.</p>
+
+    <!-- BODY: bar comparison (left) + digital footprint (right) -->
+    <div class="reveal d4" style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.85rem">
+
+      <!-- LEFT: Scale comparison -->
+      <div role="img" aria-label="Bar chart: Gen Z 2.6 million new registrations versus 2022 winning margin of 233 thousand" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:9px;padding:.85rem 1rem;display:flex;flex-direction:column;gap:.6rem">
+        <div style="font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-light);font-weight:600">Scale of the bloc</div>
+        <!-- Gen Z row -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.28rem">
+            <span style="font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--green);font-weight:700">Gen Z — new registrations</span>
+            <span style="font-size:.92rem;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums">2,600,000+</span>
+          </div>
+          <div style="background:rgba(255,255,255,.07);border-radius:3px;height:20px;overflow:hidden">
+            <div class="bar-fill" style="--w:100%;background:var(--green);height:100%;border-radius:3px;transition-delay:0s"></div>
+          </div>
+        </div>
+        <!-- Margin row -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.28rem">
+            <span style="font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-light);font-weight:500">2022 winning margin</span>
+            <span style="font-size:.92rem;font-weight:700;color:var(--muted-light);font-variant-numeric:tabular-nums">233,211</span>
+          </div>
+          <div style="background:rgba(255,255,255,.07);border-radius:3px;height:20px;overflow:hidden">
+            <div class="bar-fill" style="--w:9%;background:rgba(232,64,64,.5);height:100%;border-radius:3px;transition-delay:.3s"></div>
+          </div>
+        </div>
+        <!-- Callout -->
+        <div style="display:flex;align-items:center;gap:.35rem;padding-top:.15rem;border-top:1px solid rgba(255,255,255,.06)">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--chartreuse)" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span style="font-size:.76rem;color:var(--chartreuse);letter-spacing:.07em;text-transform:uppercase;font-weight:700">The gap is 11× — before a single promise is made</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Digital footprint -->
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:9px;padding:.85rem 1rem;display:flex;flex-direction:column;gap:.55rem">
+        <div style="font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-light);font-weight:600">Digital footprint</div>
+        <!-- TikTok -->
+        <div style="display:flex;align-items:center;gap:.65rem">
+          <div style="width:30px;height:30px;border-radius:6px;background:rgba(245,158,11,.12);display:flex;align-items:center;justify-content:center;flex:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          </div>
+          <div><div style="font-size:.86rem;font-weight:700;color:var(--text)">TikTok · 14M Kenyans</div><div style="font-size:.78rem;color:var(--muted-light);line-height:1.5">Command centre. Narratives form in hours.</div></div>
+        </div>
+        <!-- YouTube -->
+        <div style="display:flex;align-items:center;gap:.65rem">
+          <div style="width:30px;height:30px;border-radius:6px;background:rgba(232,64,64,.1);display:flex;align-items:center;justify-content:center;flex:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neg)" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <div><div style="font-size:.86rem;font-weight:700;color:var(--text)">YouTube · 12M+ reach</div><div style="font-size:.78rem;color:var(--muted-light);line-height:1.5">Long-form politics. No editorial gate.</div></div>
+        </div>
+        <!-- WhatsApp -->
+        <div style="display:flex;align-items:center;gap:.65rem">
+          <div style="width:30px;height:30px;border-radius:6px;background:rgba(22,184,102,.1);display:flex;align-items:center;justify-content:center;flex:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div><div style="font-size:.86rem;font-weight:700;color:var(--text)">WhatsApp · Mass coordination</div><div style="font-size:.78rem;color:var(--muted-light);line-height:1.5">June 2024 action assembled in &lt;72 hours.</div></div>
+        </div>
+        <!-- X / NikoKadi -->
+        <div style="display:flex;align-items:center;gap:.65rem">
+          <div style="width:30px;height:30px;border-radius:6px;background:rgba(155,123,255,.1);display:flex;align-items:center;justify-content:center;flex:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2"><path d="M4 4l16 16M4 20L20 4"/></svg>
+          </div>
+          <div><div style="font-size:.86rem;font-weight:700;color:var(--text)">#NikoKadi · Trending nationally</div><div style="font-size:.78rem;color:var(--muted-light);line-height:1.5">2.6M registered. Zero party backing.</div></div>
+        </div>
+      </div>
+
+    </div><!-- /body split -->
+
+    <!-- Bottom row: 3 proof stats + 1 wide strategic card -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1.55fr;gap:.7rem">
+      <div class="card reveal d5" style="padding:.85rem .9rem;border-top:2px solid var(--green)">
+        <div style="font-size:clamp(1.45rem,3vw,1.9rem);font-weight:900;color:var(--green);line-height:1;letter-spacing:-.02em">72 hrs</div>
+        <div style="font-size:.84rem;color:var(--muted-light);line-height:1.5;margin-top:.4rem">Parliament breached. No party, no leader, no budget.</div>
+      </div>
+      <div class="card reveal d6" style="padding:.85rem .9rem;border-top:2px solid var(--warn)">
+        <div style="font-size:clamp(1.45rem,3vw,1.9rem);font-weight:900;color:var(--warn);line-height:1;letter-spacing:-.02em">67%</div>
+        <div style="font-size:.84rem;color:var(--muted-light);line-height:1.5;margin-top:.4rem">Youth unemployment. The grievance is structural, not seasonal.</div>
+      </div>
+      <div class="card reveal d7" style="padding:.85rem .9rem;border-top:2px solid var(--violet)">
+        <div style="font-size:clamp(1.45rem,3vw,1.9rem);font-weight:900;color:var(--violet);line-height:1;letter-spacing:-.02em">65%</div>
+        <div style="font-size:.84rem;color:var(--muted-light);line-height:1.5;margin-top:.4rem">Persuadable or disengaged. Not decided. Window is now.</div>
+      </div>
+      <div class="reveal d8" style="background:rgba(22,184,102,.07);border:1px solid rgba(22,184,102,.18);border-radius:8px;padding:.85rem 1rem">
+        <div style="font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:.35rem">Bottom line</div>
+        <p style="font-size:.88rem;color:var(--text);line-height:1.6;margin:0">They brought down a Finance Bill with no party behind them. In 2027 the same cohort — concentrated in Nairobi, Mombasa, Kisumu — decides a second term. This is arithmetic, not theory.</p>
+      </div>
+    </div>
+
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">04 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
 
-<!-- ============ SLIDE 5 — FIVE THREATS (dark) ============ -->
+<!-- ============ SLIDE 5 — STRUCTURAL DIAGNOSIS (dark) ============ -->
 <section class="slide dark" data-i="5">
-  <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>The Diagnosis</div>
-    <h2 class="title reveal d2" style="margin:.8rem 0 1.4rem">Five threats — named, blunt.</h2>
-    <div class="split" style="align-items:flex-start">
-      <div class="col" style="gap:.65rem">
-        <div class="card reveal d3" style="padding:.85rem 1rem;display:flex;gap:.85rem;align-items:flex-start">
-          <svg class="icon" style="color:var(--warn);flex:none;margin-top:2px" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".6" fill="currentColor"/></svg>
-          <div><strong>1 · The deciders are rural and offline.</strong><br><span style="font-size:.82rem;color:var(--muted-light)">Vernacular radio and voice, not X. 85% mobile ≠ 85% political social media.</span></div></div>
-        <div class="card reveal d4" style="padding:.85rem 1rem;display:flex;gap:.85rem;align-items:flex-start">
-          <svg class="icon" style="color:var(--neg);flex:none;margin-top:2px" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".6" fill="currentColor"/></svg>
-          <div><strong>2 · Voter registration closes soon.</strong><br><span style="font-size:.82rem;color:var(--muted-light)">2.6M new voters via #NikoKadi, many against UDA.</span></div></div>
-        <div class="card reveal d5" style="padding:.85rem 1rem;display:flex;gap:.85rem;align-items:flex-start">
-          <svg class="icon" style="color:var(--warn);flex:none;margin-top:2px" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".6" fill="currentColor"/></svg>
-          <div><strong>3 · Rally energy evaporates by Monday.</strong><br><span style="font-size:.82rem;color:var(--muted-light)">Contacts not captured, no follow-up.</span></div></div>
-        <div class="card reveal d6" style="padding:.85rem 1rem;display:flex;gap:.85rem;align-items:flex-start">
-          <svg class="icon" style="color:var(--warn);flex:none;margin-top:2px" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".6" fill="currentColor"/></svg>
-          <div><strong>4 · Strongholds erode quietly.</strong><br><span style="font-size:.82rem;color:var(--muted-light)">Rift Valley turnout drops 4–6% between cycles.</span></div></div>
-        <div class="card reveal d7" style="padding:.85rem 1rem;display:flex;gap:.85rem;align-items:flex-start">
-          <svg class="icon" style="color:var(--neg);flex:none;margin-top:2px" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".6" fill="currentColor"/></svg>
-          <div><strong>5 · The last mile decides everything.</strong><br><span style="font-size:.82rem;color:var(--muted-light)">Elections in Kenya are won and lost at the polling station. H.E. the President's 2022 victory was challenged to the Supreme Court.</span></div></div>
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 55% 45% at 10% 90%,rgba(232,64,64,.055) 0%,transparent 62%),radial-gradient(ellipse 40% 40% at 90% 10%,rgba(245,158,11,.04) 0%,transparent 55%)"></div>
+  <div class="inner" style="z-index:2;position:relative;gap:.6rem">
+
+    <div class="eyebrow reveal d1"><span style="color:var(--warn);margin-right:.35rem">◆</span>Structural Diagnosis</div>
+    <h2 class="title reveal d2" style="margin:.2rem 0 .65rem;font-size:clamp(1.25rem,2.7vw,1.9rem)">The opposition is only half the problem.<br>
+      <span style="color:var(--warn)">Seven structural gaps exist regardless of who runs against you.</span>
+    </h2>
+
+    <!-- Intelligence ledger — 4-col: [icon-box] [name] [descriptor] [badge] -->
+    <div role="table" aria-label="Structural campaign gaps" style="border-top:1px solid rgba(255,255,255,.12)">
+
+      <!-- 01 — CRITICAL -->
+      <div class="reveal d3" role="row" style="display:grid;grid-template-columns:40px 1fr 1.55fr auto;gap:1.2rem;align-items:center;padding:clamp(.44rem,1vh,.66rem) 0;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div style="width:32px;height:32px;border-radius:7px;background:rgba(232,64,64,.1);border:1px solid rgba(232,64,64,.22);display:flex;align-items:center;justify-content:center;flex:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neg)" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <div style="font-size:.57rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.05em;font-variant-numeric:tabular-nums;margin-bottom:.13rem">01</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);line-height:1.2">Disinformation velocity</div>
+        </div>
+        <div style="font-size:.76rem;color:var(--muted-light);line-height:1.5">WhatsApp narratives reach millions before corrections can be drafted. The information war is won or lost before breakfast.</div>
+        <div style="text-align:right;flex:none"><span style="font-size:.57rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neg);background:rgba(232,64,64,.13);border-radius:4px;padding:.2rem .52rem;white-space:nowrap">CRITICAL</span></div>
       </div>
-      <div class="reveal d4" style="display:flex;flex-direction:column;align-items:center;gap:.8rem">
-        <svg viewBox="0 0 300 200" width="100%" style="max-width:340px" aria-label="Fog of war chart">
-          <line x1="30" y1="170" x2="285" y2="170" stroke="#2a2a2c" stroke-width="1.5"/>
-          <line x1="30" y1="20" x2="30" y2="170" stroke="#2a2a2c" stroke-width="1.5"/>
-          <path d="M30,160 C90,150 150,110 210,55 S270,28 282,24" fill="none" stroke="#E84040" stroke-width="2.4"/>
-          <path d="M30,162 C100,158 170,152 240,150 S275,148 282,148" fill="none" stroke="#6e6e68" stroke-width="2.2" stroke-dasharray="4 4"/>
-          <text x="198" y="44" fill="#E84040" font-size="10" font-family="Satoshi">opposition narrative</text>
-          <text x="150" y="138" fill="#9a9a93" font-size="10" font-family="Satoshi">campaign is blind</text>
-        </svg>
-        <p style="font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-light);text-align:center">The fog of war — narrative grows while the campaign can't see it</p>
+
+      <!-- 02 — HIGH -->
+      <div class="reveal d4" role="row" style="display:grid;grid-template-columns:40px 1fr 1.55fr auto;gap:1.2rem;align-items:center;padding:clamp(.44rem,1vh,.66rem) 0;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div style="width:32px;height:32px;border-radius:7px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;flex:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div style="font-size:.57rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.05em;font-variant-numeric:tabular-nums;margin-bottom:.13rem">02</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);line-height:1.2">Community &amp; vernacular gap</div>
+        </div>
+        <div style="font-size:.76rem;color:var(--muted-light);line-height:1.5">Vote decisions happen at barazas and through vernacular radio — channels no digital-first campaign reaches.</div>
+        <div style="text-align:right;flex:none"><span style="font-size:.57rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);background:rgba(245,158,11,.13);border-radius:4px;padding:.2rem .52rem;white-space:nowrap">HIGH</span></div>
+      </div>
+
+      <!-- 03 — HIGH -->
+      <div class="reveal d5" role="row" style="display:grid;grid-template-columns:40px 1fr 1.55fr auto;gap:1.2rem;align-items:center;padding:clamp(.44rem,1vh,.66rem) 0;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div style="width:32px;height:32px;border-radius:7px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;flex:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:.57rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.05em;font-variant-numeric:tabular-nums;margin-bottom:.13rem">03</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);line-height:1.2">Rally energy evaporates</div>
+        </div>
+        <div style="font-size:.76rem;color:var(--muted-light);line-height:1.5">50,000 attend. Contacts uncaptured, commitment unbound. The energy is completely gone by Monday.</div>
+        <div style="text-align:right;flex:none"><span style="font-size:.57rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);background:rgba(245,158,11,.13);border-radius:4px;padding:.2rem .52rem;white-space:nowrap">HIGH</span></div>
+      </div>
+
+      <!-- 04 — HIGH -->
+      <div class="reveal d6" role="row" style="display:grid;grid-template-columns:40px 1fr 1.55fr auto;gap:1.2rem;align-items:center;padding:clamp(.44rem,1vh,.66rem) 0;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div style="width:32px;height:32px;border-radius:7px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;flex:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+        </div>
+        <div>
+          <div style="font-size:.57rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.05em;font-variant-numeric:tabular-nums;margin-bottom:.13rem">04</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);line-height:1.2">New voters, no activation pipeline</div>
+        </div>
+        <div style="font-size:.76rem;color:var(--muted-light);line-height:1.5">2.6M registered in April 2026. No way to identify UDA-leaning youth or guarantee they show up on polling day.</div>
+        <div style="text-align:right;flex:none"><span style="font-size:.57rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);background:rgba(245,158,11,.13);border-radius:4px;padding:.2rem .52rem;white-space:nowrap">HIGH</span></div>
+      </div>
+
+      <!-- 05 — HIGH -->
+      <div class="reveal d7" role="row" style="display:grid;grid-template-columns:40px 1fr 1.55fr auto;gap:1.2rem;align-items:center;padding:clamp(.44rem,1vh,.66rem) 0;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div style="width:32px;height:32px;border-radius:7px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;flex:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        </div>
+        <div>
+          <div style="font-size:.57rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.05em;font-variant-numeric:tabular-nums;margin-bottom:.13rem">05</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);line-height:1.2">Stronghold drift</div>
+        </div>
+        <div style="font-size:.76rem;color:var(--muted-light);line-height:1.5">Rift Valley base assumes the win. Confirmed 4–6% turnout decay every cycle — 3.5M votes at quiet risk.</div>
+        <div style="text-align:right;flex:none"><span style="font-size:.57rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);background:rgba(245,158,11,.13);border-radius:4px;padding:.2rem .52rem;white-space:nowrap">HIGH</span></div>
+      </div>
+
+      <!-- 06 — CRITICAL -->
+      <div class="reveal d8" role="row" style="display:grid;grid-template-columns:40px 1fr 1.55fr auto;gap:1.2rem;align-items:center;padding:clamp(.44rem,1vh,.66rem) 0;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div style="width:32px;height:32px;border-radius:7px;background:rgba(232,64,64,.1);border:1px solid rgba(232,64,64,.22);display:flex;align-items:center;justify-content:center;flex:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neg)" stroke-width="2" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </div>
+        <div>
+          <div style="font-size:.57rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.05em;font-variant-numeric:tabular-nums;margin-bottom:.13rem">06</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);line-height:1.2">Ward-level blindness on polling day</div>
+        </div>
+        <div style="font-size:.76rem;color:var(--muted-light);line-height:1.5">1,450 wards, no real-time tally feed. Irregularities and turnout collapses surface after results are already printed.</div>
+        <div style="text-align:right;flex:none"><span style="font-size:.57rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neg);background:rgba(232,64,64,.13);border-radius:4px;padding:.2rem .52rem;white-space:nowrap">CRITICAL</span></div>
+      </div>
+
+      <!-- 07 — CRITICAL -->
+      <div class="reveal d9" role="row" style="display:grid;grid-template-columns:40px 1fr 1.55fr auto;gap:1.2rem;align-items:center;padding:clamp(.44rem,1vh,.66rem) 0;border-bottom:1px solid rgba(255,255,255,.05)">
+        <div style="width:32px;height:32px;border-radius:7px;background:rgba(232,64,64,.1);border:1px solid rgba(232,64,64,.22);display:flex;align-items:center;justify-content:center;flex:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neg)" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div>
+          <div style="font-size:.57rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.05em;font-variant-numeric:tabular-nums;margin-bottom:.13rem">07</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);line-height:1.2">Intelligence lags by weeks</div>
+        </div>
+        <div style="font-size:.76rem;color:var(--muted-light);line-height:1.5">Decisions run on week-old TIFA polling. Defections and sentiment shifts are invisible until they've become defeats.</div>
+        <div style="text-align:right;flex:none"><span style="font-size:.57rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neg);background:rgba(232,64,64,.13);border-radius:4px;padding:.2rem .52rem;white-space:nowrap">CRITICAL</span></div>
+      </div>
+
+    </div><!-- /ledger -->
+
+    <!-- Bridge card -->
+    <div class="reveal d10" style="background:rgba(22,184,102,.08);border:1px solid rgba(22,184,102,.22);border-radius:12px;padding:.85rem 1.4rem;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1.1rem;margin-top:.45rem">
+      <div style="width:36px;height:36px;border-radius:8px;background:rgba(22,184,102,.15);border:1px solid rgba(22,184,102,.3);display:flex;align-items:center;justify-content:center;flex:none">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <div>
+        <div style="font-size:.94rem;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:.18rem">Electra closes every one of these — simultaneously.</div>
+        <div style="font-size:.78rem;color:var(--muted-light);line-height:1.45">Nine dedicated modules. Each structural gap has a purpose-built response grounded in Kenyan campaign reality.</div>
+      </div>
+      <div style="text-align:right;flex:none">
+        <div style="font-size:1.75rem;font-weight:900;color:var(--green);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums">9</div>
+        <div style="font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-light);font-weight:600;margin-top:.1rem">modules</div>
       </div>
     </div>
+
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">05 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
 
-<!-- ============ SLIDE 6 — ECES PROOF (dark) ============ -->
-<section class="slide dark" data-i="6">
-  <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>Track Record</div>
-    <h2 class="title reveal d2" style="margin:.8rem 0 .5rem;max-width:24ch">We've already held the temperature of the entire Kenyan internet.</h2>
-    <div class="grid3 reveal d3" style="margin:1.8rem 0">
-      <div class="card" style="text-align:center;padding:1.6rem 1rem"><div class="stat-num green counter" data-to="27" data-suffix="M+">0</div><div class="stat-label">Conversations reached</div></div>
-      <div class="card" style="text-align:center;padding:1.6rem 1rem"><div class="stat-num counter" data-to="2500" data-fmt="comma" data-suffix="+">0</div><div class="stat-label">Incidents de-escalated</div></div>
-      <div class="card" style="text-align:center;padding:1.6rem 1rem"><div class="stat-num tnum">2022</div><div class="stat-label">Kenyan election cycle</div></div>
+<!-- ============ SLIDE 6 — ECES PROOF (warm) ============ -->
+<section class="slide warm" data-i="6">
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 55% 45% at 8% 85%,rgba(22,184,102,.055) 0%,transparent 58%),radial-gradient(ellipse 38% 35% at 92% 10%,rgba(45,212,191,.035) 0%,transparent 55%)"></div>
+  <div class="inner" style="z-index:2;position:relative;display:flex;flex-direction:column;gap:.55rem">
+
+    <!-- Top bar: Case Study tag + client logos -->
+    <div class="reveal d1" style="display:flex;align-items:center;justify-content:space-between;gap:1rem">
+      <div style="display:flex;align-items:center;gap:.7rem">
+        <span style="font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:var(--ink);color:#fafaf8;border-radius:4px;padding:.28rem .65rem">Case Study</span>
+        <span style="font-size:.72rem;font-weight:500;color:var(--muted)">Pro-Peace Kenya · #ElectionsBilaNoma · August 2022</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:1.1rem;flex:none">
+        <img src="data:image/png;base64,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" alt="European Union" style="height:36px;width:auto;object-fit:contain" />
+        <img src="ECES/ECES logo.png" alt="European Centre for Electoral Support" style="height:36px;width:auto;object-fit:contain" />
+      </div>
     </div>
-    <div class="card reveal d5" style="display:flex;gap:1.1rem;align-items:center;padding:1rem 1.3rem;max-width:760px">
-      <svg class="icon" style="color:var(--green);width:34px;height:34px;flex:none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
-      <div><strong>European Centre for Electoral Support (ECES)</strong><br><span style="font-size:.8rem;color:var(--muted-light)">Formal contract · National coverage · Verified results</span></div>
+
+    <!-- Title -->
+    <div class="reveal d2">
+      <h2 style="font-size:clamp(1.5rem,3.2vw,2.35rem);font-weight:900;line-height:1.07;letter-spacing:-.025em;color:var(--ink-text)">We built and ran the national information<br>system behind Kenya's election peace campaign.</h2>
+      <div style="font-size:clamp(.88rem,1.2vw,1rem);color:var(--muted);font-weight:500;margin-top:.25rem">EU-commissioned · €3.5M mandate · 47 counties · 18 months end-to-end operation</div>
     </div>
-    <p class="lede reveal d6" style="margin-top:1.4rem;max-width:92ch">This isn't a proposal. This is a track record. The European Union trusted Electra Labs to monitor and de-escalate the entire Kenyan digital conversation during the 2022 election.</p>
+
+    <!-- 4 Impact stats -->
+    <div class="reveal d3" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem">
+      <div style="background:rgba(22,184,102,.08);border:1px solid rgba(22,184,102,.22);border-radius:10px;padding:.78rem 1rem" role="figure" aria-label="27 million plus Kenyans reached">
+        <div style="font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:900;color:var(--green);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums">27M<span style="font-size:.52em;font-weight:700">+</span></div>
+        <div style="font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.3rem">Kenyans reached</div>
+      </div>
+      <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.18);border-radius:10px;padding:.78rem 1rem" role="figure" aria-label="30 million plus impressions">
+        <div style="font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:900;color:var(--teal);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums">30M<span style="font-size:.52em;font-weight:700">+</span></div>
+        <div style="font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.3rem">Impressions delivered</div>
+      </div>
+      <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:.78rem 1rem" role="figure" aria-label="2500 plus hate speech cases neutralised">
+        <div style="font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:900;color:var(--warn);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums">2,500<span style="font-size:.52em;font-weight:700">+</span></div>
+        <div style="font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.3rem">Hate speech cases neutralised</div>
+      </div>
+      <div style="background:rgba(155,123,255,.07);border:1px solid rgba(155,123,255,.18);border-radius:10px;padding:.78rem 1rem" role="figure" aria-label="18 month full national operation">
+        <div style="font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:900;color:var(--violet);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums">18<span style="font-size:.52em;font-weight:700">mo</span></div>
+        <div style="font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:.3rem">Full national operation</div>
+      </div>
+    </div>
+
+    <!-- Mission brief + Cultural proof -->
+    <div class="reveal d4" style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
+
+      <!-- LEFT: Mission brief -->
+      <div style="background:#fff;border:1px solid var(--hairline);border-radius:10px;padding:.88rem 1.15rem;box-shadow:0 1px 3px rgba(11,11,12,.05)">
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">Mission Brief</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:.28rem .82rem;align-items:baseline">
+          <span style="font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.04em;white-space:nowrap;padding-top:.06rem">CLIENT</span>
+          <span style="font-size:.9rem;font-weight:700;color:var(--ink-text)">European Union · ECES</span>
+
+          <span style="font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.04em;white-space:nowrap;padding-top:.06rem">PROJECT</span>
+          <span style="font-size:.9rem;font-weight:700;color:var(--green)">#ElectionsBilaNoma · Pro-Peace Kenya</span>
+
+          <span style="font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.04em;white-space:nowrap;padding-top:.06rem">MANDATE</span>
+          <span style="font-size:.88rem;color:var(--ink-text)">National peace operation · 47 counties</span>
+
+          <span style="font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.04em;white-space:nowrap;padding-top:.06rem">PARTNER</span>
+          <span style="font-size:.88rem;color:var(--muted)">NCIC — National Cohesion &amp; Integration Commission</span>
+
+          <span style="font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.04em;white-space:nowrap;padding-top:.06rem">BUDGET</span>
+          <span style="font-size:.9rem;font-weight:700;color:var(--ink-text)">€3.5M · EU Instrument for Stability &amp; Peace</span>
+
+          <span style="font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.04em;white-space:nowrap;padding-top:.06rem">TOOLS</span>
+          <span style="font-size:.88rem;color:var(--muted)">CrowdTangle · National monitoring infrastructure</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Peace anthem / cultural proof -->
+      <div style="background:#fff;border:1px solid var(--hairline);border-radius:10px;padding:.88rem 1.15rem;display:flex;flex-direction:column;gap:.52rem;box-shadow:0 1px 3px rgba(11,11,12,.05)">
+        <div style="display:flex;align-items:center;gap:.65rem">
+          <div style="width:34px;height:34px;border-radius:8px;background:rgba(22,184,102,.1);border:1px solid rgba(22,184,102,.22);display:flex;align-items:center;justify-content:center;flex:none">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div>
+            <div style="font-size:.92rem;font-weight:700;color:var(--ink-text);line-height:1.2">#ElectionsBilaNoma Peace Anthem</div>
+            <div style="font-size:.76rem;color:var(--muted)">8 artists · one song · one nation</div>
+          </div>
+        </div>
+        <div style="font-size:.84rem;color:var(--muted);line-height:1.55">Kenya's biggest music stars fronted the campaign — confirming the operation had reached cultural saturation across every demographic.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.3rem">
+          <span style="font-size:.72rem;font-weight:600;background:rgba(11,11,12,.05);border:1px solid rgba(11,11,12,.1);border-radius:100px;padding:.2rem .6rem;color:var(--ink-text)">Sauti Sol</span>
+          <span style="font-size:.72rem;font-weight:600;background:rgba(11,11,12,.05);border:1px solid rgba(11,11,12,.1);border-radius:100px;padding:.2rem .6rem;color:var(--ink-text)">Khaligraph Jones</span>
+          <span style="font-size:.72rem;font-weight:600;background:rgba(11,11,12,.05);border:1px solid rgba(11,11,12,.1);border-radius:100px;padding:.2rem .6rem;color:var(--ink-text)">Trio Mio</span>
+          <span style="font-size:.72rem;font-weight:600;background:rgba(11,11,12,.05);border:1px solid rgba(11,11,12,.1);border-radius:100px;padding:.2rem .6rem;color:var(--ink-text)">Wyre</span>
+          <span style="font-size:.72rem;font-weight:600;background:rgba(11,11,12,.05);border:1px solid rgba(11,11,12,.1);border-radius:100px;padding:.2rem .6rem;color:var(--ink-text)">Size8</span>
+          <span style="font-size:.72rem;font-weight:600;background:rgba(11,11,12,.05);border:1px solid rgba(11,11,12,.1);border-radius:100px;padding:.2rem .6rem;color:var(--ink-text)">Samidoh</span>
+          <span style="font-size:.72rem;font-weight:600;background:rgba(11,11,12,.05);border:1px solid rgba(11,11,12,.1);border-radius:100px;padding:.2rem .6rem;color:var(--ink-text)">Evelyn Wanjiru</span>
+          <span style="font-size:.72rem;font-weight:600;background:rgba(11,11,12,.05);border:1px solid rgba(11,11,12,.1);border-radius:100px;padding:.2rem .6rem;color:var(--ink-text)">Mercy Masika</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Verdict strip -->
+    <div class="reveal d5" style="background:rgba(22,184,102,.07);border:1px solid rgba(22,184,102,.22);border-radius:8px;padding:.65rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem">
+      <div style="display:flex;align-items:center;gap:.7rem">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span style="font-size:.9rem;font-weight:700;color:var(--ink-text)">Operation delivered. Kenya reported its most peaceful election cycle in its democratic history.</span>
+      </div>
+      <span style="font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--green);white-space:nowrap;flex:none">EU Verified · NCIC Endorsed</span>
+    </div>
+
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">06 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
 
-<!-- ============ SLIDE 7 — WE BUILD CAMPAIGNS (light) ============ -->
-<section class="slide light" data-i="7">
-  <div class="inner" style="text-align:center">
-    <div class="eyebrow reveal d1" style="justify-content:center"><span class="dot"></span>Positioning</div>
-    <h2 class="display reveal d2" style="margin:1.2rem auto;max-width:18ch">We don't sell software.<br>We build <span class="green">campaigns.</span></h2>
-    <div class="reveal d3" style="width:64px;height:1px;background:var(--hairline);margin:1.4rem auto"></div>
-    <p class="reveal d3" style="font-size:clamp(1.05rem,2vw,1.5rem);font-weight:500;max-width:30ch;margin:0 auto 2.2rem">Obama had the data. Modi had the army.<br><strong>H.E. President Ruto will be the first leader with both.</strong></p>
-    <div class="grid3 reveal d4" style="max-width:760px;margin:0 auto">
-      <div class="card" style="text-align:center;padding:1.5rem 1rem">
-        <svg class="icon" style="width:30px;height:30px;margin:0 auto .7rem;color:var(--ink-text)" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 14 3-4 4 3 5-7"/></svg>
-        <strong>Data</strong><div style="font-size:.78rem;color:var(--muted);margin-top:.2rem">Obama's voter file</div></div>
-      <div class="card" style="text-align:center;padding:1.5rem 1rem">
-        <svg class="icon" style="width:30px;height:30px;margin:0 auto .7rem;color:var(--ink-text)" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <strong>Army</strong><div style="font-size:.78rem;color:var(--muted);margin-top:.2rem">Modi's ground force</div></div>
-      <div class="card" style="text-align:center;padding:1.5rem 1rem;border-color:var(--green);background:rgba(22,184,102,.05)">
-        <svg class="icon" style="width:30px;height:30px;margin:0 auto .7rem;color:var(--green)" viewBox="0 0 24 24"><path d="m12 2 2.4 7.2H22l-6 4.6 2.3 7.2L12 16.6 5.7 21l2.3-7.2-6-4.6h7.6Z"/></svg>
-        <strong class="green">Both</strong><div style="font-size:.78rem;color:var(--muted);margin-top:.2rem">H.E. the President</div></div>
+<!-- ============ SLIDE 7 — MIRU HOOK (dark) ============ -->
+<section class="slide dark" data-i="7">
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 65% 70% at 80% 50%,rgba(22,184,102,.11) 0%,transparent 62%)"></div>
+  <div class="inner" style="z-index:2;position:relative;display:flex;flex-direction:column;gap:1.2rem">
+
+    <!-- Eyebrow -->
+    <div class="eyebrow reveal d1"><span class="dot"></span>The Advantage</div>
+
+    <!-- Three-column contrast -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.65fr;gap:0;align-items:stretch">
+
+      <!-- Col 1: Obama -->
+      <div class="reveal d2" style="border-right:1px solid rgba(255,255,255,.07);padding-right:2rem;display:flex;flex-direction:column;gap:.55rem">
+        <span style="font-size:.62rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.06em">USA · 2008</span>
+        <div style="font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:900;line-height:1;letter-spacing:-.03em;color:rgba(250,250,248,.28)">Obama</div>
+        <div style="font-size:.72rem;font-weight:700;color:var(--teal);letter-spacing:.12em;text-transform:uppercase">The Data</div>
+        <div style="font-size:.82rem;color:var(--muted-light);line-height:1.55;max-width:22ch">Voter micro-targeting. Knew exactly who to reach, and when.</div>
+      </div>
+
+      <!-- Col 2: Modi -->
+      <div class="reveal d3" style="border-right:1px solid rgba(255,255,255,.07);padding:0 2rem;display:flex;flex-direction:column;gap:.55rem">
+        <span style="font-size:.62rem;font-family:monospace;font-weight:600;color:var(--muted-light);letter-spacing:.06em">India · 2014</span>
+        <div style="font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:900;line-height:1;letter-spacing:-.03em;color:rgba(250,250,248,.28)">Modi</div>
+        <div style="font-size:.72rem;font-weight:700;color:var(--warn);letter-spacing:.12em;text-transform:uppercase">The Army</div>
+        <div style="font-size:.82rem;color:var(--muted-light);line-height:1.55;max-width:22ch">800K booth workers. Reached every village, every door.</div>
+      </div>
+
+      <!-- Col 3: Ruto + Miru — dominant -->
+      <div class="reveal d4" style="padding-left:2rem;display:flex;flex-direction:column;gap:.6rem">
+        <span style="font-size:.62rem;font-family:monospace;font-weight:600;color:var(--green);letter-spacing:.06em">Kenya · 2027</span>
+        <div style="font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--text)"><span style="font-size:.38em;font-weight:700;opacity:.6;display:block;line-height:2;letter-spacing:.06em">H.E.</span>Ruto</div>
+        <div style="font-size:clamp(2.8rem,6.2vw,5rem);font-weight:900;line-height:1;letter-spacing:-.04em;color:var(--green)">Miru</div>
+        <div style="font-size:.86rem;color:var(--muted-light);line-height:1.6;max-width:28ch">Obama had one edge. Modi had one edge. Miru runs <span style="color:var(--text);font-weight:700">nine</span> — simultaneously, across all 47 counties, from today until polling day.</div>
+      </div>
+
     </div>
-    <p class="lede reveal d5" style="margin:1.8rem auto 0;text-align:center;max-width:74ch">Not a dashboard vendor. Not a polling firm. A fully managed, end-to-end campaign intelligence and operations machine.</p>
+
+    <!-- Kicker -->
+    <div class="reveal d5" style="border-top:1px solid rgba(255,255,255,.08);padding-top:1.1rem">
+      <div style="font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:800;color:rgba(250,250,248,.55);line-height:1.3">You stop reacting to the opposition.</div>
+      <div style="font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:800;color:var(--green);line-height:1.3">They start reacting to you.</div>
+      <div style="font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-light);margin-top:.6rem">No Kenyan campaign has ever had this. No African campaign has either.</div>
+    </div>
+
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">07 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
 
-<!-- ============ SLIDE 8 — ONE NUMBER (warm) ============ -->
+<!-- ============ SLIDE 8 — THE NINE (warm) ============ -->
 <section class="slide warm" data-i="8">
   <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>The Operating Model</div>
-    <h2 class="title reveal d2" style="margin:.8rem 0 1.6rem">One number to call. <span class="green">Electra Labs runs the machine.</span></h2>
-    <div class="grid4">
-      <div class="card reveal d3"><svg class="icon" style="color:var(--green);margin-bottom:.6rem" viewBox="0 0 24 24"><path d="M12 5a3 3 0 1 0-5.9.8A3 3 0 0 0 5 12a3 3 0 0 0 1.1 5.8A3 3 0 0 0 12 19m0-14a3 3 0 1 1 5.9.8A3 3 0 0 1 19 12a3 3 0 0 1-1.1 5.8A3 3 0 0 1 12 19m0-14v14"/></svg><strong>24/7 AI Intelligence</strong><p style="font-size:.76rem;color:var(--muted);margin-top:.3rem">Sentiment, targeting, threat detection</p></div>
-      <div class="card reveal d3"><svg class="icon" style="color:var(--green);margin-bottom:.6rem" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg><strong>46,000 Ground Agents</strong><p style="font-size:.76rem;color:var(--muted);margin-top:.3rem">M-Pesa-paid, geo-verified</p></div>
-      <div class="card reveal d4"><svg class="icon" style="color:var(--green);margin-bottom:.6rem" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M4.9 19.1A10 10 0 0 1 4.9 4.9"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/></svg><strong>Vernacular Radio</strong><p style="font-size:.76rem;color:var(--muted);margin-top:.3rem">12+ languages, FM dominance</p></div>
-      <div class="card reveal d4"><svg class="icon" style="color:var(--green);margin-bottom:.6rem" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg><strong>Rapid Response</strong><p style="font-size:.76rem;color:var(--muted);margin-top:.3rem">Threat to counter-narrative in hours</p></div>
-      <div class="card reveal d5"><svg class="icon" style="color:var(--green);margin-bottom:.6rem" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><strong>Command Dashboard</strong><p style="font-size:.76rem;color:var(--muted);margin-top:.3rem">One screen, all data</p></div>
-      <div class="card reveal d5"><svg class="icon" style="color:var(--green);margin-bottom:.6rem" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg><strong>Pay-on-Verified-Action</strong><p style="font-size:.76rem;color:var(--muted);margin-top:.3rem">Audit-proof spend trail</p></div>
-      <div class="card reveal d6"><svg class="icon" style="color:var(--green);margin-bottom:.6rem" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg><strong>Compliance Engine</strong><p style="font-size:.76rem;color:var(--muted);margin-top:.3rem">DPA 2019, ODPC, IEBC</p></div>
-      <div class="card reveal d6"><svg class="icon" style="color:var(--green);margin-bottom:.6rem" viewBox="0 0 24 24"><path d="M2 20h20V9l-6 3V9l-6 3V6L2 9Z"/><path d="M6 16h.01M10 16h.01M14 16h.01M18 16h.01"/></svg><strong>Content Factory</strong><p style="font-size:.76rem;color:var(--muted);margin-top:.3rem">Thousands of assets/week, every dialect</p></div>
+    <div class="eyebrow reveal d1"><span class="dot"></span>The Architecture</div>
+    <h2 class="title reveal d2" style="margin:.55rem 0 1.1rem">Nine modules. <span class="green">One command.</span></h2>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem">
+
+      <div class="card reveal d3" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">01</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE GROUND</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:700;color:var(--green);letter-spacing:.07em">"WANANCHI"</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">46,000 agents. Every polling station. M-Pesa verified.</div>
+      </div>
+
+      <div class="card reveal d3" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">02</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE FRONT</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:700;color:var(--violet);letter-spacing:.07em">"WASIKIE"</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">Gen Z: the #1 threat turned into the #1 opportunity.</div>
+      </div>
+
+      <div class="card reveal d3" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">03</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE REGISTER</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:700;color:var(--warn);letter-spacing:.07em">"GHOST-HUNTER"</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">Finds persuadable voters and registers them before the window closes.</div>
+      </div>
+
+      <div class="card reveal d5" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">04</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE MAP</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:700;color:var(--green);letter-spacing:.07em">"DIRA"</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">Ward intelligence. Every county tiered by opportunity.</div>
+      </div>
+
+      <div class="card reveal d5" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">05</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE SHIELD</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:700;color:var(--green);letter-spacing:.07em">"SAUTI"</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">24/7 listening. Threat neutralised within hours.</div>
+      </div>
+
+      <div class="card reveal d5" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">06</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE VOICE</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:700;color:var(--green);letter-spacing:.07em">"KURA CONNECT"</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">Omnichannel. Every target voter in permanent conversation.</div>
+      </div>
+
+      <div class="card reveal d7" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">07</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE RALLY</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:600;color:var(--muted);letter-spacing:.07em">—</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">Converts rally energy into a permanent, contactable voter database.</div>
+      </div>
+
+      <div class="card reveal d7" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">08</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE LOCK</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:700;color:var(--green);letter-spacing:.07em">"AHADI"</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">Six-piece ballot, GOTV science, and a real-time Form 34A tally.</div>
+      </div>
+
+      <div class="card reveal d7" style="padding:.85rem 1rem;display:flex;flex-direction:column;gap:.2rem">
+        <div style="font-size:.57rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.05em">09</div>
+        <div style="font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:-.01em;margin-top:.05rem">THE COMMAND</div>
+        <div style="font-size:.58rem;font-family:monospace;font-weight:700;color:var(--green);letter-spacing:.07em">"RUNGU"</div>
+        <div style="font-size:.73rem;color:var(--muted);line-height:1.5;margin-top:.1rem">One war-room screen. All 9 modules. Real-time.</div>
+      </div>
+
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">08 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -490,7 +987,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">09 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -524,7 +1021,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">10 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -543,7 +1040,7 @@ svg{display:block;max-width:100%}
     </div>
     <p class="lede reveal d5" style="margin:2rem auto 0;max-width:88ch;text-align:center">AI handles <strong style="color:var(--text)">1–2 and 4–5</strong>. Humans deliver <strong class="green">3</strong> — the moment the voter is touched.</p>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">11 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -578,7 +1075,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">12 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -609,7 +1106,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">13 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -650,7 +1147,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">14 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -687,7 +1184,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">15 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -723,7 +1220,7 @@ svg{display:block;max-width:100%}
     </div>
     <p class="lede reveal d6" style="margin-top:1rem;max-width:92ch">The spine. Every other system's output reaches the voter through these 46,000 neighbours.</p>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">16 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -757,7 +1254,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">17 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -804,7 +1301,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">18 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -854,7 +1351,7 @@ svg{display:block;max-width:100%}
       </div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">19 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -878,7 +1375,7 @@ svg{display:block;max-width:100%}
       <div class="impact" style="margin:0"><span class="k">Projected impact</span><span class="v">+250–700K</span></div>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">20 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -891,27 +1388,27 @@ svg{display:block;max-width:100%}
     <div class="col reveal d3" style="gap:.85rem;max-width:760px">
       <div style="display:grid;grid-template-columns:160px 1fr 110px;align-items:center;gap:.9rem">
         <span style="font-size:.82rem;font-weight:700">Strongholds</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:62%;background:#16B866"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="--w:62%;background:#16B866;transition-delay:0s"></div></div>
         <span style="font-size:.78rem;color:var(--muted);text-align:right">+300–500K</span>
       </div>
       <div style="display:grid;grid-template-columns:160px 1fr 110px;align-items:center;gap:.9rem">
         <span style="font-size:.82rem;font-weight:700">Mt Kenya recovery</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:54%;background:#F59E0B"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="--w:54%;background:#F59E0B;transition-delay:.18s"></div></div>
         <span style="font-size:.78rem;color:var(--muted);text-align:right">+200–450K</span>
       </div>
       <div style="display:grid;grid-template-columns:160px 1fr 110px;align-items:center;gap:.9rem">
         <span style="font-size:.82rem;font-weight:700">Registration</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:48%;background:#2DD4BF"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="--w:48%;background:#2DD4BF;transition-delay:.36s"></div></div>
         <span style="font-size:.78rem;color:var(--muted);text-align:right">+150–400K</span>
       </div>
       <div style="display:grid;grid-template-columns:160px 1fr 110px;align-items:center;gap:.9rem">
         <span style="font-size:.82rem;font-weight:700">Swing</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:44%;background:#5FD99A"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="--w:44%;background:#5FD99A;transition-delay:.54s"></div></div>
         <span style="font-size:.78rem;color:var(--muted);text-align:right">+150–350K</span>
       </div>
       <div style="display:grid;grid-template-columns:160px 1fr 110px;align-items:center;gap:.9rem">
         <span style="font-size:.82rem;font-weight:700">Gen Z</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:70%;background:#9B7BFF"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="--w:70%;background:#9B7BFF;transition-delay:.72s"></div></div>
         <span style="font-size:.78rem;color:var(--muted);text-align:right">+250–700K</span>
       </div>
     </div>
@@ -921,7 +1418,7 @@ svg{display:block;max-width:100%}
     </div>
     <p class="reveal d6" style="font-size:.68rem;color:var(--muted);margin-top:1rem;max-width:92ch">Planning model — not a guarantee. Conservative floor ~1.0M · ceiling ~2.0M. Based on +8.3pp turnout lift from friend-to-friend contact (Impactive 2024 field study).</p>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">21 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -958,7 +1455,7 @@ svg{display:block;max-width:100%}
       <p style="font-size:.82rem;color:var(--muted);margin-top:.6rem"><strong style="color:var(--ink-text)">Every shilling traceable to a verified action</strong> — this protects H.E. the President from slush-fund accusations, not the other way around.</p>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">22 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -968,18 +1465,18 @@ svg{display:block;max-width:100%}
   <div class="inner">
     <div class="eyebrow reveal d1"><span class="dot"></span>The Ask</div>
     <h2 class="display reveal d2" style="margin:.7rem 0 1.8rem;font-size:clamp(1.9rem,5vw,3.6rem)"><span class="green">KES 35M</span> proves it.<br><span class="green">KES 563M</span> wins the country.</h2>
-    <div class="grid3 reveal d3" style="align-items:stretch">
-      <div class="card" style="padding:1.3rem 1.2rem">
+    <div class="grid3" style="align-items:stretch">
+      <div class="card reveal d3" style="padding:1.3rem 1.2rem">
         <div style="font-size:2.4rem;font-weight:900;color:var(--muted-light);line-height:1">01</div>
         <strong style="display:block;margin:.5rem 0 .3rem">Sprint 0</strong>
         <p style="font-size:.82rem;color:var(--muted-light)">Registration starts now — the window is closing.</p>
       </div>
-      <div class="card" style="padding:1.3rem 1.2rem;transform:translateY(-14px);border-color:var(--green)">
+      <div class="card reveal d4" style="padding:1.3rem 1.2rem;transform:translateY(-14px);border-color:var(--green)">
         <div style="font-size:2.4rem;font-weight:900;color:var(--green);line-height:1">02</div>
         <strong style="display:block;margin:.5rem 0 .3rem">30-Day Proof</strong>
         <p style="font-size:.82rem;color:var(--muted-light)">3 counties · <strong style="color:var(--text)">KES 35M</strong> · live dashboard.</p>
       </div>
-      <div class="card" style="padding:1.3rem 1.2rem">
+      <div class="card reveal d5" style="padding:1.3rem 1.2rem">
         <div style="font-size:2.4rem;font-weight:900;color:var(--muted-light);line-height:1">03</div>
         <strong style="display:block;margin:.5rem 0 .3rem">Full National</strong>
         <p style="font-size:.82rem;color:var(--muted-light)"><strong style="color:var(--text)">KES 563M</strong> · 47 counties · 46K agents.</p>
@@ -994,7 +1491,7 @@ svg{display:block;max-width:100%}
       <span style="font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-light);font-weight:700">Electra Labs · Confidential</span>
     </div>
   </div>
-  <div class="chrome-foot"><span class="fdot"></span>ELECTRA</div>
+  <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">23 / 23</div>
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
@@ -1036,22 +1533,54 @@ svg{display:block;max-width:100%}
     progress.style.width = pct + '%';
     if(deck.scrollTop > 40 && hint) hint.classList.add('hide');
   }
-  deck.addEventListener('scroll', updateProgress, {passive:true});
 
-  /* ---- IntersectionObserver: visible class + triggers ---- */
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting && e.intersectionRatio > 0.5){
-        var idx = slides.indexOf(e.target);
-        e.target.classList.add('visible');
-        setActive(idx);
-        runCounters(e.target);
-        buildArmy(e.target);
-        runArcs(e.target);
+  /* ---- Visibility trigger: fires for each slide when it enters view ---- */
+  function triggerSlide(s){
+    if(s.classList.contains('visible')) return;
+    s.classList.add('visible');
+    setActive(slides.indexOf(s));
+    runCounters(s);
+    buildArmy(s);
+    runArcs(s);
+    buildDotMatrix(s);
+    buildBattlefield(s);
+  }
+
+  function checkVisible(){
+    var deckTop = deck.scrollTop;
+    var deckH   = deck.clientHeight;
+    slides.forEach(function(s){
+      var sTop = s.offsetTop;
+      var sH   = s.offsetHeight;
+      var centre = sTop + sH/2;
+      if(centre >= deckTop && centre <= deckTop + deckH){
+        if(s.classList.contains('visible')){
+          setActive(slides.indexOf(s)); /* keep current in sync when scrolling back */
+        } else {
+          triggerSlide(s);
+        }
       }
     });
-  },{root:deck, threshold:[0.5,0.6]});
-  slides.forEach(function(s){ io.observe(s); });
+  }
+
+  deck.addEventListener('scroll', function(){
+    updateProgress();
+    checkVisible();
+    sessionStorage.setItem('deckSlide', current);
+  }, {passive:true});
+
+  /* IntersectionObserver as belt-and-suspenders backup */
+  if(window.IntersectionObserver){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting && e.intersectionRatio > 0.3) triggerSlide(e.target);
+      });
+    },{root:deck, threshold:[0.3,0.4]});
+    slides.forEach(function(s){ io.observe(s); });
+  }
+
+  /* fire immediately for whichever slide is visible at load */
+  checkVisible();
 
   /* ---- animated counters ---- */
   function runCounters(scope){
@@ -1079,6 +1608,230 @@ svg{display:block;max-width:100%}
         else el.textContent = fmtNum(to)+suffix;
       }
       requestAnimationFrame(step);
+    });
+  }
+
+  /* ---- Dot matrix: 22M voter universe (slide 2) ---- */
+  function buildDotMatrix(scope){
+    var svg = scope.querySelector('#s2-dots');
+    if(!svg || svg.dataset.built) return;
+    svg.dataset.built = '1';
+    var ns = 'http://www.w3.org/2000/svg';
+    var COLS=10, R=13, STEP=40, XSTART=25;
+    var GREEN_Y=[68,108,148,188,228];
+    var DIM_Y  =[274,314,354,394,434];
+
+    // scoped CSS animations (unique names to avoid global collision)
+    var st=document.createElementNS(ns,'style');
+    st.textContent=
+      '@keyframes s2dp{0%,100%{opacity:.88}50%{opacity:.44}}'+
+      '@keyframes s2rp{0%,100%{opacity:.9}50%{opacity:1}}';
+    svg.appendChild(st);
+
+    // defs: glow filters + scan-line gradient + green-field clip
+    var defs=document.createElementNS(ns,'defs');
+    defs.innerHTML=
+      '<filter id="dg" x="-50%" y="-50%" width="200%" height="200%">'+
+        '<feGaussianBlur stdDeviation="3.5" result="b"/>'+
+        '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'+
+      '</filter>'+
+      '<filter id="rg" x="-90%" y="-90%" width="280%" height="280%">'+
+        '<feGaussianBlur stdDeviation="6" result="b"/>'+
+        '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'+
+      '</filter>'+
+      '<linearGradient id="sg" x1="0%" x2="100%" y1="0%" y2="0%">'+
+        '<stop offset="0%" stop-color="#16B866" stop-opacity="0"/>'+
+        '<stop offset="35%" stop-color="#16B866" stop-opacity="0.5"/>'+
+        '<stop offset="65%" stop-color="#16B866" stop-opacity="0.5"/>'+
+        '<stop offset="100%" stop-color="#16B866" stop-opacity="0"/>'+
+      '</linearGradient>'+
+      '<clipPath id="gc"><rect x="0" y="46" width="430" height="206"/></clipPath>';
+    svg.appendChild(defs);
+
+    function mk(tag,attrs){
+      var el=document.createElementNS(ns,tag);
+      Object.keys(attrs).forEach(function(k){ el.setAttribute(k,attrs[k]); });
+      return el;
+    }
+    function txt(content,x,y,fill,size,weight,ls,anchor){
+      var t=mk('text',{x:x,y:y,fill:fill||'#4a4a48','font-size':size||'8.5','font-family':'Satoshi','font-weight':weight||'700','letter-spacing':ls||'2'});
+      if(anchor) t.setAttribute('text-anchor',anchor);
+      t.textContent=content;
+      return t;
+    }
+
+    // header
+    svg.appendChild(txt('22 MILLION REGISTERED VOTERS',215,18,'#2e2e2c','8','700','2','middle'));
+    svg.appendChild(txt('EACH DOT = 220K VOTERS',215,32,'#222220','7.5','500','1.5','middle'));
+
+    var greenEls=[], dimEls=[];
+
+    // green rows (11M confirmed)
+    GREEN_Y.forEach(function(cy,ri){
+      for(var c=0;c<COLS;c++){
+        var cx=XSTART+c*STEP;
+        var el=mk('circle',{cx:cx,cy:cy,r:R,fill:'#16B866',opacity:'0',filter:'url(#dg)'});
+        svg.appendChild(el);
+        greenEls.push({el:el, delay:350+(ri*COLS+c)*42, col:c});
+      }
+    });
+
+    // scan line: sweeps green field via SMIL (starts after dots appear)
+    var scanG=mk('g',{'clip-path':'url(#gc)'});
+    var scanLine=mk('rect',{x:'0',y:'48',width:'430',height:'2',fill:'url(#sg)',opacity:'0'});
+    var sY=document.createElementNS(ns,'animate');
+    sY.setAttribute('attributeName','y'); sY.setAttribute('values','48;252');
+    sY.setAttribute('dur','5s'); sY.setAttribute('begin','indefinite');
+    sY.setAttribute('repeatCount','indefinite');
+    sY.setAttribute('calcMode','spline'); sY.setAttribute('keySplines','0.3 0 0.7 1');
+    scanLine.appendChild(sY);
+    var sOp=document.createElementNS(ns,'animate');
+    sOp.setAttribute('attributeName','opacity');
+    sOp.setAttribute('values','0;0.9;0.9;0'); sOp.setAttribute('keyTimes','0;0.06;0.88;1');
+    sOp.setAttribute('dur','5s'); sOp.setAttribute('begin','indefinite');
+    sOp.setAttribute('repeatCount','indefinite');
+    scanLine.appendChild(sOp);
+    scanG.appendChild(scanLine);
+    svg.appendChild(scanG);
+
+    // divider
+    svg.appendChild(mk('line',{x1:'10',y1:'250',x2:'420',y2:'250',stroke:'rgba(255,255,255,0.05)','stroke-width':'1','stroke-dasharray':'3 5'}));
+
+    // dim rows (remaining 50% — all in scope, minimum conversion floor)
+    DIM_Y.forEach(function(cy,ri){
+      for(var c=0;c<COLS;c++){
+        var cx=XSTART+c*STEP;
+        var el=mk('circle',{cx:cx,cy:cy,r:R,fill:'#141416',stroke:'#222224','stroke-width':'1.2',opacity:'0'});
+        svg.appendChild(el);
+        dimEls.push({el:el, delay:350+50*42+420+ri*32});
+      }
+    });
+
+    // right-side labels
+    var lbl1=txt('11M CONFIRMED','422','148','#16B866','8','700','1.5');
+    lbl1.setAttribute('transform','rotate(90 422 148)');
+    lbl1.setAttribute('text-anchor','middle');
+    svg.appendChild(lbl1);
+
+    var lbl2=txt('11M ADDRESSABLE UPSIDE','422','354','#252523','7.5','600','1');
+    lbl2.setAttribute('transform','rotate(90 422 354)');
+    lbl2.setAttribute('text-anchor','middle');
+    svg.appendChild(lbl2);
+
+    // 233K: red dot with breathing pulse + two expanding SMIL rings
+    var rdot=mk('circle',{cx:'25',cy:'462',r:'10',fill:'#E84040',filter:'url(#rg)',opacity:'0.9'});
+    if(!reduce) rdot.style.animation='s2rp 1.8s ease-in-out infinite';
+    svg.appendChild(rdot);
+
+    [0,1].forEach(function(i){
+      var ring=mk('circle',{cx:'25',cy:'462',r:'10',fill:'none',stroke:'#E84040','stroke-width':'1.5'});
+      var ra=document.createElementNS(ns,'animate');
+      ra.setAttribute('attributeName','r'); ra.setAttribute('from','10'); ra.setAttribute('to','30');
+      ra.setAttribute('dur','2.4s'); ra.setAttribute('begin',(i*1.2)+'s');
+      ra.setAttribute('repeatCount','indefinite');
+      ring.appendChild(ra);
+      var oa=document.createElementNS(ns,'animate');
+      oa.setAttribute('attributeName','stroke-opacity'); oa.setAttribute('from','0.65'); oa.setAttribute('to','0');
+      oa.setAttribute('dur','2.4s'); oa.setAttribute('begin',(i*1.2)+'s');
+      oa.setAttribute('repeatCount','indefinite');
+      ring.appendChild(oa);
+      svg.appendChild(ring);
+    });
+
+    svg.appendChild(mk('line',{x1:'37',y1:'462',x2:'58',y2:'462',stroke:'rgba(232,64,64,.4)','stroke-width':'1'}));
+    svg.appendChild(txt('233K — what decided 2022','62','466','#E84040','8','700','1'));
+    svg.appendChild(txt('That\'s less than 1 dot out of 100','62','478','#383836','7.5','500','0.5'));
+
+    // --- animate ---
+    var maxDelay=0;
+
+    // green: fade in, then start column-wave breathing pulse
+    greenEls.forEach(function(d){
+      var delay=reduce?0:d.delay;
+      if(delay>maxDelay) maxDelay=delay;
+      setTimeout(function(){
+        d.el.style.transition='opacity 0.4s ease';
+        d.el.setAttribute('opacity','0.88');
+        if(!reduce){
+          setTimeout(function(){
+            d.el.style.transition='';
+            d.el.style.animation='s2dp 2.6s ease-in-out infinite';
+            d.el.style.animationDelay=(d.col*0.22)+'s';
+          }, 550);
+        }
+      }, delay);
+    });
+
+    // dim: fade in after green half
+    dimEls.forEach(function(d){
+      setTimeout(function(){
+        d.el.style.transition='opacity 0.4s ease';
+        d.el.setAttribute('opacity','1');
+      }, reduce?0:d.delay);
+    });
+
+    // scan line: begins when green half is fully loaded
+    setTimeout(function(){
+      sY.beginElement(); sOp.beginElement();
+    }, reduce?0:maxDelay+700);
+  }
+
+  /* ---- Territory control bars (slide 3) ---- */
+  function buildBattlefield(scope){
+    var master=scope.querySelector('#s3-master');
+    if(!master||master.dataset.built) return;
+    master.dataset.built='1';
+    var tiers=[
+      {label:'DEEP STRONGHOLD',       color:'#16B866',c:10,v:3.5,pct:15.8,avg:'88% UDA',  keys:'Nandi · Elgeyo-Marakwet · Bomet · Kericho · Uasin Gishu · Baringo · West Pokot'},
+      {label:'FRIENDLY / EXPANDING',  color:'#5FD99A',c:9, v:3.2,pct:14.5,avg:'63% UDA',  keys:'Mandera · Wajir · Garissa · Isiolo · Tana River · Mombasa · Coast gains · BBG Nyanza'},
+      {label:'BATTLEGROUND',          color:'#F59E0B',c:13,v:6.9,pct:31.2,avg:'47% contested',keys:'Mt Kenya (9 cos.) · Nakuru · Trans-Nzoia · Kakamega · Bungoma · Busia · Vihiga'},
+      {label:'SWING',                 color:'#2DD4BF',c:6, v:3.4,pct:15.4,avg:'43% UDA',  keys:'Nairobi · Kajiado · Narok · Taita-Taveta · Laikipia · Lamu'},
+      {label:'HOSTILE',               color:'#E84040',c:9, v:5.1,pct:23.1,avg:'23% UDA',  keys:'Makueni · Kitui · Machakos · Kilifi · Siaya · Kisumu · Homa Bay · Kisii · Nyamira'}
+    ];
+    // segmented master bar
+    tiers.forEach(function(t,i){
+      var seg=document.createElement('div');
+      seg.style.cssText='flex:0 0 '+t.pct+'%;height:100%;background:'+t.color+';opacity:0;transition:opacity .6s '+(i*.09)+'s ease';
+      master.appendChild(seg);
+      setTimeout(function(){ seg.style.opacity='1'; },reduce?0:160+i*90);
+    });
+    // tier rows — flex layout so county names wrap fully
+    var container=scope.querySelector('#s3-tiers');
+    if(!container) return;
+    tiers.forEach(function(t,i){
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:flex-start;gap:.6rem;padding:clamp(.3rem,1vh,.45rem) 0;border-bottom:1px solid rgba(11,11,12,.05);opacity:0;transform:translateY(5px);transition:opacity .4s '+(i*.1)+'s ease,transform .4s '+(i*.1)+'s ease';
+      var dot=document.createElement('span');
+      dot.style.cssText='width:11px;height:11px;border-radius:50%;background:'+t.color+';box-shadow:0 0 6px '+t.color+'66;flex:none;margin-top:3px';
+      // body wraps label row + county names
+      var body=document.createElement('div');
+      body.style.cssText='flex:1;min-width:0';
+      // top line: label + bar + stats
+      var topLine=document.createElement('div');
+      topLine.style.cssText='display:flex;align-items:center;gap:.6rem';
+      var lbl=document.createElement('span');
+      lbl.style.cssText='font-size:.7rem;font-weight:700;letter-spacing:.06em;color:'+(t.label==='BATTLEGROUND'?'#b86e00':'#1e1e1c')+';white-space:nowrap;flex:none';
+      lbl.textContent=t.label;
+      var track=document.createElement('div');
+      track.style.cssText='flex:1;height:6px;background:rgba(11,11,12,.07);border-radius:3px;overflow:hidden';
+      var fill=document.createElement('div');
+      fill.style.cssText='width:0;height:100%;background:'+t.color+';border-radius:3px;transition:width 1.1s cubic-bezier(.22,.61,.36,1) '+(i*.1)+'s';
+      track.appendChild(fill);
+      var vc=document.createElement('span');
+      vc.style.cssText='font-size:.7rem;font-weight:700;color:#6a6a62;font-variant-numeric:tabular-nums;white-space:nowrap;flex:none';
+      vc.textContent=t.v+'M';
+      var ac=document.createElement('span');
+      ac.style.cssText='font-size:.66rem;font-weight:700;color:'+t.color+';white-space:nowrap;flex:none;min-width:76px;text-align:right';
+      ac.textContent=t.avg;
+      topLine.appendChild(lbl); topLine.appendChild(track); topLine.appendChild(vc); topLine.appendChild(ac);
+      // county names — wraps naturally, no clipping
+      var keys=document.createElement('div');
+      keys.style.cssText='font-size:.6rem;color:#8a8a80;margin-top:.22rem;line-height:1.55;white-space:normal';
+      keys.textContent=t.keys;
+      body.appendChild(topLine); body.appendChild(keys);
+      row.appendChild(dot); row.appendChild(body);
+      container.appendChild(row);
+      setTimeout(function(){ row.style.opacity='1'; row.style.transform='translateY(0)'; fill.style.width=t.pct+'%'; },reduce?0:300+i*130);
     });
   }
 
@@ -1147,10 +1900,15 @@ svg{display:block;max-width:100%}
   });
 
   /* ---- init ---- */
+  var savedIdx = parseInt(sessionStorage.getItem('deckSlide') || '0');
+  if(savedIdx > 0 && slides[savedIdx]){
+    deck.scrollTop = slides[savedIdx].offsetTop;
+  }
   slides[0].classList.add('visible');
   dots[0].classList.add('active');
   runCounters(slides[0]);
   updateProgress();
+  checkVisible();
 })();
 </script>
 </body>
