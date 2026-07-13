@@ -40,7 +40,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:auto;overflow:hidden;height:100%}
+html{scroll-behavior:auto;overflow:hidden;height:100%;font-size:clamp(14px,1.15vw,22px)}
 body{
   font-family:'Satoshi',system-ui,-apple-system,sans-serif;
   background:var(--ink);
@@ -357,7 +357,7 @@ svg{display:block;max-width:100%}
             <div class="stat-label">2022 winning margin</div>
           </div>
         </div>
-        <p class="lede reveal d4">H.E. the President leads <strong style="color:var(--text)">TIFA May 2026 polling at 24%</strong> — but no candidate reaches 50%+1. The last election was decided by 233,000 votes. You need 8 million to win comfortably. <strong style="color:var(--text)">We build 11 million confirmed supporters.</strong></p>
+        <p class="lede reveal d4">H.E. the President leads <strong style="color:var(--text)">TIFA May 2026 polling at 24%</strong> — but no candidate reaches 50%+1. The last election was decided by 233,000 votes. <strong style="color:var(--text)">We build 11 million confirmed supporters.</strong></p>
         <p class="reveal d5" style="font-size:.7rem;letter-spacing:.1em;color:var(--muted-light);text-transform:uppercase">Source: TIFA National Survey, May 14 2026 (n=2,013 ±2.18%) · 2022 IEBC final results</p>
       </div>
       <!-- Funnel rings -->
@@ -749,8 +749,8 @@ svg{display:block;max-width:100%}
         <span style="font-size:.72rem;font-weight:500;color:var(--muted)">Pro-Peace Kenya · #ElectionsBilaNoma · August 2022</span>
       </div>
       <div style="display:flex;align-items:center;gap:1.1rem;flex:none">
-        <img src="data:image/png;base64,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" alt="European Union" style="height:36px;width:auto;object-fit:contain" />
-        <img src="ECES/ECES logo.png" alt="European Centre for Electoral Support" style="height:36px;width:auto;object-fit:contain" />
+        <img src="data:image/png;base64,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" alt="European Union" style="height:56px;width:auto;object-fit:contain" />
+        <img src="ECES/ECES logo.png" alt="European Centre for Electoral Support" style="height:56px;width:auto;object-fit:contain" />
       </div>
     </div>
 
@@ -1001,7 +1001,7 @@ svg{display:block;max-width:100%}
             <div style="font-size:.56rem;font-family:monospace;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:.2rem">2022 winning margin</div>
           </div>
           <div style="width:1px;background:rgba(255,255,255,.07);align-self:stretch"></div>
-          <p style="font-size:clamp(.7rem,1.2vw,.82rem);color:var(--muted-light);line-height:1.65;margin:0">Rift Valley turnout decays <strong style="color:var(--warn)">4–6% per cycle.</strong> Mt. Kenya is fragmenting. Three counties drifting silently erases this — weeks before any poll publishes.</p>
+          <p style="font-size:clamp(.82rem,1.3vw,.95rem);color:var(--muted-light);line-height:1.65;margin:0">Rift Valley turnout decays <strong style="color:var(--warn)">4–6% per cycle.</strong> Mt. Kenya is fragmenting. Three counties drifting silently erases this — weeks before any poll publishes.</p>
         </div>
 
         <!-- Speed contrast — argument flows naturally -->
@@ -1015,7 +1015,7 @@ svg{display:block;max-width:100%}
             <div class="tnum" style="font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:900;color:var(--muted);line-height:1;opacity:.35">4wk</div>
             <div style="font-size:.53rem;font-family:monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Infotrak</div>
           </div>
-          <p style="font-size:clamp(.67rem,1.1vw,.77rem);color:var(--muted-light);line-height:1.6;margin:0">Obama 2012's precinct models caught Ohio shifting before Romney's team knew it was in play. <strong style="color:var(--text)">Dira runs the same — at ward level, for Kenya.</strong></p>
+          <p style="font-size:clamp(.8rem,1.25vw,.92rem);color:var(--muted-light);line-height:1.6;margin:0">Obama 2012's precinct models caught Ohio shifting before Romney's team knew it was in play. <strong style="color:var(--text)">Dira runs the same — at ward level, for Kenya.</strong></p>
         </div>
 
         <!-- Stats -->
@@ -1042,28 +1042,28 @@ svg{display:block;max-width:100%}
 
         <div style="border-radius:8px;overflow:hidden">
           <div style="background:rgba(22,184,102,.18);padding:.32rem .7rem;font-size:.58rem;font-weight:700;color:var(--green);letter-spacing:.06em;text-transform:uppercase">Defend &amp; Maximize</div>
-          <div style="background:rgba(22,184,102,.06);padding:.32rem .7rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.75">
+          <div style="background:rgba(22,184,102,.06);padding:.32rem .7rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.75">
             Uasin Gishu · Kericho · Nandi · Bomet · Baringo · Elgeyo-Marakwet · Trans-Nzoia · West Pokot · Turkana · Samburu · Marsabit · Isiolo · Mandera · Wajir · Garissa · Tana River · Lamu
           </div>
         </div>
 
         <div style="border-radius:8px;overflow:hidden">
           <div style="background:rgba(245,158,11,.18);padding:.32rem .7rem;font-size:.58rem;font-weight:700;color:var(--warn);letter-spacing:.06em;text-transform:uppercase">Recover</div>
-          <div style="background:rgba(245,158,11,.06);padding:.32rem .7rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.75">
+          <div style="background:rgba(245,158,11,.06);padding:.32rem .7rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.75">
             Nyeri · Kirinyaga · Murang'a · Nyandarua · Kiambu · Meru · Embu · Tharaka-Nithi · Laikipia
           </div>
         </div>
 
         <div style="border-radius:8px;overflow:hidden">
           <div style="background:rgba(45,212,191,.16);padding:.32rem .7rem;font-size:.58rem;font-weight:700;color:var(--teal);letter-spacing:.06em;text-transform:uppercase">Win — Swing</div>
-          <div style="background:rgba(45,212,191,.05);padding:.32rem .7rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.75">
+          <div style="background:rgba(45,212,191,.05);padding:.32rem .7rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.75">
             Nairobi · Mombasa · Kilifi · Kwale · Taita-Taveta · Kakamega · Vihiga · Bungoma · Busia · Nakuru
           </div>
         </div>
 
         <div style="border-radius:8px;overflow:hidden">
           <div style="background:rgba(232,64,64,.16);padding:.32rem .7rem;font-size:.58rem;font-weight:700;color:var(--neg);letter-spacing:.06em;text-transform:uppercase">Mine — Pockets</div>
-          <div style="background:rgba(232,64,64,.05);padding:.32rem .7rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.75">
+          <div style="background:rgba(232,64,64,.05);padding:.32rem .7rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.75">
             Kisumu · Siaya · Homa Bay · Migori · Kisii · Nyamira · Machakos · Makueni · Kitui · Kajiado · Narok
           </div>
         </div>
@@ -1098,7 +1098,7 @@ svg{display:block;max-width:100%}
             <div style="font-size:.56rem;font-family:monospace;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:.2rem">IEBC 2026 new voters</div>
           </div>
           <div style="width:1px;background:rgba(255,255,255,.07);align-self:stretch"></div>
-          <p style="font-size:clamp(.7rem,1.2vw,.82rem);color:var(--muted-light);line-height:1.65;margin:0">The IEBC 2026 drive added 2.6M new registrants. Passive registration doesn't choose sides — <strong style="color:var(--warn)">Ghost-Hunter identifies the share that leans Ruto and gets them on the register before the window closes.</strong></p>
+          <p style="font-size:clamp(.82rem,1.3vw,.95rem);color:var(--muted-light);line-height:1.65;margin:0">The IEBC 2026 drive added 2.6M new registrants. Passive registration doesn't choose sides — <strong style="color:var(--warn)">Ghost-Hunter identifies the share that leans Ruto and gets them on the register before the window closes.</strong></p>
         </div>
 
         <!-- Sprint 0 vs vote ceiling comparison -->
@@ -1106,12 +1106,12 @@ svg{display:block;max-width:100%}
           <div style="background:rgba(232,64,64,.05);border:1px solid rgba(232,64,64,.15);border-radius:8px;padding:.7rem .9rem">
             <div class="tnum" style="font-size:clamp(1.1rem,2.4vw,1.75rem);font-weight:900;color:var(--neg);line-height:1">Sprint 0</div>
             <div style="font-size:.55rem;font-family:monospace;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:.15rem">Window closes</div>
-            <p style="font-size:.67rem;color:var(--muted-light);line-height:1.5;margin:.3rem 0 0">Registration closes months before election day. Miss the window — lose those votes forever.</p>
+            <p style="font-size:.78rem;color:var(--muted-light);line-height:1.5;margin:.3rem 0 0">Registration closes months before election day. Miss the window — lose those votes forever.</p>
           </div>
           <div style="background:rgba(22,184,102,.05);border:1px solid rgba(22,184,102,.15);border-radius:8px;padding:.7rem .9rem">
             <div class="tnum" style="font-size:clamp(1.1rem,2.4vw,1.75rem);font-weight:900;color:var(--green);line-height:1">+400K</div>
             <div style="font-size:.55rem;font-family:monospace;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:.15rem">Vote ceiling</div>
-            <p style="font-size:.67rem;color:var(--muted-light);line-height:1.5;margin:.3rem 0 0">2022 margin was 233K. Ghost-Hunter adds a hard floor before any mobilisation begins.</p>
+            <p style="font-size:.78rem;color:var(--muted-light);line-height:1.5;margin:.3rem 0 0">2022 margin was 233K. Ghost-Hunter adds a hard floor before any mobilisation begins.</p>
           </div>
         </div>
 
@@ -1123,7 +1123,7 @@ svg{display:block;max-width:100%}
         </div>
 
         <!-- Precedent -->
-        <div class="reveal d6" style="font-size:clamp(.63rem,1.05vw,.72rem);color:var(--muted);border-left:2px solid rgba(245,158,11,.25);padding-left:.7rem;line-height:1.6">
+        <div class="reveal d6" style="font-size:clamp(.76rem,1.15vw,.86rem);color:var(--muted);border-left:2px solid rgba(245,158,11,.25);padding-left:.7rem;line-height:1.6">
           Obama 2008 — active registration drives added 2M first-time Black voters in key states. Not passive sign-up tables. <strong style="color:var(--muted-light)">AI-targeted identification, door-to-door contact, IVR follow-up.</strong> Ghost-Hunter is that playbook at ward scale, for Kenya.
         </div>
       </div>
@@ -1137,7 +1137,7 @@ svg{display:block;max-width:100%}
             <span style="width:14px;height:14px;border-radius:50%;background:rgba(245,158,11,.25);border:1px solid rgba(245,158,11,.4);display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:900;flex-shrink:0">1</span>
             AI builds the ghost list
           </div>
-          <div style="background:rgba(245,158,11,.04);padding:.4rem .75rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.7">
+          <div style="background:rgba(245,158,11,.04);padding:.4rem .75rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.7">
             Cross-references IEBC register gaps vs telco coverage data, county databases, consented community signals. Outputs a ward-level list of unregistered voters who model as Ruto-leaning.
           </div>
         </div>
@@ -1147,7 +1147,7 @@ svg{display:block;max-width:100%}
             <span style="width:14px;height:14px;border-radius:50%;background:rgba(45,212,191,.2);border:1px solid rgba(45,212,191,.3);display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:900;flex-shrink:0">2</span>
             2,000 agents dispatch
           </div>
-          <div style="background:rgba(45,212,191,.04);padding:.4rem .75rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.7">
+          <div style="background:rgba(45,212,191,.04);padding:.4rem .75rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.7">
             Teams deploy to markets, churches, boda stages in priority wards. IVR/SMS follow-up converts pending registrants who didn't complete on first contact.
           </div>
         </div>
@@ -1157,14 +1157,14 @@ svg{display:block;max-width:100%}
             <span style="width:14px;height:14px;border-radius:50%;background:rgba(22,184,102,.2);border:1px solid rgba(22,184,102,.3);display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:900;flex-shrink:0">3</span>
             Enters the Voter Graph
           </div>
-          <div style="background:rgba(22,184,102,.04);padding:.4rem .75rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.7">
+          <div style="background:rgba(22,184,102,.04);padding:.4rem .75rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.7">
             Every registered ghost enters Dira's model, receives an I-Force PSA page assignment, and becomes reachable by Kura Connect. Ghost-Hunter expands the universe every other module works from.
           </div>
         </div>
 
         <div style="border-radius:8px;overflow:hidden">
           <div style="background:rgba(155,123,255,.10);padding:.35rem .75rem;font-size:.58rem;font-weight:700;color:var(--violet);letter-spacing:.06em;text-transform:uppercase">Data sources</div>
-          <div style="background:rgba(155,123,255,.03);padding:.38rem .75rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.65">
+          <div style="background:rgba(155,123,255,.03);padding:.38rem .75rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.65">
             IEBC voter register · telco coverage zones · county databases · consented community data · ward-level Dira tier scores
           </div>
         </div>
@@ -1200,21 +1200,21 @@ svg{display:block;max-width:100%}
             <div style="font-size:.56rem;font-family:monospace;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:.15rem">PSA agents</div>
           </div>
           <div style="width:1px;background:rgba(255,255,255,.07);align-self:stretch"></div>
-          <p style="font-size:clamp(.7rem,1.2vw,.82rem);color:var(--muted-light);line-height:1.55;margin:0">Each agent owns one page of the register — ~50 voters <strong style="color:var(--text)">they already know personally.</strong> These are neighbours who will actually open the door. AI dispatches the task list. Verified action gets paid.</p>
+          <p style="font-size:clamp(.82rem,1.3vw,.95rem);color:var(--muted-light);line-height:1.55;margin:0">Each agent owns one page of the register — ~50 voters <strong style="color:var(--text)">they already know personally.</strong> These are neighbours who will actually open the door. AI dispatches the task list. Verified action gets paid.</p>
         </div>
 
-        <!-- Science: +8.3pp vs +2.8pp -->
-        <div class="reveal d4" style="display:grid;grid-template-columns:auto 1px auto 1fr;gap:.75rem;align-items:center">
+        <!-- 440K AI Agents powered by 46K ground force -->
+        <div class="reveal d4" style="display:grid;grid-template-columns:auto 1px auto 1fr;gap:.85rem;align-items:center;background:rgba(22,184,102,.05);border:1px solid rgba(22,184,102,.18);border-radius:10px;padding:.75rem 1rem">
           <div>
-            <div class="tnum" style="font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:900;color:var(--green);line-height:1">+8.3pp</div>
-            <div style="font-size:.53rem;font-family:monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Neighbour</div>
+            <div class="tnum" style="font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:900;color:var(--green);line-height:1">440K</div>
+            <div style="font-size:.62rem;font-family:monospace;color:var(--muted-light);text-transform:uppercase;letter-spacing:.07em;margin-top:.15rem">AI agents</div>
           </div>
-          <div style="width:1px;height:2rem;background:rgba(255,255,255,.08)"></div>
+          <div style="width:1px;background:rgba(255,255,255,.08);align-self:stretch"></div>
           <div>
-            <div class="tnum" style="font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:900;color:var(--muted);line-height:1;opacity:.35">+2.8pp</div>
-            <div style="font-size:.53rem;font-family:monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Stranger</div>
+            <div class="tnum" style="font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:900;color:var(--text);line-height:1">46K</div>
+            <div style="font-size:.62rem;font-family:monospace;color:var(--muted-light);text-transform:uppercase;letter-spacing:.07em;margin-top:.15rem">Ground force</div>
           </div>
-          <p style="font-size:clamp(.67rem,1.1vw,.77rem);color:var(--muted-light);line-height:1.55;margin:0">Nickerson (2008) — largest turnout RCT ever run. <strong style="color:var(--text)">The neighbour is 3× more effective. I-Force is built on that gap.</strong></p>
+          <p style="font-size:clamp(.78rem,1.2vw,.9rem);color:var(--muted-light);line-height:1.55;margin:0">Each ground agent powers 10 AI agents — each AI agent holds a personal list of 50 voters they know. <strong style="color:var(--text)">440,000 live conversations, running simultaneously.</strong></p>
         </div>
 
         <!-- Stats -->
@@ -1233,7 +1233,7 @@ svg{display:block;max-width:100%}
             <span class="badge" style="font-size:.55rem">M-Pesa pay-on-action</span>
             <span class="badge" style="font-size:.55rem">Voter Graph nightly</span>
           </div>
-          <div style="font-size:clamp(.63rem,1.05vw,.72rem);color:var(--muted);border-left:2px solid rgba(22,184,102,.25);padding-left:.7rem;line-height:1.55">
+          <div style="font-size:clamp(.76rem,1.15vw,.86rem);color:var(--muted);border-left:2px solid rgba(22,184,102,.25);padding-left:.7rem;line-height:1.55">
             BJP panna pramukh — one agent per page of 40 voters across India's 900M electorate. Obama 2008 neighbourhood teams — the ground game that held Ohio. <strong style="color:var(--muted-light)">I-Force is both, AI-dispatched.</strong>
           </div>
         </div>
@@ -1265,7 +1265,7 @@ svg{display:block;max-width:100%}
         <!-- Vote math -->
         <div style="border-radius:8px;background:rgba(22,184,102,.04);border:1px solid rgba(22,184,102,.12);padding:.55rem .85rem">
           <div style="font-size:.55rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.35rem">Vote math</div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:.15rem .6rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.65">
+          <div style="display:grid;grid-template-columns:1fr auto;gap:.15rem .6rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.65">
             <span>46,000 PSAs × ~60 assigned voters</span><span class="tnum" style="color:var(--text);font-weight:700">2.76M</span>
             <span>Projected impact (floor–ceiling)</span><span class="tnum" style="color:var(--green);font-weight:700">+350K–620K</span>
           </div>
@@ -1274,7 +1274,7 @@ svg{display:block;max-width:100%}
         <!-- Also does — compact inline -->
         <div style="border-radius:8px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);padding:.45rem .75rem">
           <div style="font-size:.55rem;font-family:monospace;font-weight:700;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.25rem">Also does</div>
-          <div style="font-size:clamp(.6rem,1vw,.67rem);color:var(--muted-light);line-height:1.6">Ghost-Hunter registration · Form 34A capture on election day · ballot education · rally turnout push</div>
+          <div style="font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.6">Ghost-Hunter registration · Form 34A capture on election day · ballot education · rally turnout push</div>
         </div>
 
         <div style="font-size:.55rem;color:var(--muted);line-height:1.5">IEBC register legally accessible to registered parties (Elections Act) · geo-stamped · ghost agents earn zero</div>
@@ -1308,7 +1308,7 @@ svg{display:block;max-width:100%}
             <div style="font-size:.56rem;font-family:monospace;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:.2rem">Modi 2014 IVR</div>
           </div>
           <div style="width:1px;background:rgba(255,255,255,.07);align-self:stretch"></div>
-          <p style="font-size:clamp(.7rem,1.2vw,.82rem);color:var(--muted-light);line-height:1.65;margin:0">India 2014: vernacular IVR reached 100M+ voters and moved the needle in rural states. <strong style="color:var(--text)">Kura Connect runs the same model at Kenya's scale — but it also transcribes every reply and sentiment-scores it in real time.</strong></p>
+          <p style="font-size:clamp(.82rem,1.3vw,.95rem);color:var(--muted-light);line-height:1.65;margin:0">India 2014: vernacular IVR reached 100M+ voters and moved the needle in rural states. <strong style="color:var(--text)">Kura Connect runs the same model at Kenya's scale — but it also transcribes every reply and sentiment-scores it in real time.</strong></p>
         </div>
 
         <!-- 50M vs 12+ comparison -->
@@ -1322,7 +1322,7 @@ svg{display:block;max-width:100%}
             <div class="tnum" style="font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:900;color:var(--green);line-height:1">12+</div>
             <div style="font-size:.53rem;font-family:monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Languages</div>
           </div>
-          <p style="font-size:clamp(.67rem,1.1vw,.77rem);color:var(--muted-light);line-height:1.6;margin:0">Works on any phone. USSD <strong style="color:var(--text)">*384#</strong>, toll-free IVR, WhatsApp, SMS. <strong style="color:var(--text)">No smartphone, no data plan, no literacy barrier.</strong> Rural Kenya is reachable.</p>
+          <p style="font-size:clamp(.8rem,1.25vw,.92rem);color:var(--muted-light);line-height:1.6;margin:0">Works on any phone. USSD <strong style="color:var(--text)">*384#</strong>, toll-free IVR, WhatsApp, SMS. <strong style="color:var(--text)">No smartphone, no data plan, no literacy barrier.</strong> Rural Kenya is reachable.</p>
         </div>
 
         <!-- Stats -->
@@ -1342,7 +1342,7 @@ svg{display:block;max-width:100%}
             <span class="badge" style="font-size:.56rem">SMS</span>
             <span class="badge" style="font-size:.56rem">Vernacular radio</span>
           </div>
-          <div style="font-size:clamp(.63rem,1.05vw,.72rem);color:var(--muted);border-left:2px solid rgba(155,123,255,.25);padding-left:.7rem;line-height:1.6">
+          <div style="font-size:clamp(.76rem,1.15vw,.86rem);color:var(--muted);border-left:2px solid rgba(155,123,255,.25);padding-left:.7rem;line-height:1.6">
             Obama Narwhal (2012) — one voter database driving all contact, every channel. <strong style="color:var(--muted-light)">Kura Connect is Narwhal at Kenya's scale, with ASR that hears Kikuyu.</strong>
           </div>
         </div>
@@ -1357,7 +1357,7 @@ svg{display:block;max-width:100%}
             <span style="width:14px;height:14px;border-radius:50%;background:rgba(155,123,255,.25);border:1px solid rgba(155,123,255,.4);display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:900;flex-shrink:0">1</span>
             Dira routes the call
           </div>
-          <div style="background:rgba(155,123,255,.04);padding:.35rem .72rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.65">
+          <div style="background:rgba(155,123,255,.04);padding:.35rem .72rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.65">
             Selects channel, language, message and timing based on voter profile — region, lean, last contact, preferred channel. No generic blasts.
           </div>
         </div>
@@ -1367,7 +1367,7 @@ svg{display:block;max-width:100%}
             <span style="width:14px;height:14px;border-radius:50%;background:rgba(45,212,191,.2);border:1px solid rgba(45,212,191,.3);display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:900;flex-shrink:0">2</span>
             Voter picks up. We listen.
           </div>
-          <div style="background:rgba(45,212,191,.04);padding:.35rem .72rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.65">
+          <div style="background:rgba(45,212,191,.04);padding:.35rem .72rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.65">
             Branching IVR/USSD/WhatsApp in their mother tongue. Feature phone, no data plan needed. Voter presses a key or speaks. Kura Connect records it.
           </div>
         </div>
@@ -1377,7 +1377,7 @@ svg{display:block;max-width:100%}
             <span style="width:14px;height:14px;border-radius:50%;background:rgba(22,184,102,.2);border:1px solid rgba(22,184,102,.3);display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:900;flex-shrink:0">3</span>
             AI scores. Dira updates.
           </div>
-          <div style="background:rgba(22,184,102,.04);padding:.35rem .72rem;font-size:clamp(.6rem,1vw,.68rem);color:var(--muted-light);line-height:1.65">
+          <div style="background:rgba(22,184,102,.04);padding:.35rem .72rem;font-size:clamp(.76rem,1.1vw,.86rem);color:var(--muted-light);line-height:1.65">
             Whisper ASR transcribes the reply. Sentiment scored. Persuadable → different next call today. Hostile → pause. Supporter → turnout prompt. The model sharpens with every reply.
           </div>
         </div>
@@ -1408,10 +1408,10 @@ svg{display:block;max-width:100%}
 </section>
 
 
-<!-- ============ SLIDE 13 — RALLY ENGINE (light) · 07 · Multiplier ============ -->
+<!-- ============ SLIDE 13 — RALLY ENGINE (light) · 05 · Multiplier ============ -->
 <section class="slide light" data-i="13">
   <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>07 · Rally Engine · The Multiplier</div>
+    <div class="eyebrow reveal d1"><span class="dot"></span>05 · Rally Engine · The Multiplier</div>
     <div class="split" style="margin-top:.55rem;align-items:start;gap:clamp(2rem,4vw,3.5rem)">
       <div class="col" style="gap:clamp(.5rem,1.3vh,.9rem)">
         <h2 class="display reveal d2" style="font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.05">Rally Engine</h2>
@@ -1460,7 +1460,7 @@ svg{display:block;max-width:100%}
 <section class="slide dark" data-i="14">
   <div style="position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 80% 20%,rgba(200,255,0,.04) 0%,transparent 65%)"></div>
   <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>09 · Wasikie · Gen Z Front</div>
+    <div class="eyebrow reveal d1"><span class="dot"></span>06 · Wasikie · Gen Z Front</div>
     <div class="split" style="margin-top:.55rem;align-items:start;gap:clamp(2rem,4vw,3.5rem)">
       <div class="col" style="gap:clamp(.5rem,1.3vh,.85rem)">
         <h2 class="display reveal d2" style="font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.05">Wasikie</h2>
@@ -1516,7 +1516,7 @@ svg{display:block;max-width:100%}
 <!-- ============ SLIDE 15 — SAUTI SHIELD (light) · 06 · Rapid Response ============ -->
 <section class="slide light" data-i="15">
   <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>06 · Sauti Shield · Rapid Response</div>
+    <div class="eyebrow reveal d1"><span class="dot"></span>07 · Sauti Shield · Rapid Response</div>
     <div class="split" style="margin-top:.55rem;align-items:start;gap:clamp(2rem,4vw,3.5rem)">
       <div class="col" style="gap:clamp(.38rem,.95vh,.62rem)">
         <h2 class="display reveal d2" style="font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.05">Sauti Shield</h2>
@@ -1584,7 +1584,7 @@ svg{display:block;max-width:100%}
 <section class="slide dark" data-i="16">
   <div style="position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 50% 50% at 75% 30%,rgba(22,184,102,.06) 0%,transparent 65%)"></div>
   <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>07 · The Lock · Six-Piece + Form 34A Vault</div>
+    <div class="eyebrow reveal d1"><span class="dot"></span>08 · The Lock · Six-Piece + Form 34A Vault</div>
     <div class="split" style="margin-top:.28rem;align-items:start;gap:clamp(2rem,4vw,3.5rem)">
       <div class="col" style="gap:clamp(.32rem,.7vh,.52rem)">
         <h2 class="display reveal d2" style="font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.05">The Lock</h2>
@@ -1594,7 +1594,7 @@ svg{display:block;max-width:100%}
           <div><div class="stat-num tnum" style="font-size:clamp(1.6rem,3.6vw,2.2rem)">&lt;30m</div><div class="stat-label">34A flag time</div></div>
           <div><div class="stat-num counter tnum" data-to="23000" data-fmt="comma" style="font-size:clamp(1.6rem,3.6vw,2.2rem)">0</div><div class="stat-label">Stations covered</div></div>
         </div>
-        <div class="impact reveal d4"><span class="k">Protects</span><span class="v">THE FULL 8M</span></div>
+        <div class="impact reveal d4"><span class="k">Protects</span><span class="v">THE FULL 11M</span></div>
         <div class="card reveal d5" style="padding:.4rem .72rem">
           <div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-light);font-weight:700;margin-bottom:.2rem">AHADI · Commitment Ladder</div>
           <div class="col" style="gap:.22rem">
@@ -1626,7 +1626,7 @@ svg{display:block;max-width:100%}
             <rect x="158" y="21" width="84" height="24" rx="3" fill="none" stroke="#16B866" stroke-width="1.6"/>
             <text x="200" y="37" text-anchor="middle" fill="#16B866" font-size="12" font-weight="700" font-family="Satoshi">7,184 &#10003;</text>
           </svg>
-          <p style="font-size:.68rem;color:var(--muted-light);margin-top:.38rem">Photo &#8594; OCR &#8594; parallel tally &#8594; discrepancy flag &lt;30 min</p>
+          <p style="font-size:.82rem;color:var(--muted-light);margin-top:.38rem">Photo &#8594; OCR &#8594; parallel tally &#8594; discrepancy flag &lt;30 min</p>
         </div>
       </div>
     </div>
@@ -1639,7 +1639,7 @@ svg{display:block;max-width:100%}
 <!-- ============ SLIDE 17 — RUNGU COMMAND (light) · 08 · The War Room ============ -->
 <section class="slide light" data-i="17">
   <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>08 · Rungu Command · The War Room</div>
+    <div class="eyebrow reveal d1"><span class="dot"></span>09 · Rungu Command · The War Room</div>
     <div class="split" style="margin-top:.55rem;align-items:start;gap:clamp(2rem,4vw,3.5rem)">
       <div class="col" style="gap:clamp(.5rem,1.3vh,.85rem)">
         <h2 class="display reveal d2" style="font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.05">Rungu Command</h2>
@@ -1689,7 +1689,7 @@ svg{display:block;max-width:100%}
             <div style="font-size:.5rem;color:#9a9a93;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.32rem">THREATS</div>
             <div style="font-size:.62rem;display:flex;align-items:center;gap:.35rem;margin-bottom:.25rem;color:#fafaf8"><span style="width:6px;height:6px;border-radius:50%;background:#E84040;flex:none"></span>Rumor · Nakuru</div>
             <div style="font-size:.62rem;display:flex;align-items:center;gap:.35rem;margin-bottom:.25rem;color:#fafaf8"><span style="width:6px;height:6px;border-radius:50%;background:#F59E0B;flex:none"></span>Hashtag · Nairobi</div>
-            <div style="font-size:.62px;display:flex;align-items:center;gap:.35rem;color:#fafaf8"><span style="width:6px;height:6px;border-radius:50%;background:#16B866;flex:none"></span>Cleared · Kisumu</div>
+            <div style="font-size:.62rem;display:flex;align-items:center;gap:.35rem;color:#fafaf8"><span style="width:6px;height:6px;border-radius:50%;background:#16B866;flex:none"></span>Cleared · Kisumu</div>
           </div>
         </div>
         <div style="padding:.38rem .6rem;border-top:1px solid #2a2a2c">
@@ -1703,48 +1703,48 @@ svg{display:block;max-width:100%}
   <div class="chrome-side">Confidential — UDA 2027</div>
 </section>
 
-<!-- ============ SLIDE 18 — ROAD TO 8M (light) ============ -->
+<!-- ============ SLIDE 18 — ROAD TO 11M (light) ============ -->
 <section class="slide light" data-i="18">
   <div class="inner">
-    <div class="eyebrow reveal d1"><span class="dot"></span>The Vote Stack · Road to 8M</div>
-    <h2 class="title reveal d2" style="margin:.55rem 0 .3rem;font-size:clamp(1.3rem,2.8vw,1.9rem);line-height:1.25">233,000 votes decided 2022.<br><strong style="color:var(--ink-text)">We are bringing 1 to 2 million.</strong></h2>
+    <div class="eyebrow reveal d1"><span class="dot"></span>The Vote Stack · Road to 11M</div>
+    <h2 class="title reveal d2" style="margin:.55rem 0 .3rem;font-size:clamp(1.3rem,2.8vw,1.9rem);line-height:1.25">233,000 votes decided 2022.<br><strong style="color:var(--ink-text)">We are building a path to 11 million confirmed supporters.</strong></h2>
     <div class="col reveal d3" style="gap:.7rem;max-width:760px;margin-top:.75rem">
       <div style="display:grid;grid-template-columns:170px 1fr 120px;align-items:center;gap:.8rem">
         <span style="font-size:.8rem;font-weight:700">Defend strongholds</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:60%;background:#16B866;transition-delay:0s"></div></div>
-        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+300K–500K</span>
+        <div class="bar-track"><div class="bar-fill" style="--w:76%;background:#16B866;transition-delay:0s"></div></div>
+        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+600K–1.2M</span>
       </div>
       <div style="display:grid;grid-template-columns:170px 1fr 120px;align-items:center;gap:.8rem">
         <span style="font-size:.8rem;font-weight:700">Mt Kenya recovery</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:52%;background:#F59E0B;transition-delay:.15s"></div></div>
-        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+200K–450K</span>
+        <div class="bar-track"><div class="bar-fill" style="--w:65%;background:#F59E0B;transition-delay:.15s"></div></div>
+        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+500K–900K</span>
       </div>
       <div style="display:grid;grid-template-columns:170px 1fr 120px;align-items:center;gap:.8rem">
         <span style="font-size:.8rem;font-weight:700">New registrations</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:46%;background:#2DD4BF;transition-delay:.3s"></div></div>
-        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+150K–400K</span>
+        <div class="bar-track"><div class="bar-fill" style="--w:54%;background:#2DD4BF;transition-delay:.3s"></div></div>
+        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+300K–600K</span>
       </div>
       <div style="display:grid;grid-template-columns:170px 1fr 120px;align-items:center;gap:.8rem">
         <span style="font-size:.8rem;font-weight:700">Swing — Western/Coast</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:42%;background:#5FD99A;transition-delay:.45s"></div></div>
-        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+150K–350K</span>
+        <div class="bar-track"><div class="bar-fill" style="--w:54%;background:#5FD99A;transition-delay:.45s"></div></div>
+        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+300K–600K</span>
       </div>
       <div style="display:grid;grid-template-columns:170px 1fr 120px;align-items:center;gap:.8rem">
         <span style="font-size:.8rem;font-weight:700">Gen Z middle</span>
-        <div class="bar-track"><div class="bar-fill" style="--w:68%;background:#9B7BFF;transition-delay:.6s"></div></div>
-        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+250K–700K</span>
+        <div class="bar-track"><div class="bar-fill" style="--w:88%;background:#9B7BFF;transition-delay:.6s"></div></div>
+        <span style="font-size:.84rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums">+700K–1.4M</span>
       </div>
     </div>
     <div class="row reveal d5" style="gap:2rem;margin-top:1rem;align-items:flex-end">
       <div>
-        <div class="stat-num green" style="font-size:clamp(1.9rem,4.2vw,2.8rem);font-variant-numeric:tabular-nums">~1.0 – 2.0M</div>
-        <div class="stat-label">Attributable decisive votes — 4 to 8&times; the 2022 margin</div>
+        <div class="stat-num green" style="font-size:clamp(1.9rem,4.2vw,2.8rem);font-variant-numeric:tabular-nums">~2.4M – 4.7M</div>
+        <div class="stat-label">Net new votes · 2022 base 7.2M · path: 10M–12M</div>
       </div>
       <div style="padding-bottom:.3rem;max-width:34ch">
-        <span style="font-size:.8rem;color:var(--muted)">Verified, ward-by-ward. Conservative floor ~1.0M vs margin of <strong style="color:var(--ink-text)">233,000</strong>.</span>
+        <span style="font-size:.8rem;color:var(--muted)">Conservative floor 10M. Optimistic ceiling 12M. All ward-level, overlap-discounted.</span>
       </div>
     </div>
-    <p class="reveal d6" style="font-size:.64rem;color:var(--muted);margin-top:.65rem;max-width:90ch">Planning model — not a guarantee. Based on +8.3pp turnout lift from friend-to-friend contact (Impactive 2024 · largest field study). Tranches overlap-discounted.</p>
+    <p class="reveal d6" style="font-size:.64rem;color:var(--muted);margin-top:.65rem;max-width:90ch">Planning model — not a guarantee. Tranches are overlap-discounted. Based on ward-level Dira modelling and historical base-rate uplift from structured field operations.</p>
   </div>
   <div class="chrome-foot"><span class="fdot"></span></div>
   <div class="chrome-page">18 / 20</div>
