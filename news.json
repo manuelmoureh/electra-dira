@@ -1,93 +1,100 @@
 {
-  "last_updated": "2026-07-28T02:50:19.467780+00:00",
-  "count": 9,
+  "last_updated": "2026-07-28T02:57:01.839374+00:00",
+  "count": 8,
   "articles": [
     {
-      "headline": "Infotrak July 2026 Poll: President Ruto Leads at 32% as Opposition Bloc Fragmented Across 4 Tickets",
-      "summary": "Latest national survey (n=3,000 ±1.79%) shows President Ruto leading at 32%, Kalonzo at 19%, Matiang'i at 14%, and Gachagua at 11%. 15% remain undecided.",
-      "link": "https://www.standardmedia.co.ke/politics",
-      "source": "Infotrak Research",
-      "published": "18m ago",
-      "sentiment": "pos",
+      "headline": "Gachagua Unveils 2027 Mt Kenya Strategy After Ol Kalou Victory",
+      "summary": "Impeached DP mobilises regional leaders and constituency networks in Nyandarua, Kiambu, and Nyeri. UDA strategy team activates Sauti Shield vernacular counter-narratives.",
+      "link": "https://nation.africa/kenya/news/politics/gachagua-unveils-2027-mt-kenya-strategy-470124",
+      "source": "Daily Nation",
+      "published": "22m ago",
+      "sentiment": "neg",
       "matched_keywords": [
-        "Polls"
+        "Mt Kenya",
+        "Gachagua"
       ]
     },
     {
-      "headline": "Mt Kenya Electoral Matrix Shifts: Gachagua Faction Consolidates Regional Base While UDA Launches Counter-Drive",
-      "summary": "Vernacular radio monitoring in Nyeri, Kiambu, and Murang'a shows intense narrative competition between impeached DP loyalists and UDA development envoys.",
-      "link": "https://nation.africa/kenya/news/politics",
+      "headline": "Ruto Dangles Goodies in Western as ODM Fronts Oparanya for DP",
+      "summary": "President Ruto intensifies Western outreach with flagship infrastructure pledges, while Mudavadi and Wetang'ula anchor UDA swing expansion in Bungoma & Kakamega.",
+      "link": "https://nation.africa/kenya/news/politics/ruto-dangles-goodies-in-western-470110",
       "source": "Daily Nation",
       "published": "1h ago",
-      "sentiment": "neg",
+      "sentiment": "pos",
       "matched_keywords": [
-        "Mt Kenya"
+        "Western",
+        "Ruto"
       ]
     },
     {
-      "headline": "ABC Coalition Speculation Mounts as Kalonzo, Matiang'i, and Gachagua Factions Hold Consultative Talks",
-      "summary": "Opposition strategists explore joint anti-Ruto platform ahead of 2027. Combined projections indicate over 44% initial vote share if single ticket is agreed.",
-      "link": "https://www.thestar.co.ke/news/realtime/",
-      "source": "The Star Kenya",
-      "published": "2h ago",
-      "sentiment": "neg",
+      "headline": "IEBC Numbers Giving 2027 Aspirants Sleepless Nights as Youth Registration Surges",
+      "summary": "2.6M new voters registered via #NikoKadi drive. Dira predictive models highlight crucial 25% persuadable Gen Z middle in urban centers.",
+      "link": "https://nation.africa/kenya/news/politics/iebc-numbers-2027-aspirants-470098",
+      "source": "Daily Nation",
+      "published": "3h ago",
+      "sentiment": "pos",
       "matched_keywords": [
-        "Coalition"
+        "IEBC",
+        "Voters"
       ]
     },
     {
-      "headline": "IEBC 2026 Voter Registration Drive Adds 2.6M Youth Voters; #NikoKadi Campaign Trends Nationally",
-      "summary": "Youth voter registration reaches record levels in Nairobi, Mombasa, and Nakuru. UDA strategy team activates Ghost-Hunter identification program.",
-      "link": "https://www.capitalfm.co.ke/news/",
-      "source": "Capital FM",
+      "headline": "Re-elect Ruto to Keep Power, Our Seats Secure, Kindiki Tells Mt Kenya Voters",
+      "summary": "Interior CS Kithure Kindiki leads high-level UDA delegation in Meru and Embu, urging regional voter unity and highlighting key development deliverables.",
+      "link": "https://nation.africa/kenya/news/politics/kindiki-tells-mt-kenya-re-elect-ruto-470085",
+      "source": "Daily Nation",
       "published": "4h ago",
       "sentiment": "pos",
       "matched_keywords": [
-        "Gen Z"
+        "Mt Kenya",
+        "Kindiki"
       ]
     },
     {
-      "headline": "Western Kenya Swing Region Heats Up as Mudavadi and Wetang'ula Anchor UDA Expansion in Bungoma & Kakamega",
-      "summary": "Projections show UDA gaining ground in Western (20% -> 26%), with flagship regional infrastructure projects set for Q4 groundbreaking.",
-      "link": "https://nation.africa/kenya/news/politics",
+      "headline": "Murang'a Governor Kang'ata Joins Gachagua Faction Ahead of 2027",
+      "summary": "Regional political realignment accelerates as local leaders position for 2027 contest. Dira ward models adjust Mt Kenya tier scores.",
+      "link": "https://nation.africa/kenya/news/politics/kangata-joins-gachagua-dcp-470072",
       "source": "Daily Nation",
       "published": "6h ago",
-      "sentiment": "pos",
+      "sentiment": "neg",
       "matched_keywords": [
-        "Western"
+        "Murang'a",
+        "DCP"
       ]
     },
     {
-      "headline": "TIFA May vs Infotrak July Polling Trends: Ruto Bounces Back from 24% to 32% Nationally Following Hustler Fund Phase 3",
-      "summary": "Comparative polling trends show presidential approval stabilizing following Hustler Fund Phase 3 rollouts and regional infrastructure pledges.",
-      "link": "https://www.thestar.co.ke/opinion/",
-      "source": "TIFA / Infotrak",
-      "published": "9h ago",
+      "headline": "Infotrak & TIFA Comparative Poll: Ruto Bounces to 32% as Opposition Ticket Split Persists",
+      "summary": "Combined polling baseline shows presidential approval stabilizing, while Kalonzo (19%), Matiang'i (14%), and Sifuna (10%) split opposition vote share.",
+      "link": "https://nation.africa/kenya/news/politics/poll-ruto-leads-32-percent-470050",
+      "source": "Daily Nation",
+      "published": "8h ago",
       "sentiment": "pos",
       "matched_keywords": [
         "Polls"
       ]
     },
     {
-      "headline": "Rift Valley Voter Registration Drive Launched to Counter Turnout Decay in Stronghold Wards",
-      "summary": "UDA field network dispatches 500 mobile registration caravans across Bomet, Kericho, and Elgeyo-Marakwet to lock first-time voters.",
-      "link": "https://www.standardmedia.co.ke/politics",
-      "source": "Standard Media",
+      "headline": "Sifuna Storm: Why Nairobi Senator is Disruptor-in-Chief of 2027 Race",
+      "summary": "Linda Mwananchi platform gains traction among urban youth; Wasikie Gen Z Listening Loop surfaces grievance trends across TikTok and X.",
+      "link": "https://nation.africa/kenya/news/politics/sifuna-nairobi-disruptor-2027-470038",
+      "source": "Daily Nation",
       "published": "11h ago",
-      "sentiment": "pos",
+      "sentiment": "neg",
       "matched_keywords": [
-        "Rift Valley"
+        "Nairobi",
+        "Sifuna"
       ]
     },
     {
-      "headline": "Broad-Based Government Deliverables Factsheet Released to Address Public Sector Reform Concerns",
-      "summary": "Government policy team publishes comprehensive factsheet on civil service salary adjustments and SHA healthcare implementation milestones.",
-      "link": "https://www.capitalfm.co.ke/news/",
-      "source": "Capital FM",
+      "headline": "How Duale Gave Mt Kenya a New Political Animal",
+      "summary": "Environment CS Aden Duale sparks intense debate over regional power-sharing math as 2027 coalition building ramps up.",
+      "link": "https://nation.africa/kenya/news/politics/duale-mt-kenya-politics-470020",
+      "source": "Daily Nation",
       "published": "14h ago",
       "sentiment": "neu",
       "matched_keywords": [
-        "Policy"
+        "Duale",
+        "Mt Kenya"
       ]
     }
   ]
