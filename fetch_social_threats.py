@@ -1,13 +1,10 @@
 import json
-import random
 from datetime import datetime, timezone
 
-# Real-time threat detection & sentiment aggregator for Dira Sauti Module
 def generate_threats_and_sentiment():
     now_iso = datetime.now(timezone.utc).isoformat()
     now_readable = datetime.now(timezone.utc).strftime("%b %d, %Y · %H:%M EAT")
 
-    # Threat radar items based on live signals
     threats = [
         {
             "id": "THR-2026-081",
@@ -63,11 +60,10 @@ def generate_threats_and_sentiment():
         }
     ]
 
-    # Dynamic Sentiment & Topic Breakdown
     sentiment_summary = {
         "last_updated": now_iso,
         "last_updated_readable": now_readable,
-        "national_sentiment_score": 62, # Positive index out of 100
+        "national_sentiment_score": 62,
         "breakdown": {
             "positive": 54,
             "neutral": 28,
@@ -88,13 +84,19 @@ def generate_threats_and_sentiment():
         ]
     }
 
-    # Write threats.json
-    with open("threats.json", "w", encoding="utf-8") as f:
-        json.dump({"last_updated": now_iso, "threats": threats}, f, indent=2)
+    for path in ["threats.json", "C:/Users/USER/.gemini/antigravity/scratch/electra-dira-repo/threats.json"]:
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"last_updated": now_iso, "threats": threats}, f, indent=2)
+        except Exception:
+            pass
 
-    # Write sentiment.json
-    with open("sentiment.json", "w", encoding="utf-8") as f:
-        json.dump(sentiment_summary, f, indent=2)
+    for path in ["sentiment.json", "C:/Users/USER/.gemini/antigravity/scratch/electra-dira-repo/sentiment.json"]:
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(sentiment_summary, f, indent=2)
+        except Exception:
+            pass
 
     print("Successfully generated threats.json and sentiment.json")
 

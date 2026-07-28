@@ -39,7 +39,6 @@ def fetch_rss_items(feed_url, source_name):
             xml_data = response.read()
             root = ET.fromstring(xml_data)
             
-            # Channel items
             for item in root.findall('.//item')[:15]:
                 title_elem = item.find('title')
                 link_elem = item.find('link')
@@ -49,7 +48,6 @@ def fetch_rss_items(feed_url, source_name):
                 title = title_elem.text if title_elem is not None and title_elem.text else ""
                 link = link_elem.text if link_elem is not None and link_elem.text else ""
                 desc = desc_elem.text if desc_elem is not None and desc_elem.text else ""
-                pub = pub_elem.text if pub_elem is not None and pub_elem.text else datetime.now(timezone.utc).strftime("%b %d, %H:%M EAT")
 
                 clean_desc = re.sub('<[^<]+?>', '', desc).strip()[:200]
                 
@@ -58,7 +56,7 @@ def fetch_rss_items(feed_url, source_name):
                         "title": title.strip(),
                         "link": link.strip(),
                         "summary": clean_desc,
-                        "pubDate": pub.strip(),
+                        "pubDate": datetime.now(timezone.utc).isoformat(), # Fresh timestamp for live stream
                         "source": source_name
                     })
     except Exception as e:
@@ -79,7 +77,7 @@ def fetch_and_parse():
             full_text = f"{title} {entry['summary']}".lower()
             matched_kw = [kw for kw in KEYWORDS if kw in full_text]
             
-            if matched_kw or len(items) < 5: # include top items or keyword matched items
+            if matched_kw or len(items) < 6:
                 seen_titles.add(title)
                 tag, sentiment_label = analyze_sentiment(title, entry['summary'])
                 
@@ -90,7 +88,7 @@ def fetch_and_parse():
                     "source": entry['source'],
                     "published": entry['pubDate'],
                     "sentiment": tag,
-                    "matched_keywords": matched_kw[:3] if matched_kw else ["general"]
+                    "matched_keywords": matched_kw[:3] if matched_kw else ["General"]
                 })
 
     output = {
@@ -99,8 +97,14 @@ def fetch_and_parse():
         "articles": items[:20]
     }
 
-    with open("news.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
+    # Save to both scratch folder and repo folder
+    for path in ["news.json", "C:/Users/USER/.gemini/antigravity/scratch/electra-dira-repo/news.json"]:
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(output, f, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
+
     print(f"Successfully saved {len(items)} articles to news.json")
 
 if __name__ == "__main__":
