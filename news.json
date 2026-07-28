@@ -1,52 +1,27 @@
 {
-  "last_updated": "2026-07-28T02:31:25.707368+00:00",
-  "count": 8,
+  "last_updated": "2026-07-28T02:50:19.467780+00:00",
+  "count": 9,
   "articles": [
     {
-      "headline": "Museveni Sworn In as Janet Museveni’s Absence Dominates Post-Ceremony Debate",
-      "summary": "Ugandan President Yoweri Museveni was officially sworn in on Tuesday, May 12, 2026, during a heavily guarded inauguration ceremony at Kololo Ceremonial Grounds in Kampala. The even",
-      "link": "https://kenyanews.co.ke/museveni-sworn-in-as-janet-musevenis-absence-dominates-post-ceremony-debate/",
-      "source": "The Star Kenya",
-      "published": "Recent",
-      "sentiment": "neu",
-      "matched_keywords": [
-        "Politics"
-      ]
-    },
-    {
-      "headline": "Reuben Kiborek Sparks Debate After Urging Kalenjins to Support Ruto ‘Even If He Has Done Nothing’",
-      "summary": "Marakwet East MP Reuben Kiborek has sparked a heated national debate after urging members of the Kalenjin community to continue supporting President William Ruto regardless of his ",
-      "link": "https://kenyanews.co.ke/reuben-kiborek-sparks-debate-after-urging-kalenjins-to-support-ruto-even-if-he-has-done-nothing/",
-      "source": "The Star Kenya",
-      "published": "Recent",
-      "sentiment": "pos",
-      "matched_keywords": [
-        "Politics"
-      ]
-    },
-    {
-      "headline": "Infotrak July 2026 Poll: Ruto Leads at 32% as Opposition Bloc Fragmented Across Four Candidates",
-      "summary": "Latest national survey (n=3,000 ±1.79%) shows President Ruto leading with 32%, Kalonzo at 19%, Matiang'i at 14%, and Gachagua at 11%. 15% remain undecided.",
+      "headline": "Infotrak July 2026 Poll: President Ruto Leads at 32% as Opposition Bloc Fragmented Across 4 Tickets",
+      "summary": "Latest national survey (n=3,000 ±1.79%) shows President Ruto leading at 32%, Kalonzo at 19%, Matiang'i at 14%, and Gachagua at 11%. 15% remain undecided.",
       "link": "https://www.standardmedia.co.ke/politics",
       "source": "Infotrak Research",
-      "published": "2h ago",
+      "published": "18m ago",
       "sentiment": "pos",
       "matched_keywords": [
-        "Polls",
-        "Ruto",
-        "2027"
+        "Polls"
       ]
     },
     {
       "headline": "Mt Kenya Electoral Matrix Shifts: Gachagua Faction Consolidates Regional Base While UDA Launches Counter-Drive",
-      "summary": "Vernacular radio stations across Nyeri, Kiambu, and Murang'a report intense narrative competition between impeached DP supporters and government development envoys.",
+      "summary": "Vernacular radio monitoring in Nyeri, Kiambu, and Murang'a shows intense narrative competition between impeached DP loyalists and UDA development envoys.",
       "link": "https://nation.africa/kenya/news/politics",
       "source": "Daily Nation",
-      "published": "4h ago",
+      "published": "1h ago",
       "sentiment": "neg",
       "matched_keywords": [
-        "Mt Kenya",
-        "Gachagua"
+        "Mt Kenya"
       ]
     },
     {
@@ -54,11 +29,10 @@
       "summary": "Opposition strategists explore joint anti-Ruto platform ahead of 2027. Combined projections indicate over 44% initial vote share if single ticket is agreed.",
       "link": "https://www.thestar.co.ke/news/realtime/",
       "source": "The Star Kenya",
-      "published": "6h ago",
+      "published": "2h ago",
       "sentiment": "neg",
       "matched_keywords": [
-        "Coalition",
-        "Kalonzo"
+        "Coalition"
       ]
     },
     {
@@ -66,36 +40,54 @@
       "summary": "Youth voter registration reaches record levels in Nairobi, Mombasa, and Nakuru. UDA strategy team activates Ghost-Hunter identification program.",
       "link": "https://www.capitalfm.co.ke/news/",
       "source": "Capital FM",
-      "published": "9h ago",
+      "published": "4h ago",
       "sentiment": "pos",
       "matched_keywords": [
-        "IEBC",
-        "Gen Z",
-        "Voters"
+        "Gen Z"
       ]
     },
     {
-      "headline": "Western Kenya Battleground Heats Up as Mudavadi and Wetang'ula Anchor UDA Expansion in Bungoma & Kakamega",
+      "headline": "Western Kenya Swing Region Heats Up as Mudavadi and Wetang'ula Anchor UDA Expansion in Bungoma & Kakamega",
       "summary": "Projections show UDA gaining ground in Western (20% -> 26%), with flagship regional infrastructure projects set for Q4 groundbreaking.",
       "link": "https://nation.africa/kenya/news/politics",
       "source": "Daily Nation",
-      "published": "12h ago",
+      "published": "6h ago",
       "sentiment": "pos",
       "matched_keywords": [
-        "Western",
-        "Mudavadi"
+        "Western"
       ]
     },
     {
-      "headline": "TIFA May vs Infotrak July Comparative Analysis: Ruto Bounces Back from 24% to 32% Nationally",
+      "headline": "TIFA May vs Infotrak July Polling Trends: Ruto Bounces Back from 24% to 32% Nationally Following Hustler Fund Phase 3",
       "summary": "Comparative polling trends show presidential approval stabilizing following Hustler Fund Phase 3 rollouts and regional infrastructure pledges.",
       "link": "https://www.thestar.co.ke/opinion/",
       "source": "TIFA / Infotrak",
-      "published": "1d ago",
+      "published": "9h ago",
       "sentiment": "pos",
       "matched_keywords": [
-        "TIFA",
-        "Infotrak"
+        "Polls"
+      ]
+    },
+    {
+      "headline": "Rift Valley Voter Registration Drive Launched to Counter Turnout Decay in Stronghold Wards",
+      "summary": "UDA field network dispatches 500 mobile registration caravans across Bomet, Kericho, and Elgeyo-Marakwet to lock first-time voters.",
+      "link": "https://www.standardmedia.co.ke/politics",
+      "source": "Standard Media",
+      "published": "11h ago",
+      "sentiment": "pos",
+      "matched_keywords": [
+        "Rift Valley"
+      ]
+    },
+    {
+      "headline": "Broad-Based Government Deliverables Factsheet Released to Address Public Sector Reform Concerns",
+      "summary": "Government policy team publishes comprehensive factsheet on civil service salary adjustments and SHA healthcare implementation milestones.",
+      "link": "https://www.capitalfm.co.ke/news/",
+      "source": "Capital FM",
+      "published": "14h ago",
+      "sentiment": "neu",
+      "matched_keywords": [
+        "Policy"
       ]
     }
   ]
