@@ -1,0 +1,75 @@
+{
+  "last_updated": "2026-07-28T02:15:39.302170+00:00",
+  "threats": [
+    {
+      "id": "THR-2026-081",
+      "title": "Gachagua Mt. Kenya Unity Campaign Narrative",
+      "severity": "high",
+      "severity_label": "CRITICAL",
+      "type": "ELECTORAL",
+      "description": "Impeached DP mobilising vernacular podcasts & WhatsApp broadcast lists in Nyeri, Kiambu, and Murang'a. Narrative centering on regional betrayal and cost of living.",
+      "impacted_counties": [
+        "Nyeri",
+        "Kiambu",
+        "Murang'a",
+        "Kirinyaga"
+      ],
+      "reach_estimate": "1.4M voters",
+      "velocity": "HIGH (+42% in 24h)",
+      "origin": "WhatsApp Groups / Inooro FM call-ins",
+      "suggested_response": "Deploy Kura Connect vernacular audio explainers highlighting local infrastructure investments; activate I-Force ward coordinators in Nyeri & Kiambu."
+    },
+    {
+      "id": "THR-2026-082",
+      "title": "ABC Coalition Unity Speculation Spike",
+      "severity": "high",
+      "severity_label": "CRITICAL",
+      "type": "COALITION",
+      "description": "Viral TikTok clips alleging joint ticket talks between Kalonzo, Matiang'i, and Gachagua faction. High engagement among undecided youth in Nairobi and Machakos.",
+      "impacted_counties": [
+        "Nairobi",
+        "Machakos",
+        "Makueni",
+        "Kitui"
+      ],
+      "reach_estimate": "850K views",
+      "velocity": "SURGING",
+      "origin": "TikTok / X (Twitter)",
+      "suggested_response": "Wasikie youth creator push highlighting UDA youth employment programs & digital hubs."
+    },
+    {
+      "id": "THR-2026-083",
+      "title": "Matiang'i Public Sector Policy Critique",
+      "severity": "med",
+      "severity_label": "HIGH",
+      "type": "POLICY",
+      "description": "Ex-Interior CS gaining traction on YouTube long-form interviews discussing civil service conditions and economic reforms.",
+      "impacted_counties": [
+        "Kisii",
+        "Nyamira",
+        "Nairobi"
+      ],
+      "reach_estimate": "420K views",
+      "velocity": "MODERATE",
+      "origin": "YouTube / Daily Nation Op-Eds",
+      "suggested_response": "Release comparative factsheets on civil service salary adjustments and bottom-up economic transformation metrics."
+    },
+    {
+      "id": "THR-2026-084",
+      "title": "Rift Valley Voter Registration Apathy Signal",
+      "severity": "med",
+      "severity_label": "MEDIUM",
+      "type": "TURNOUT",
+      "description": "Dira ward models detect 4.2% lower voter registration conversion among first-time voters in Bomet and Elgeyo-Marakwet compared to 2022 baseline.",
+      "impacted_counties": [
+        "Bomet",
+        "Elgeyo-Marakwet",
+        "Baringo"
+      ],
+      "reach_estimate": "120K unregistered youth",
+      "velocity": "STEADY",
+      "origin": "IEBC Monthly Returns / Dira Models",
+      "suggested_response": "Deploy Ghost-Hunter mobile registration caravans in markets and boda boda stages immediately."
+    }
+  ]
+}

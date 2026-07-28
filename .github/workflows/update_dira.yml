@@ -1,0 +1,37 @@
+name: Dira Live Data Pipeline
+
+on:
+  schedule:
+    # Run every 4 hours
+    - cron: '0 */4 * * *'
+  workflow_dispatch: # Allow manual trigger via GitHub UI
+
+jobs:
+  update-dira-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Dira Data Pipeline
+        run: |
+          python fetch_news.py
+          python fetch_social_threats.py
+          python fetch_counties.py
+
+      - name: Commit and Push Updated Live Data
+        run: |
+          git config --global user.name "Dira Live Bot"
+          git config --global user.email "bot@electralabs.co"
+          git add news.json threats.json sentiment.json counties.json
+          git status
+          git diff-index --quiet HEAD || git commit -m "Auto-update Dira Live Feeds [$(date -u +'%Y-%m-%d %H:%M UTC')]"
+          git push

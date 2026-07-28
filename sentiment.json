@@ -1,0 +1,63 @@
+{
+  "last_updated": "2026-07-28T02:15:39.302170+00:00",
+  "last_updated_readable": "Jul 28, 2026 \u00b7 02:15 EAT",
+  "national_sentiment_score": 62,
+  "breakdown": {
+    "positive": 54,
+    "neutral": 28,
+    "negative": 18
+  },
+  "platforms": [
+    {
+      "name": "TikTok",
+      "share": 38,
+      "sentiment": "mixed",
+      "volume": "1.4M mentions/wk"
+    },
+    {
+      "name": "WhatsApp",
+      "share": 32,
+      "sentiment": "contested",
+      "volume": "2.8M msgs/wk"
+    },
+    {
+      "name": "YouTube",
+      "share": 18,
+      "sentiment": "positive",
+      "volume": "650K views/wk"
+    },
+    {
+      "name": "X (Twitter)",
+      "share": 12,
+      "sentiment": "volatile",
+      "volume": "410K tweets/wk"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Bottom-Up Economy & Hustler Fund",
+      "volume": 85,
+      "sentiment": "pos"
+    },
+    {
+      "name": "Mt. Kenya Politics & Unity",
+      "volume": 78,
+      "sentiment": "neg"
+    },
+    {
+      "name": "Gen Z Opportunities & Tech Hubs",
+      "volume": 64,
+      "sentiment": "pos"
+    },
+    {
+      "name": "Cost of Living & Taxes",
+      "volume": 60,
+      "sentiment": "neg"
+    },
+    {
+      "name": "Infrastructure & Affordable Housing",
+      "volume": 52,
+      "sentiment": "pos"
+    }
+  ]
+}

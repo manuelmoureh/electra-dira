@@ -1,0 +1,67 @@
+import json
+from datetime import datetime, timezone
+
+def generate_counties_data():
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    counties = [
+        # DEEP STRONGHOLD (Tier 1)
+        {"code": "027", "name": "Uasin Gishu", "voters": 506138, "tier": "Deep Stronghold", "uda_share": 89.2, "swing": "+1.4%", "status": "Secure"},
+        {"code": "035", "name": "Kericho", "voters": 429288, "tier": "Deep Stronghold", "uda_share": 88.5, "swing": "+0.8%", "status": "Secure"},
+        {"code": "029", "name": "Nandi", "voters": 406288, "tier": "Deep Stronghold", "uda_share": 91.1, "swing": "+2.1%", "status": "Secure"},
+        {"code": "036", "name": "Bomet", "voters": 376985, "tier": "Deep Stronghold", "uda_share": 86.4, "swing": "-1.2%", "status": "Monitor Turnout"},
+        {"code": "030", "name": "Baringo", "voters": 281053, "tier": "Deep Stronghold", "uda_share": 85.0, "swing": "+0.5%", "status": "Secure"},
+        {"code": "028", "name": "Elgeyo-Marakwet", "voters": 213884, "tier": "Deep Stronghold", "uda_share": 92.4, "swing": "+1.8%", "status": "Secure"},
+
+        # BATTLEGROUND / RECOVER (Tier 2 - Mt Kenya Fracture Zone)
+        {"code": "013", "name": "Kiambu", "voters": 1275008, "tier": "Battleground", "uda_share": 54.2, "swing": "-12.5%", "status": "High Risk (Gachagua)"},
+        {"code": "019", "name": "Nyeri", "voters": 481632, "tier": "Battleground", "uda_share": 48.6, "swing": "-18.2%", "status": "Critical Intervention"},
+        {"code": "020", "name": "Kirinyaga", "voters": 376000, "tier": "Battleground", "uda_share": 52.1, "swing": "-14.0%", "status": "Contested"},
+        {"code": "021", "name": "Murang'a", "voters": 621000, "tier": "Battleground", "uda_share": 51.5, "swing": "-15.1%", "status": "High Risk"},
+        {"code": "012", "name": "Meru", "voters": 772000, "tier": "Battleground", "uda_share": 58.0, "swing": "-8.4%", "status": "Contested"},
+        {"code": "014", "name": "Embu", "voters": 334000, "tier": "Battleground", "uda_share": 56.4, "swing": "-7.2%", "status": "Contested"},
+        {"code": "018", "name": "Nyandarua", "voters": 361000, "tier": "Battleground", "uda_share": 53.8, "swing": "-11.3%", "status": "High Risk"},
+        {"code": "032", "name": "Nakuru", "voters": 1054000, "tier": "Battleground", "uda_share": 59.2, "swing": "-5.5%", "status": "Priority Swing"},
+
+        # SWING / METRO (Tier 3)
+        {"code": "047", "name": "Nairobi", "voters": 2415310, "tier": "Swing", "uda_share": 44.8, "swing": "+3.2%", "status": "Gen Z Battleground"},
+        {"code": "001", "name": "Mombasa", "voters": 641913, "tier": "Swing", "uda_share": 41.5, "swing": "+5.8%", "status": "Coast Expansion"},
+        {"code": "037", "name": "Kakamega", "voters": 844709, "tier": "Swing", "uda_share": 38.2, "swing": "+6.1%", "status": "Mudavadi Anchor"},
+        {"code": "039", "name": "Bungoma", "voters": 646598, "tier": "Swing", "uda_share": 47.9, "swing": "+7.4%", "status": "Wetang'ula Anchor"},
+        {"code": "026", "name": "Trans-Nzoia", "voters": 398981, "tier": "Swing", "uda_share": 46.2, "swing": "+2.1%", "status": "Contested"},
+        {"code": "034", "name": "Kajiado", "voters": 463271, "tier": "Swing", "uda_share": 48.1, "swing": "+1.9%", "status": "Contested"},
+        {"code": "033", "name": "Narok", "voters": 397418, "tier": "Swing", "uda_share": 47.5, "swing": "+0.4%", "status": "Contested"},
+
+        # HOSTILE / MINING POCKETS (Tier 4)
+        {"code": "016", "name": "Machakos", "voters": 687472, "tier": "Hostile", "uda_share": 24.1, "swing": "+2.8%", "status": "Kalonzo Lock"},
+        {"code": "017", "name": "Makueni", "voters": 498726, "tier": "Hostile", "uda_share": 19.4, "swing": "+1.5%", "status": "Kalonzo Lock"},
+        {"code": "015", "name": "Kitui", "voters": 532758, "tier": "Hostile", "uda_share": 21.8, "swing": "+2.0%", "status": "Kalonzo Lock"},
+        {"code": "042", "name": "Kisumu", "voters": 606754, "tier": "Hostile", "uda_share": 12.3, "swing": "+0.9%", "status": "Opposition Base"},
+        {"code": "041", "name": "Siaya", "voters": 533595, "tier": "Hostile", "uda_share": 9.8, "swing": "+0.4%", "status": "Opposition Base"},
+        {"code": "043", "name": "Homa Bay", "voters": 551071, "tier": "Hostile", "uda_share": 8.5, "swing": "+0.3%", "status": "Opposition Base"},
+        {"code": "045", "name": "Kisii", "voters": 637018, "tier": "Hostile", "uda_share": 31.4, "swing": "-4.2%", "status": "Matiang'i Surge"}
+    ]
+
+    total_voters = sum(c["voters"] for c in counties)
+    tier_summary = {
+        "Deep Stronghold": sum(c["voters"] for c in counties if c["tier"] == "Deep Stronghold"),
+        "Battleground": sum(c["voters"] for c in counties if c["tier"] == "Battleground"),
+        "Swing": sum(c["voters"] for c in counties if c["tier"] == "Swing"),
+        "Hostile": sum(c["voters"] for c in counties if c["tier"] == "Hostile")
+    }
+
+    output = {
+        "last_updated": now_iso,
+        "total_counties_tracked": len(counties),
+        "total_voters": total_voters,
+        "tier_summary": tier_summary,
+        "counties": counties
+    }
+
+    with open("counties.json", "w", encoding="utf-8") as f:
+        json.dump(output, f, indent=2)
+
+    print("Successfully generated counties.json")
+
+if __name__ == "__main__":
+    generate_counties_data()
