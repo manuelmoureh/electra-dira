@@ -34,7 +34,7 @@
         const text = firstTd.textContent;
         const codeMatch = text.match(/#(\d+)/);
         const code = codeMatch ? codeMatch[1] : null;
-        const countyName = text.split('#')[0].strip ? text.split('#')[0].strip() : text.split('#')[0].trim();
+        const countyName = text.split('#')[0].trim();
 
         openWardModal(code, countyName);
       });
@@ -52,8 +52,8 @@
 
     const wards = (wardsData && code && wardsData[code]) ? wardsData[code] : [
       {name: `${countyName} Central Ward`, constituency: `${countyName} Central`, voters: 34500, tier: "Battleground", ruto_share: 49.5, action: "Deploy Ghost-Hunter & Kura Connect IVR"},
-      {name: `${countyName} North Ward`, constituency: `${countyName} North`, voters: 28900, tier: "Swing", ruto_share": 52.1, action: "I-Force PSA Canvassing"},
-      {name: `${countyName} South Ward`, constituency: `${countyName} South`, voters: 41200, tier: "Recover", ruto_share": 46.8, action: "Sauti Rapid Response Track"}
+      {name: `${countyName} North Ward`, constituency: `${countyName} North`, voters: 28900, tier: "Swing", ruto_share: 52.1, action: "I-Force PSA Canvassing"},
+      {name: `${countyName} South Ward`, constituency: `${countyName} South`, voters: 41200, tier: "Recover", ruto_share: 46.8, action: "Sauti Rapid Response Track"}
     ];
 
     let wardCardsHtml = wards.map(w => {
