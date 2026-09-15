@@ -380,7 +380,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
       <div class="tb-left">
         <div>
           <div class="tb-title" id="pageTitle">Command Overview</div>
-          <div class="tb-sub" id="pageSub">National picture · TIFA May 2026 baseline · live monitoring</div>
+          <div class="tb-sub" id="pageSub">National picture · May 2026 polling baseline · live monitoring</div>
         </div>
       </div>
       <div class="tb-right">
@@ -432,7 +432,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
 
         <div class="row2">
           <div class="card">
-            <div class="card-h"><div class="t">Presidential Race</div><div class="meta">TIFA · 14 May 2026 · n=2,013</div></div>
+            <div class="card-h"><div class="t">Presidential Race</div><div class="meta">National polling · May 2026 · n=2,013</div></div>
             <div id="raceBars"></div>
           </div>
           <div class="card">
@@ -471,7 +471,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
 
       <!-- ============ PAGE 2: REGIONAL ============ -->
       <section class="page" id="regional">
-        <div class="eyebrow"><span class="acc"></span>Regional Distribution · TIFA 9-Zone Model</div>
+        <div class="eyebrow"><span class="acc"></span>Regional Distribution · 9-Zone Intelligence Model</div>
         <div class="mapwrap">
           <div class="card">
             <div class="card-h"><div class="t">Ruto Support by Zone</div><div class="meta">Darker = stronger</div></div>
@@ -496,7 +496,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
         </div>
 
         <div class="card">
-          <div class="card-h"><div class="t">Zone Breakdown — Presidential &amp; Party</div><div class="meta">% support, TIFA May 2026</div></div>
+          <div class="card-h"><div class="t">Zone Breakdown — Presidential &amp; Party</div><div class="meta">% support, national polling May 2026</div></div>
           <table>
             <thead><tr><th>Zone</th><th>Ruto</th><th>Kalonzo</th><th>Gachagua</th><th>DCP party</th><th>UDA party</th><th>Undecided</th></tr></thead>
             <tbody id="zoneTable"></tbody>
@@ -863,7 +863,7 @@ const ICONS={
 
 /* ---------- NAV ---------- */
 const TITLES={
-  overview:['Command Overview','National picture · TIFA May 2026 baseline · live monitoring'],
+  overview:['Command Overview','National picture · May 2026 polling baseline · live monitoring'],
   regional:['Regional Intelligence','9-zone distribution · presidential & party support'],
   threats:['Threat Radar','Active risks with AI-drafted strategic responses'],
   sentiment:['Sentiment & Social','Real-time conversation monitoring across press & social'],
@@ -1115,9 +1115,9 @@ function renderAgents(){
   const AGENTS=[
     {id:'dira',nm:'Dira',role:'WARD-LEVEL INTELLIGENCE',status:'live',color:'#C8FF00',
      ico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
-     desc:'Predictive turnout & persuasion model scoring all 1,450 wards across 47 counties. Live sentiment polling faster than Infotrak/TIFA — reads voter reaction in hours, not weeks.',
+     desc:'Predictive turnout & persuasion model scoring all 1,450 wards across 47 counties. Live sentiment polling faster than any polling firm — reads voter reaction in hours, not weeks.',
      stats:[{n:'1,450',l:'Wards scored'},{n:'47',l:'Counties'},{n:'9',l:'Zones tracked'},{n:'<6h',l:'Refresh cycle'}],
-     details:[{dl:'MODEL TYPE',dv:'Ensemble',dd:'XGBoost + sentiment NLP on ward-level signals: turnout history, registration delta, social volume, radio call-in tone'},{dl:'DATA SOURCES',dv:'14',dd:'IEBC register, TIFA polls, Africa\'s Talking IVR logs, WhatsApp sentiment, vernacular radio NLP, Google Trends, county budgets'},{dl:'OUTPUT',dv:'Daily',dd:'Ward-tier classification (Defend/Recover/Win/Mine), daily priority task list for agents, resource reallocation alerts'}],
+     details:[{dl:'MODEL TYPE',dv:'Ensemble',dd:'XGBoost + sentiment NLP on ward-level signals: turnout history, registration delta, social volume, radio call-in tone'},{dl:'DATA SOURCES',dv:'14',dd:'IEBC register, national polls, Africa\'s Talking IVR logs, WhatsApp sentiment, vernacular radio NLP, Google Trends, county budgets'},{dl:'OUTPUT',dv:'Daily',dd:'Ward-tier classification (Defend/Recover/Win/Mine), daily priority task list for agents, resource reallocation alerts'}],
      kpis:['Prediction accuracy vs by-election backtest','Ward re-tier rate per week','Resource allocation delta per signal','Agent task completion driven by Dira output'],
      votes:'Efficiency multiplier — aims the whole system'},
     {id:'ghost',nm:'The Signal',role:'NARRATIVE INTELLIGENCE · SOCIAL LISTENING',status:'live',color:'#E84040',
