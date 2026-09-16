@@ -3665,6 +3665,8 @@ document.addEventListener('DOMContentLoaded', () => {
         roleModal.style.transition = 'opacity .25s ease, transform .25s ease';
         setTimeout(() => { roleModal.style.display = 'none'; }, 260);
       }
+      const appEl = document.getElementById('app');
+      if (appEl) appEl.classList.remove('hidden');
       applyRole(roleId || 'national-ops');
       startClock();
       simulateRealTime();
