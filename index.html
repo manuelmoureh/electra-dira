@@ -3921,50 +3921,17 @@ function applyRole(roleId) {
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── Role selection modal
+  // ── Auto-enter as National Ops Director, no role modal
   const roleModal = document.getElementById('role-modal');
-  const roleOptions = document.querySelectorAll('.role-option');
-
-  roleOptions.forEach(opt => {
-    // Hover effects
-    opt.addEventListener('mouseenter', () => {
-      opt.style.transform = 'translateX(4px)';
-      opt.style.borderColor = 'var(--border-strong)';
-    });
-    opt.addEventListener('mouseleave', () => {
-      opt.style.transform = '';
-      opt.style.borderColor = '';
-    });
-
-    // Click to select role & enter dashboard
-    opt.addEventListener('click', () => {
-      const roleId = opt.dataset.role;
-      if (roleModal) {
-        roleModal.style.opacity = '0';
-        roleModal.style.transform = 'scale(0.97)';
-        roleModal.style.transition = 'opacity .25s ease, transform .25s ease';
-        setTimeout(() => { roleModal.style.display = 'none'; }, 260);
-      }
-      const appEl = document.getElementById('app');
-      if (appEl) appEl.classList.remove('hidden');
-      applyRole(roleId || 'national-ops');
-      startClock();
-      simulateRealTime();
-      navigate('rungu');
-
-      // Seed initial audit entries
-      addAudit('System', 'System', 'session.started', 'Dira Command V3', 'Dashboard session initialized');
-      addAudit('Current User', STATE.roleLabel || 'National Ops Director', 'auth.login', 'Dashboard', 'Authenticated via SSO · 2FA confirmed');
-    });
-  });
-
-  // ── Skip role modal if already set (for dev reloads)
-  if (STATE.currentRole && roleModal) {
-    roleModal.style.display = 'none';
-    startClock();
-    simulateRealTime();
-    navigate(STATE.page || 'rungu');
-  }
+  if (roleModal) roleModal.style.display = 'none';
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.classList.remove('hidden');
+  applyRole('national-ops');
+  startClock();
+  simulateRealTime();
+  navigate(STATE.page || 'rungu');
+  addAudit('System', 'System', 'session.started', 'Dira Command V3', 'Dashboard session initialized');
+  addAudit('Current User', 'National Ops Director', 'auth.login', 'Dashboard', 'Authenticated via SSO · 2FA confirmed');
 
   // ── Nav item click handlers
   document.querySelectorAll('.nav-item[data-page]').forEach(item => {
