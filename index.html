@@ -1703,6 +1703,120 @@ const NATIONAL_COUNTIES = [
   {name:'Homa Bay',         code:'043', reg:551111,  uda:0.9,  odm:98.9, turnout:73.7, status:'MONITOR'},
 ];
 
+// ── Msingi interactive state
+let _msingiFilter = 'ALL';
+let _msingiExpanded = null;
+let _msingiClockInterval = null;
+const _msingiBaseElapsed = (46 * 3600) + (14 * 60); // 46h 14m since Roysambu flag
+const _msingiStartWall = Date.now() - _msingiBaseElapsed * 1000;
+
+function startMsingiClock() {
+  if (_msingiClockInterval) clearInterval(_msingiClockInterval);
+  const pad = n => String(n).padStart(2, '0');
+  _msingiClockInterval = setInterval(() => {
+    if (!document.getElementById('page-msingi')?.classList.contains('active')) {
+      clearInterval(_msingiClockInterval); _msingiClockInterval = null; return;
+    }
+    const elapsed = Math.floor((Date.now() - _msingiStartWall) / 1000);
+    const rem = Math.max(0, 72 * 3600 - elapsed);
+    const eh = Math.floor(elapsed/3600), em = Math.floor((elapsed%3600)/60), es = elapsed%60;
+    const rh = Math.floor(rem/3600), rm = Math.floor((rem%3600)/60), rs = rem%60;
+    const elEl = document.getElementById('msingi-elapsed');
+    const remEl = document.getElementById('msingi-remaining');
+    if (elEl) elEl.textContent = `${pad(eh)}:${pad(em)}:${pad(es)}`;
+    if (remEl) {
+      if (rem <= 0) { remEl.textContent = 'AUTO-ESCALATED'; remEl.style.color = '#EF4444'; }
+      else remEl.textContent = `${pad(rh)}:${pad(rm)}:${pad(rs)}`;
+    }
+  }, 1000);
+}
+
+function msingiSetFilter(f) {
+  _msingiFilter = f; _msingiExpanded = null;
+  document.querySelectorAll('.msingi-ftab').forEach(t => t.classList.toggle('active', t.dataset.f === f));
+  const rows = f === 'ALL' ? NATIONAL_COUNTIES : NATIONAL_COUNTIES.filter(c => c.status === f);
+  const tbody = document.getElementById('msingi-tbody');
+  if (tbody) tbody.innerHTML = rows.map(c => renderCountyRow(c)).join('');
+}
+
+function msingiExpandCounty(code) {
+  _msingiExpanded = _msingiExpanded === code ? null : code;
+  const rows = _msingiFilter === 'ALL' ? NATIONAL_COUNTIES : NATIONAL_COUNTIES.filter(c => c.status === _msingiFilter);
+  const tbody = document.getElementById('msingi-tbody');
+  if (tbody) tbody.innerHTML = rows.map(c => renderCountyRow(c)).join('');
+}
+
+function renderCountyRow(c) {
+  const udaCol = c.uda >= 50 ? '#10B981' : c.uda >= 35 ? '#F59E0B' : '#EF4444';
+  const nonV = Math.round(c.reg * (1 - c.turnout / 100));
+  const udaV = Math.round(c.reg * (c.turnout / 100) * (c.uda / 100));
+  const odmV = Math.round(c.reg * (c.turnout / 100) * (c.odm / 100));
+  const isExp = _msingiExpanded === c.code;
+  const strat = c.status === 'WIN'
+    ? `UDA stronghold. Priority: voter mobilization, not persuasion. Every 1pp turnout uplift here adds ~${fmt(Math.round(c.reg * 0.01 * c.uda / 100))} net votes.`
+    : c.status === 'WATCH'
+    ? 'Competitive county. Target high-registration wards with split history. ODM vote is soft in places — reachable with the right message.'
+    : 'Opposition territory. Do not over-invest. Monitor turnout trends and protect against unexpected county swings.';
+  return `<tr onclick="msingiExpandCounty('${c.code}')" style="cursor:pointer">
+    <td style="padding:10px 12px;min-width:140px">
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:10px;color:var(--text-muted);min-width:28px;font-variant-numeric:tabular-nums">${c.code}</span>
+        <span style="font-weight:500">${c.name}</span>
+        <span style="margin-left:auto;color:var(--text-muted);font-size:10px">${isExp?'▲':'▼'}</span>
+      </div>
+    </td>
+    <td style="padding:10px 12px;font-variant-numeric:tabular-nums;color:var(--text-secondary)">${fmt(c.reg)}</td>
+    <td style="padding:10px 12px">
+      <span class="baseline-tag" style="color:${udaCol};border-color:${udaCol}33;background:${udaCol}14">${c.uda}% UDA</span>
+      <span class="baseline-tag" style="margin-left:3px">${c.odm}% ODM</span>
+    </td>
+    <td style="padding:10px 12px;font-variant-numeric:tabular-nums;color:var(--text-secondary)">${c.turnout}%</td>
+    <td style="padding:10px 12px"><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
+  </tr>${isExp ? `<tr>
+    <td colspan="5" style="padding:0;border-bottom:1px solid var(--border)">
+      <div style="background:rgba(100,116,139,0.06);padding:16px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">2022 Votes (est.)</div>
+          <div style="font-size:13px;font-weight:600;color:#10B981">Ruto: ${fmt(udaV)}</div>
+          <div style="font-size:13px;font-weight:600;color:#EF4444;margin-top:3px">Raila: ${fmt(odmV)}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">${c.turnout}% turnout of ${fmt(c.reg)}</div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Untapped Voters</div>
+          <div style="font-size:22px;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums">${fmt(nonV)}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">did not vote in 2022</div>
+          <div style="font-size:11px;color:${udaCol};margin-top:3px;font-weight:500">At ${c.uda}% UDA rate → ${fmt(Math.round(nonV*c.uda/100))} potential votes</div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Strategic Note</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">${strat}</div>
+        </div>
+      </div>
+    </td>
+  </tr>` : ''}`;
+}
+
+function msingiAcknowledge(flagId) {
+  const f = MSINGI_FLAGS.find(x => x.id === flagId);
+  if (!f || f.acknowledged) return;
+  f.acknowledged = true;
+  const btn = document.querySelector(`[data-ack="${flagId}"]`);
+  if (btn) { btn.textContent = '✓ Acknowledged'; btn.disabled = true; btn.style.opacity = '.5'; btn.style.cursor = 'default'; }
+  showToast('Signal acknowledged — logged to audit trail', 'success');
+}
+
+function msingiEscalate(flagId) {
+  const f = MSINGI_FLAGS.find(x => x.id === flagId);
+  if (!f || f.escalation_step >= 2) return;
+  f.escalation_step++;
+  const msgs = ['Campaign Director notified — action required within 48h', 'Candidate brief issued — 72h threshold reached'];
+  showToast(msgs[f.escalation_step - 1], 'warning');
+  const chain = document.querySelector(`[data-chain="${flagId}"]`);
+  if (chain) chain.querySelectorAll('.esc-step').forEach((el, i) => el.classList.toggle('active', i <= f.escalation_step));
+  const escBtn = document.querySelector(`[data-esc="${flagId}"]`);
+  if (f.escalation_step >= 2 && escBtn) { escBtn.disabled = true; escBtn.style.opacity = '.5'; escBtn.textContent = 'Max Escalated'; }
+}
+
 const MSINGI_FLAGS = [
   {
     id:'RSB-FLAG-001', constituency:'Roysambu', ward:'Kahawa West / Zimmerman',
@@ -1728,24 +1842,22 @@ function renderMsingi() {
   document.getElementById('topbar-title').textContent = 'Msingi';
   document.getElementById('topbar-subtitle').textContent = 'Electoral Baseline Intelligence';
 
-  const totalReg   = 22110015;
-  const rutoBase   = 50.49;
-  const margin     = 234748;
-  const nonVoters  = 7902866;
-  const winCount   = NATIONAL_COUNTIES.filter(c=>c.status==='WIN').length;
-  const watchCount = NATIONAL_COUNTIES.filter(c=>c.status==='WATCH').length;
-  const monCount   = NATIONAL_COUNTIES.filter(c=>c.status==='MONITOR').length;
+  _msingiFilter = 'ALL';
+  _msingiExpanded = null;
 
-  const tableRows = NATIONAL_COUNTIES.map(c => {
-    const udaColor = c.uda >= 50 ? '#10B981' : c.uda >= 35 ? '#F59E0B' : '#EF4444';
-    return `<tr>
-      <td class="td-name" style="min-width:130px">${c.name}</td>
-      <td class="td-reg">${fmt(c.reg)}</td>
-      <td><span class="baseline-tag" style="color:${udaColor};border-color:${udaColor}33;background:${udaColor}14">${c.uda}% UDA</span> <span class="baseline-tag">${c.odm}% ODM</span></td>
-      <td style="font-variant-numeric:tabular-nums;color:var(--text-secondary)">${c.turnout}%</td>
-      <td><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
-    </tr>`;
-  }).join('');
+  const winC  = NATIONAL_COUNTIES.filter(c => c.status === 'WIN');
+  const watC  = NATIONAL_COUNTIES.filter(c => c.status === 'WATCH');
+  const monC  = NATIONAL_COUNTIES.filter(c => c.status === 'MONITOR');
+  const winReg = winC.reduce((s, c) => s + c.reg, 0);
+  const watReg = watC.reduce((s, c) => s + c.reg, 0);
+  const monReg = monC.reduce((s, c) => s + c.reg, 0);
+  const winUplift = winC.reduce((s, c) => s + Math.round(c.reg * 0.01 * c.uda / 100), 0);
+
+  const pad = n => String(n).padStart(2, '0');
+  const initElapsed = _msingiBaseElapsed;
+  const initRem = Math.max(0, 72 * 3600 - initElapsed);
+  const eh = Math.floor(initElapsed/3600), em = Math.floor((initElapsed%3600)/60), es = initElapsed%60;
+  const rh = Math.floor(initRem/3600), rm = Math.floor((initRem%3600)/60), rs = initRem%60;
 
   const flagCards = MSINGI_FLAGS.map(f => `
     <div class="convergent-card" style="margin-bottom:16px">
@@ -1753,67 +1865,114 @@ function renderMsingi() {
         <div class="conv-pulse"></div>
         <div>
           <div style="font-weight:700;font-size:14px;color:var(--text-primary)">${f.constituency} — ${f.ward}</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:1px">${f.signals.length} convergent signals · Flagged ${f.hours_since_flag}h ago · ${fmt(f.registered)} registered voters</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${f.signals.length} convergent signals · Flagged ${f.hours_since_flag}h ago · ${fmt(f.registered)} registered voters · UDA base ${f.uda_base}% · Coord ${f.coord_prev}→${f.coord_now}/100</div>
         </div>
-        <span class="signal-chip signal-flag" style="margin-left:auto">${f.signals.length} SIGNALS</span>
+        <span class="signal-chip signal-flag" style="margin-left:auto;flex-shrink:0">${f.signals.length} SIGNALS</span>
       </div>
-      ${f.signals.map(s=>`
-        <div class="conv-signal-row">
+      ${f.signals.map(s => `
+        <div class="conv-signal-row" style="align-items:flex-start">
           <span class="conv-signal-source">${s.source}</span>
-          <span style="font-size:12px;color:var(--text-secondary);flex:1">${s.detail}</span>
+          <span style="font-size:12px;color:var(--text-secondary);flex:1;line-height:1.55">${s.detail}</span>
           <span style="width:8px;height:8px;border-radius:50%;background:${s.type==='alert'?'#EF4444':'#F59E0B'};flex-shrink:0;margin-top:4px"></span>
         </div>`).join('')}
-      <div class="escalation-ring">
-        <div>
-          <div class="esc-clock">${23 + f.hours_since_flag}:14</div>
-          <div class="esc-label">hours since flag</div>
+      <div class="escalation-ring" style="flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:20px">
+          <div style="min-width:80px">
+            <div class="esc-clock" id="msingi-elapsed">${pad(eh)}:${pad(em)}:${pad(es)}</div>
+            <div class="esc-label">elapsed since flag</div>
+          </div>
+          <div class="esc-chain" data-chain="${f.id}" style="flex:1">
+            <div class="esc-step active"><div class="esc-dot"></div>Intelligence Lead — assessing (0–24h)</div>
+            <div class="esc-step ${f.escalation_step>=1?'active':''}"><div class="esc-dot"></div>Campaign Director — action required within 48h</div>
+            <div class="esc-step ${f.escalation_step>=2?'active':''}"><div class="esc-dot"></div>Auto-escalates to candidate brief at 72h</div>
+          </div>
+          <div style="text-align:right;min-width:90px">
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:2px">Remaining</div>
+            <div id="msingi-remaining" style="font-size:20px;font-weight:800;color:#F59E0B;font-variant-numeric:tabular-nums;letter-spacing:-.02em">${pad(rh)}:${pad(rm)}:${pad(rs)}</div>
+          </div>
         </div>
-        <div class="esc-chain">
-          <div class="esc-step active"><div class="esc-dot"></div>Intelligence Lead — assessing (0–24h)</div>
-          <div class="esc-step ${f.escalation_step>=1?'active':''}"><div class="esc-dot"></div>Campaign Director — action required within 48h</div>
-          <div class="esc-step ${f.escalation_step>=2?'active':''}"><div class="esc-dot"></div>Auto-escalates to candidate brief at 72h</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:11px;color:var(--text-muted)">Remaining</div>
-          <div style="font-size:22px;font-weight:800;color:#F59E0B;font-variant-numeric:tabular-nums">${72-(23+f.hours_since_flag)}h</div>
+        <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid rgba(239,68,68,0.15)">
+          <button data-ack="${f.id}" onclick="msingiAcknowledge('${f.id}')"
+            ${f.acknowledged?'disabled':''}
+            style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid rgba(16,185,129,0.3);background:rgba(16,185,129,0.08);color:#10B981;font-size:12px;font-weight:600;cursor:pointer;${f.acknowledged?'opacity:.5;cursor:default':''}">
+            ${f.acknowledged?'✓ Acknowledged':'Acknowledge'}
+          </button>
+          <button data-esc="${f.id}" onclick="msingiEscalate('${f.id}')"
+            ${f.escalation_step>=2?'disabled':''}
+            style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid rgba(245,158,11,0.3);background:rgba(245,158,11,0.08);color:#F59E0B;font-size:12px;font-weight:600;cursor:pointer;${f.escalation_step>=2?'opacity:.5;cursor:default':''}">
+            ${f.escalation_step>=2?'Max Escalated':'Escalate Now →'}
+          </button>
+          <button onclick="showToast('Opening Roysambu full intelligence brief…', 'success')"
+            style="padding:8px 14px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:12px;font-weight:600;cursor:pointer">
+            View Brief
+          </button>
         </div>
       </div>
     </div>`).join('');
+
+  const filterTabs = ['ALL','WIN','WATCH','MONITOR'].map(f => {
+    const cnt = f==='ALL' ? NATIONAL_COUNTIES.length : NATIONAL_COUNTIES.filter(c=>c.status===f).length;
+    const col = f==='WIN'?'#10B981':f==='WATCH'?'#F59E0B':f==='MONITOR'?'#64748B':'var(--text-secondary)';
+    const bg  = f==='WIN'?'rgba(16,185,129,0.08)':f==='WATCH'?'rgba(245,158,11,0.08)':f==='MONITOR'?'rgba(100,116,139,0.08)':'var(--bg-surface)';
+    const bdr = f==='WIN'?'rgba(16,185,129,0.3)':f==='WATCH'?'rgba(245,158,11,0.3)':f==='MONITOR'?'rgba(100,116,139,0.3)':'var(--border-strong)';
+    return `<button class="msingi-ftab${f==='ALL'?' active':''}" data-f="${f}" onclick="msingiSetFilter('${f}')"
+      style="padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid ${bdr};background:${bg};color:${col};transition:opacity .15s">
+      ${f} <span style="opacity:.65">${cnt}</span></button>`;
+  }).join('');
 
   document.getElementById('page-msingi').innerHTML = `
     <div class="page-header">
       <h1>Msingi — Electoral Baseline</h1>
       <div class="page-sub">
         <span class="live-indicator">BASELINE</span>
-        <span>2022 foundation · Kenya · All 47 counties</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${winCount} WIN · ${watchCount} WATCH · ${monCount} MONITOR</span>
+        <span>2022 IEBC foundation · Kenya · All 47 counties</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${winC.length} WIN · ${watC.length} WATCH · ${monC.length} MONITOR</span>
       </div>
     </div>
 
-    <div class="kpi-grid" style="margin-bottom:24px">
+    <div class="kpi-grid" style="margin-bottom:16px">
       <div class="kpi-card">
         <div class="kpi-label">National Registered</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#8B5CF6,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(totalReg)}</div>
+        <div class="kpi-value" style="background:linear-gradient(135deg,#8B5CF6,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">22,110,015</div>
         <div class="kpi-sub">2022 IEBC register · all 47 counties</div>
-        <div class="kpi-trend up">290 constituencies baselined</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">2022 Ruto Baseline</div>
-        <div class="kpi-value" style="color:#10B981">${rutoBase}%</div>
-        <div class="kpi-sub">7,173,951 votes · presidential result</div>
-        <div class="kpi-trend up">Won 2022 · 20 of 47 counties</div>
+        <div class="kpi-value" style="color:#10B981">50.49%</div>
+        <div class="kpi-sub">7,173,951 votes · 20 of 47 counties won</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">2022 Win Margin</div>
-        <div class="kpi-value" style="color:#10B981">+${fmt(margin)}</div>
-        <div class="kpi-sub">votes ahead of Raila 2022</div>
-        <div class="kpi-trend down">Thin buffer — must defend &amp; grow</div>
+        <div class="kpi-value" style="color:#10B981">+234,748</div>
+        <div class="kpi-sub">votes ahead of Raila Odinga</div>
+        <div class="kpi-trend down">Thin — must defend &amp; grow</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Turnout Lever</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#2DD4BF,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(nonVoters)}</div>
+        <div class="kpi-value" style="background:linear-gradient(135deg,#2DD4BF,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">7,902,866</div>
         <div class="kpi-sub">registered non-voters 2022</div>
-        <div class="kpi-trend up">5% mobilization in WIN counties ≈ 180K votes</div>
+        <div class="kpi-trend up">1pp uplift in WIN counties ≈ +${fmt(winUplift)} net votes</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+      <div onclick="msingiSetFilter('WIN')" style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(16,185,129,0.1)'" onmouseout="this.style.background='rgba(16,185,129,0.06)'">
+        <div style="font-size:10px;color:#10B981;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">WIN Counties</div>
+        <div style="font-size:28px;font-weight:800;color:#10B981;font-variant-numeric:tabular-nums">${winC.length}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${fmt(winReg)} registered voters</div>
+        <div style="font-size:10px;color:#10B981;margin-top:6px;font-weight:600">Filter table →</div>
+      </div>
+      <div onclick="msingiSetFilter('WATCH')" style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,0.1)'" onmouseout="this.style.background='rgba(245,158,11,0.06)'">
+        <div style="font-size:10px;color:#F59E0B;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">WATCH Counties</div>
+        <div style="font-size:28px;font-weight:800;color:#F59E0B;font-variant-numeric:tabular-nums">${watC.length}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${fmt(watReg)} registered voters</div>
+        <div style="font-size:10px;color:#F59E0B;margin-top:6px;font-weight:600">Filter table →</div>
+      </div>
+      <div onclick="msingiSetFilter('MONITOR')" style="background:rgba(100,116,139,0.06);border:1px solid rgba(100,116,139,0.2);border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(100,116,139,0.1)'" onmouseout="this.style.background='rgba(100,116,139,0.06)'">
+        <div style="font-size:10px;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">MONITOR Counties</div>
+        <div style="font-size:28px;font-weight:800;color:#64748B;font-variant-numeric:tabular-nums">${monC.length}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${fmt(monReg)} registered voters</div>
+        <div style="font-size:10px;color:#64748B;margin-top:6px;font-weight:600">Filter table →</div>
       </div>
     </div>
 
@@ -1826,9 +1985,12 @@ function renderMsingi() {
     </div>
 
     <div class="card" style="margin-bottom:0;padding:0 0 8px">
-      <div class="card-header" style="padding:16px 16px 12px">
-        <h3>County Intelligence</h3>
-        <span style="font-size:11px;color:var(--text-muted)">2022 presidential baseline · all 47 counties</span>
+      <div class="card-header" style="padding:16px 16px 12px;flex-wrap:wrap;gap:10px;align-items:flex-start">
+        <div>
+          <h3>County Intelligence</h3>
+          <span style="font-size:11px;color:var(--text-muted)">2022 presidential baseline · click any row to expand</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;align-items:center">${filterTabs}</div>
       </div>
       <div style="overflow-x:auto">
         <table class="msingi-table">
@@ -1841,14 +2003,16 @@ function renderMsingi() {
               <th>Status</th>
             </tr>
           </thead>
-          <tbody>${tableRows}</tbody>
+          <tbody id="msingi-tbody">${NATIONAL_COUNTIES.map(c => renderCountyRow(c)).join('')}</tbody>
         </table>
       </div>
       <div style="padding:10px 14px;font-size:10px;color:var(--text-muted);border-top:1px solid var(--border)">
-        Source: IEBC 2022 presidential results. WIN ≥ 50% UDA · WATCH 35–49% · MONITOR &lt; 35%.
+        Source: IEBC 2022 presidential results. Estimated votes = registered × turnout% × party share. WIN ≥ 50% UDA · WATCH 35–49% · MONITOR &lt; 35%.
       </div>
     </div>
   `;
+
+  startMsingiClock();
 }
 
 function renderRungu() {
