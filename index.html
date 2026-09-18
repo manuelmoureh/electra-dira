@@ -1706,31 +1706,6 @@ const NATIONAL_COUNTIES = [
 // ── Msingi interactive state
 let _msingiFilter = 'ALL';
 let _msingiExpanded = null;
-let _msingiClockInterval = null;
-const _msingiBaseElapsed = (46 * 3600) + (14 * 60); // 46h 14m since Roysambu flag
-const _msingiStartWall = Date.now() - _msingiBaseElapsed * 1000;
-
-function startMsingiClock() {
-  if (_msingiClockInterval) clearInterval(_msingiClockInterval);
-  const pad = n => String(n).padStart(2, '0');
-  _msingiClockInterval = setInterval(() => {
-    if (!document.getElementById('page-msingi')?.classList.contains('active')) {
-      clearInterval(_msingiClockInterval); _msingiClockInterval = null; return;
-    }
-    const elapsed = Math.floor((Date.now() - _msingiStartWall) / 1000);
-    const rem = Math.max(0, 72 * 3600 - elapsed);
-    const eh = Math.floor(elapsed/3600), em = Math.floor((elapsed%3600)/60), es = elapsed%60;
-    const rh = Math.floor(rem/3600), rm = Math.floor((rem%3600)/60), rs = rem%60;
-    const elEl = document.getElementById('msingi-elapsed');
-    const remEl = document.getElementById('msingi-remaining');
-    if (elEl) elEl.textContent = `${pad(eh)}:${pad(em)}:${pad(es)}`;
-    if (remEl) {
-      if (rem <= 0) { remEl.textContent = 'AUTO-ESCALATED'; remEl.style.color = '#EF4444'; }
-      else remEl.textContent = `${pad(rh)}:${pad(rm)}:${pad(rs)}`;
-    }
-  }, 1000);
-}
-
 function msingiSetFilter(f) {
   _msingiFilter = f; _msingiExpanded = null;
   document.querySelectorAll('.msingi-ftab').forEach(t => t.classList.toggle('active', t.dataset.f === f));
@@ -1796,27 +1771,6 @@ function renderCountyRow(c) {
   </tr>` : ''}`;
 }
 
-function msingiAcknowledge(flagId) {
-  const f = MSINGI_FLAGS.find(x => x.id === flagId);
-  if (!f || f.acknowledged) return;
-  f.acknowledged = true;
-  const btn = document.querySelector(`[data-ack="${flagId}"]`);
-  if (btn) { btn.textContent = '✓ Acknowledged'; btn.disabled = true; btn.style.opacity = '.5'; btn.style.cursor = 'default'; }
-  showToast('Signal acknowledged — logged to audit trail', 'success');
-}
-
-function msingiEscalate(flagId) {
-  const f = MSINGI_FLAGS.find(x => x.id === flagId);
-  if (!f || f.escalation_step >= 2) return;
-  f.escalation_step++;
-  const msgs = ['Campaign Director notified — action required within 48h', 'Candidate brief issued — 72h threshold reached'];
-  showToast(msgs[f.escalation_step - 1], 'warning');
-  const chain = document.querySelector(`[data-chain="${flagId}"]`);
-  if (chain) chain.querySelectorAll('.esc-step').forEach((el, i) => el.classList.toggle('active', i <= f.escalation_step));
-  const escBtn = document.querySelector(`[data-esc="${flagId}"]`);
-  if (f.escalation_step >= 2 && escBtn) { escBtn.disabled = true; escBtn.style.opacity = '.5'; escBtn.textContent = 'Max Escalated'; }
-}
-
 const MSINGI_FLAGS = [
   {
     id:'RSB-FLAG-001', constituency:'Roysambu', ward:'Kahawa West / Zimmerman',
@@ -1853,62 +1807,6 @@ function renderMsingi() {
   const monReg = monC.reduce((s, c) => s + c.reg, 0);
   const winUplift = winC.reduce((s, c) => s + Math.round(c.reg * 0.01 * c.uda / 100), 0);
 
-  const pad = n => String(n).padStart(2, '0');
-  const initElapsed = _msingiBaseElapsed;
-  const initRem = Math.max(0, 72 * 3600 - initElapsed);
-  const eh = Math.floor(initElapsed/3600), em = Math.floor((initElapsed%3600)/60), es = initElapsed%60;
-  const rh = Math.floor(initRem/3600), rm = Math.floor((initRem%3600)/60), rs = initRem%60;
-
-  const flagCards = MSINGI_FLAGS.map(f => `
-    <div class="convergent-card" style="margin-bottom:16px">
-      <div class="conv-header">
-        <div class="conv-pulse"></div>
-        <div>
-          <div style="font-weight:700;font-size:14px;color:var(--text-primary)">${f.constituency} — ${f.ward}</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${f.signals.length} convergent signals · Flagged ${f.hours_since_flag}h ago · ${fmt(f.registered)} registered voters · UDA base ${f.uda_base}% · Coord ${f.coord_prev}→${f.coord_now}/100</div>
-        </div>
-        <span class="signal-chip signal-flag" style="margin-left:auto;flex-shrink:0">${f.signals.length} SIGNALS</span>
-      </div>
-      ${f.signals.map(s => `
-        <div class="conv-signal-row" style="align-items:flex-start">
-          <span class="conv-signal-source">${s.source}</span>
-          <span style="font-size:12px;color:var(--text-secondary);flex:1;line-height:1.55">${s.detail}</span>
-          <span style="width:8px;height:8px;border-radius:50%;background:${s.type==='alert'?'#EF4444':'#F59E0B'};flex-shrink:0;margin-top:4px"></span>
-        </div>`).join('')}
-      <div class="escalation-ring" style="flex-direction:column;gap:14px">
-        <div style="display:flex;align-items:center;gap:20px">
-          <div style="min-width:80px">
-            <div class="esc-clock" id="msingi-elapsed">${pad(eh)}:${pad(em)}:${pad(es)}</div>
-            <div class="esc-label">elapsed since flag</div>
-          </div>
-          <div class="esc-chain" data-chain="${f.id}" style="flex:1">
-            <div class="esc-step active"><div class="esc-dot"></div>Intelligence Lead — assessing (0–24h)</div>
-            <div class="esc-step ${f.escalation_step>=1?'active':''}"><div class="esc-dot"></div>Campaign Director — action required within 48h</div>
-            <div class="esc-step ${f.escalation_step>=2?'active':''}"><div class="esc-dot"></div>Auto-escalates to candidate brief at 72h</div>
-          </div>
-          <div style="text-align:right;min-width:90px">
-            <div style="font-size:10px;color:var(--text-muted);margin-bottom:2px">Remaining</div>
-            <div id="msingi-remaining" style="font-size:20px;font-weight:800;color:#F59E0B;font-variant-numeric:tabular-nums;letter-spacing:-.02em">${pad(rh)}:${pad(rm)}:${pad(rs)}</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid rgba(239,68,68,0.15)">
-          <button data-ack="${f.id}" onclick="msingiAcknowledge('${f.id}')"
-            ${f.acknowledged?'disabled':''}
-            style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid rgba(16,185,129,0.3);background:rgba(16,185,129,0.08);color:#10B981;font-size:12px;font-weight:600;cursor:pointer;${f.acknowledged?'opacity:.5;cursor:default':''}">
-            ${f.acknowledged?'✓ Acknowledged':'Acknowledge'}
-          </button>
-          <button data-esc="${f.id}" onclick="msingiEscalate('${f.id}')"
-            ${f.escalation_step>=2?'disabled':''}
-            style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid rgba(245,158,11,0.3);background:rgba(245,158,11,0.08);color:#F59E0B;font-size:12px;font-weight:600;cursor:pointer;${f.escalation_step>=2?'opacity:.5;cursor:default':''}">
-            ${f.escalation_step>=2?'Max Escalated':'Escalate Now →'}
-          </button>
-          <button onclick="showToast('Opening Roysambu full intelligence brief…', 'success')"
-            style="padding:8px 14px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:12px;font-weight:600;cursor:pointer">
-            View Brief
-          </button>
-        </div>
-      </div>
-    </div>`).join('');
 
   const filterTabs = ['ALL','WIN','WATCH','MONITOR'].map(f => {
     const cnt = f==='ALL' ? NATIONAL_COUNTIES.length : NATIONAL_COUNTIES.filter(c=>c.status===f).length;
@@ -1976,12 +1874,42 @@ function renderMsingi() {
       </div>
     </div>
 
-    <div style="margin-bottom:24px">
-      <div class="section-header" style="margin-bottom:14px">
-        <h2>Convergent Signals — Requires Action</h2>
-        <span class="badge badge-critical">${MSINGI_FLAGS.length} flagged</span>
+    <div style="background:rgba(20,20,40,0.6);border:1px solid rgba(139,92,246,0.12);border-radius:var(--radius-md);padding:20px 24px;margin-bottom:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+        <div style="width:3px;height:18px;background:linear-gradient(#8B5CF6,#3B82F6);border-radius:2px;flex-shrink:0"></div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted)">Strategic Intelligence — 2022 Foundation</div>
+        <div style="margin-left:auto;font-size:10px;color:var(--text-muted)">IEBC 2022 · Confidence 0.92</div>
       </div>
-      ${flagCards}
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#8B5CF6;padding-top:1px;flex-shrink:0">MARGIN</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">The 234,748-vote buffer is the thinnest presidential win in Kenya's multi-party era — smaller than the registered voter population of Isiolo County. This margin does not survive a passive campaign. Every down-ballot loss that demobilises a UDA ward is a presidential risk.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#10B981;padding-top:1px;flex-shrink:0">NON-VOTERS</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">7,902,866 registered Kenyans did not cast a vote in 2022. In WIN counties these non-voters are disproportionately UDA-aligned — low turnout cost the campaign more than opposition voters did. A 1pp mobilisation increase across WIN counties adds approximately 70,879 net votes, equivalent to 30% of the entire winning margin.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#10B981;padding-top:1px;flex-shrink:0">WIN DEFENCE</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">20 fortress counties hold 9.1 million registered voters and delivered the presidency. A 2% turnout decline in these counties erases the margin before a single opposition vote changes. Fortress counties are not safe by default — they require active mobilisation infrastructure throughout the campaign cycle.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#F59E0B;padding-top:1px;flex-shrink:0">WATCH PRIORITY</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">11 competitive counties (5.5M registered) represent the highest campaign ROI per shilling spent. The ODM vote in WATCH counties is softer than it appears — these voters are persuadable, not committed. Correctly invested, WATCH counties can double the margin. Under-invested, they can eliminate it.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748B;padding-top:1px;flex-shrink:0">MONITOR POSTURE</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">16 opposition-held counties (7.5M registered) are not zero-investment territory. Targeted presence in boundary wards reduces the clean-sweep and protects the national vote share buffer. The goal in MONITOR counties is not conversion — it is suppressing the opposition's margin, not building our own.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:12px 0">
+          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);padding-top:1px;flex-shrink:0">INTEL GAPS</div>
+          <div style="font-size:12px;color:var(--text-muted);line-height:1.7">
+            <div>· 2026 ECVR data not reflected — youth registrations since 2022 have materially changed the electorate in WATCH and MONITOR counties.</div>
+            <div style="margin-top:4px">· No presidential ward-level 2022 results exist — county and constituency data is the finest granularity available. Ward signals use MCA results as proxy.</div>
+            <div style="margin-top:4px">· No 2027 opposition candidate landscape — a regionally credible challenger flips the competitive county calculus.</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="card" style="margin-bottom:0;padding:0 0 8px">
@@ -2012,7 +1940,6 @@ function renderMsingi() {
     </div>
   `;
 
-  startMsingiClock();
 }
 
 function renderRungu() {
