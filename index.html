@@ -582,6 +582,74 @@ body {
   .grid-2 { grid-template-columns: 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
 }
+
+/* ── MSINGI MODULE ─────────────────────────────────────────── */
+.baseline-tag {
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(100,116,139,0.15);border:1px solid rgba(100,116,139,0.25);
+  color:#64748B;font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;
+  letter-spacing:.03em;white-space:nowrap;
+}
+.signal-chip {
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;
+}
+.signal-hold   { background:rgba(16,185,129,0.12);color:#10B981;border:1px solid rgba(16,185,129,0.2); }
+.signal-watch  { background:rgba(245,158,11,0.12);color:#F59E0B;border:1px solid rgba(245,158,11,0.2); }
+.signal-flag   { background:rgba(239,68,68,0.12);color:#EF4444;border:1px solid rgba(239,68,68,0.25); }
+.signal-monitor{ background:rgba(100,116,139,0.1);color:#64748B;border:1px solid rgba(100,116,139,0.15); }
+.msingi-table { width:100%;border-collapse:collapse; }
+.msingi-table thead th {
+  font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;
+  padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;
+}
+.msingi-table tbody tr {
+  border-bottom:1px solid var(--border);transition:background var(--transition-fast);
+}
+.msingi-table tbody tr:hover { background:var(--bg-surface-hover); }
+.msingi-table tbody tr:last-child { border-bottom:none; }
+.msingi-table td { padding:10px 12px;font-size:12px;vertical-align:middle; }
+.msingi-table td.td-name { font-weight:600;color:var(--text-primary); }
+.msingi-table td.td-reg { color:var(--text-secondary);font-variant-numeric:tabular-nums; }
+.delta-badge { font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px; }
+.delta-neg { color:#EF4444;background:rgba(239,68,68,0.1); }
+.delta-pos { color:#10B981;background:rgba(16,185,129,0.1); }
+.delta-flat{ color:#64748B;background:rgba(100,116,139,0.1); }
+.convergent-card {
+  background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.2);
+  border-radius:var(--radius-md);padding:20px;
+}
+.convergent-card .conv-header { display:flex;align-items:center;gap:10px;margin-bottom:14px; }
+.conv-pulse {
+  width:10px;height:10px;border-radius:50%;background:#EF4444;flex-shrink:0;
+  box-shadow:0 0 0 0 rgba(239,68,68,0.4);
+  animation:pulse-ring 1.5s cubic-bezier(0.4,0,0.6,1) infinite;
+}
+@keyframes pulse-ring {
+  0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}
+  50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}
+}
+.conv-signal-row {
+  display:flex;align-items:flex-start;gap:10px;padding:8px 0;
+  border-bottom:1px solid rgba(239,68,68,0.1);
+}
+.conv-signal-row:last-child{border-bottom:none;}
+.conv-signal-source {
+  font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;
+  letter-spacing:.05em;white-space:nowrap;min-width:130px;padding-top:1px;
+}
+.escalation-ring {
+  display:flex;align-items:center;gap:16px;
+  background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);
+  border-radius:var(--radius-md);padding:16px 20px;margin-top:16px;
+}
+.esc-clock { font-size:28px;font-weight:800;color:#EF4444;font-variant-numeric:tabular-nums;letter-spacing:-.02em; }
+.esc-label { font-size:11px;color:var(--text-muted);margin-top:2px; }
+.esc-chain { display:flex;flex-direction:column;gap:4px;flex:1; }
+.esc-step { display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-secondary); }
+.esc-step.active { color:var(--text-primary);font-weight:600; }
+.esc-dot { width:6px;height:6px;border-radius:50%;background:var(--text-muted);flex-shrink:0; }
+.esc-step.active .esc-dot { background:#EF4444; }
 </style>
 </head>
 <body>
@@ -709,6 +777,10 @@ body {
       <div class="nav-item active" data-page="rungu" onclick="navigateTo('rungu',this)">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Rungu
+      </div>
+      <div class="nav-item" data-page="msingi" onclick="navigate('msingi')">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        Msingi
       </div>
       <div class="nav-item" data-page="dira" onclick="navigateTo('dira',this)">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
@@ -952,6 +1024,14 @@ body {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- ── PAGE: MSINGI ─────────────────────────────────── -->
+      <div class="page" id="page-msingi">
+        <div class="page-header">
+          <h1>Msingi — Electoral Baseline</h1>
+          <div class="page-sub"><span class="live-indicator">BASELINE</span><span>2022 foundation vs live intelligence · Nairobi County</span></div>
         </div>
       </div>
 
@@ -1570,6 +1650,186 @@ function showToast(message, type='info') {
   container.appendChild(toast);
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>toast.classList.add('show')); });
   setTimeout(()=>{ toast.classList.remove('show'); setTimeout(()=>toast.remove(),300); }, 4000);
+}
+
+// ── MSINGI DATA ──────────────────────────────────────────────
+const NAIROBI_CONST = [
+  {name:'Embakasi North',   reg:113344, uda:59.1, odm:20.4, coord:74, trend:'up',     status:'HOLD'},
+  {name:'Embakasi Central', reg:145892, uda:58.7, odm:0,    coord:71, trend:'stable', status:'HOLD'},
+  {name:'Embakasi West',    reg:141878, uda:46.4, odm:0,    coord:68, trend:'stable', status:'HOLD'},
+  {name:'Kasarani',         reg:155250, uda:30.0, odm:0,    coord:65, trend:'up',     status:'WATCH'},
+  {name:'Dagoretti South',  reg:114930, uda:39.1, odm:0,    coord:62, trend:'stable', status:'WATCH'},
+  {name:'Starehe',          reg:169575, uda:25.0, odm:0,    coord:60, trend:'up',     status:'WATCH'},
+  {name:'Langata',          reg:145649, uda:38.4, odm:48.7, coord:51, trend:'down',   status:'WATCH'},
+  {name:'Kamukunji',        reg:128516, uda:29.5, odm:0,    coord:53, trend:'stable', status:'WATCH'},
+  {name:'Embakasi South',   reg:167953, uda:17.4, odm:17.4, coord:48, trend:'stable', status:'WATCH'},
+  {name:'Embakasi East',    reg:154599, uda:31.3, odm:59.9, coord:42, trend:'stable', status:'MONITOR'},
+  {name:'Makadara',         reg:129627, uda:23.5, odm:43.9, coord:40, trend:'stable', status:'MONITOR'},
+  {name:'Dagoretti North',  reg:157659, uda:17.4, odm:63.3, coord:39, trend:'stable', status:'MONITOR'},
+  {name:'Mathare',          reg:123163, uda:19.9, odm:45.4, coord:37, trend:'stable', status:'MONITOR'},
+  {name:'Westlands',        reg:160739, uda:14.7, odm:70.1, coord:36, trend:'stable', status:'MONITOR'},
+  {name:'Kibra',            reg:128282, uda:19.1, odm:44.3, coord:34, trend:'stable', status:'MONITOR'},
+  {name:'Roysambu',         reg:153772, uda:50.0, odm:0,    coord:42, trend:'down',   status:'FLAGGED'},
+  {name:'Ruaraka',          reg:124482, uda:14.0, odm:68.4, coord:28, trend:'down',   status:'FLAGGED'},
+];
+
+const MSINGI_FLAGS = [
+  {
+    id:'RSB-FLAG-001', constituency:'Roysambu', ward:'Kahawa West / Zimmerman',
+    registered:69287, uda_base:62, coord_prev:71, coord_now:42,
+    hours_since_flag:23,
+    signals:[
+      {source:'Community Radio', detail:'Mulembe FM running unga-price segments — 4 of last 8 broadcasts. Segment tone: critical of government.', type:'warn'},
+      {source:'Coordinator Report', detail:'Roysambu coordinator confidence: 42/100 vs 71/100 three weeks ago. Reports "mood has changed" — no specific cause given.', type:'warn'},
+      {source:'MCA Tracker', detail:'Githurai MCA Wainaina Kamande missed 3 of last 4 government functions. Last seen publicly at opposition-adjacent gathering Sept 14.', type:'alert'},
+    ],
+    escalation_step:1
+  }
+];
+
+function msingiStatusStyle(s) {
+  if(s==='HOLD')    return 'signal-hold';
+  if(s==='WATCH')   return 'signal-watch';
+  if(s==='FLAGGED') return 'signal-flag';
+  return 'signal-monitor';
+}
+
+function renderMsingi() {
+  document.getElementById('topbar-title').textContent = 'Msingi';
+  document.getElementById('topbar-subtitle').textContent = 'Electoral Baseline Intelligence';
+
+  const totalReg = 2416551;
+  const rutoBase = 41.94;
+  const gap = 205620;
+  const nonVoters = 1064790;
+  const flagged = NAIROBI_CONST.filter(c=>c.status==='FLAGGED');
+  const watching = NAIROBI_CONST.filter(c=>c.status==='WATCH');
+  const holding  = NAIROBI_CONST.filter(c=>c.status==='HOLD');
+
+  const tableRows = [...flagged,...holding,...watching,...NAIROBI_CONST.filter(c=>c.status==='MONITOR')]
+    .map(c => {
+      const expected = Math.round(c.uda * 1.38);
+      const delta = c.coord - expected;
+      const deltaHtml = delta > 3
+        ? `<span class="delta-badge delta-pos">+${delta}</span>`
+        : delta < -5
+          ? `<span class="delta-badge delta-neg">${delta}</span>`
+          : `<span class="delta-badge delta-flat">~${delta>0?'+':''}${delta}</span>`;
+      const trendArrow = c.trend==='up' ? '<span style="color:#10B981">↑</span>' : c.trend==='down' ? '<span style="color:#EF4444">↓</span>' : '<span style="color:#64748B">→</span>';
+      return `<tr>
+        <td class="td-name">${c.name}</td>
+        <td class="td-reg">${fmt(c.reg)}</td>
+        <td><span class="baseline-tag">${c.uda}% UDA</span>${c.odm>0?` <span class="baseline-tag" style="margin-left:4px">${c.odm}% ODM</span>`:''}</td>
+        <td style="font-variant-numeric:tabular-nums;color:${c.coord<45?'#EF4444':c.coord<60?'#F59E0B':'#10B981'}">${c.coord}/100 ${trendArrow}</td>
+        <td>${deltaHtml}</td>
+        <td><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
+      </tr>`;
+    }).join('');
+
+  const flagCards = MSINGI_FLAGS.map(f => `
+    <div class="convergent-card" style="margin-bottom:16px">
+      <div class="conv-header">
+        <div class="conv-pulse"></div>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--text-primary)">${f.constituency} — ${f.ward}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:1px">${f.signals.length} convergent signals · Flagged ${f.hours_since_flag}h ago · ${fmt(f.registered)} registered voters</div>
+        </div>
+        <span class="signal-chip signal-flag" style="margin-left:auto">${f.signals.length} SIGNALS</span>
+      </div>
+      ${f.signals.map(s=>`
+        <div class="conv-signal-row">
+          <span class="conv-signal-source">${s.source}</span>
+          <span style="font-size:12px;color:var(--text-secondary);flex:1">${s.detail}</span>
+          <span style="width:8px;height:8px;border-radius:50%;background:${s.type==='alert'?'#EF4444':'#F59E0B'};flex-shrink:0;margin-top:4px"></span>
+        </div>`).join('')}
+      <div class="escalation-ring">
+        <div>
+          <div class="esc-clock">${23 + f.hours_since_flag}:14</div>
+          <div class="esc-label">hours since flag</div>
+        </div>
+        <div class="esc-chain">
+          <div class="esc-step active"><div class="esc-dot"></div>Intelligence Lead — assessing (0–24h)</div>
+          <div class="esc-step ${f.escalation_step>=1?'active':''}"><div class="esc-dot"></div>Campaign Director — action required within 48h</div>
+          <div class="esc-step ${f.escalation_step>=2?'active':''}"><div class="esc-dot"></div>Auto-escalates to candidate brief at 72h</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:var(--text-muted)">Remaining</div>
+          <div style="font-size:22px;font-weight:800;color:#F59E0B;font-variant-numeric:tabular-nums">${72-(23+f.hours_since_flag)}h</div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('page-msingi').innerHTML = `
+    <div class="page-header">
+      <h1>Msingi — Electoral Baseline</h1>
+      <div class="page-sub">
+        <span class="live-indicator">BASELINE</span>
+        <span>2022 foundation · Nairobi County · ${NAIROBI_CONST.length} constituencies monitored</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${flagged.length} flagged · ${watching.length} watch · ${holding.length} hold</span>
+      </div>
+    </div>
+
+    <div class="kpi-grid" style="margin-bottom:24px">
+      <div class="kpi-card">
+        <div class="kpi-label">Nairobi Registered</div>
+        <div class="kpi-value" style="background:linear-gradient(135deg,#8B5CF6,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(totalReg)}</div>
+        <div class="kpi-sub">2022 IEBC register · ward-level mapped</div>
+        <div class="kpi-trend up">85 wards fully baselined</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">2022 Ruto Baseline</div>
+        <div class="kpi-value" style="color:#F59E0B">${rutoBase}%</div>
+        <div class="kpi-sub">561,775 votes · county level</div>
+        <div class="kpi-trend down">Deficit county — margin reduction target</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Gap to Close</div>
+        <div class="kpi-value" style="color:#EF4444">-${fmt(gap)}</div>
+        <div class="kpi-sub">votes behind Raila 2022</div>
+        <div class="kpi-trend down">National buffer: 233,000 votes</div>
+      </div>
+      <div class="kpi-card ${flagged.length>0?'accent-amber':''}">
+        <div class="kpi-label">Turnout Lever</div>
+        <div class="kpi-value" style="background:linear-gradient(135deg,#2DD4BF,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(nonVoters)}</div>
+        <div class="kpi-sub">registered non-voters 2022</div>
+        <div class="kpi-trend up">5% mobilization in UDA wards ≈ 53,000 votes</div>
+      </div>
+    </div>
+
+    ${flagged.length > 0 ? `
+    <div style="margin-bottom:24px">
+      <div class="section-header" style="margin-bottom:14px">
+        <h2>Convergent Signals — Requires Action</h2>
+        <span class="badge badge-critical">${flagged.length} flagged</span>
+      </div>
+      ${flagCards}
+    </div>` : ''}
+
+    <div class="card" style="margin-bottom:0;padding:0 0 8px">
+      <div class="card-header" style="padding:16px 16px 12px">
+        <h3>Constituency Intelligence</h3>
+        <span style="font-size:11px;color:var(--text-muted)">2022 baseline · live coordinator signal · divergence</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="msingi-table">
+          <thead>
+            <tr>
+              <th>Constituency</th>
+              <th>Registered</th>
+              <th>2022 Baseline</th>
+              <th>Coord Signal</th>
+              <th>Divergence</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>
+      <div style="padding:10px 14px;font-size:10px;color:var(--text-muted);border-top:1px solid var(--border)">
+        Baseline: 2022 MCA/MP party results (presidential proxy). Coord Signal: field coordinator confidence 0–100. Divergence vs expected baseline performance.
+      </div>
+    </div>
+  `;
 }
 
 function renderRungu() {
@@ -3447,6 +3707,7 @@ function navigate(page) {
     item.classList.toggle('active', item.dataset.page === page);
   });
   const renders = {
+    msingi: renderMsingi,
     rungu: renderRungu,
     dira: renderDira,
     signal: renderSignal,
