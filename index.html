@@ -1653,24 +1653,54 @@ function showToast(message, type='info') {
 }
 
 // ── MSINGI DATA ──────────────────────────────────────────────
-const NAIROBI_CONST = [
-  {name:'Embakasi North',   reg:113344, uda:59.1, odm:20.4, coord:74, trend:'up',     status:'HOLD'},
-  {name:'Embakasi Central', reg:145892, uda:58.7, odm:0,    coord:71, trend:'stable', status:'HOLD'},
-  {name:'Embakasi West',    reg:141878, uda:46.4, odm:0,    coord:68, trend:'stable', status:'HOLD'},
-  {name:'Kasarani',         reg:155250, uda:30.0, odm:0,    coord:65, trend:'up',     status:'WATCH'},
-  {name:'Dagoretti South',  reg:114930, uda:39.1, odm:0,    coord:62, trend:'stable', status:'WATCH'},
-  {name:'Starehe',          reg:169575, uda:25.0, odm:0,    coord:60, trend:'up',     status:'WATCH'},
-  {name:'Langata',          reg:145649, uda:38.4, odm:48.7, coord:51, trend:'down',   status:'WATCH'},
-  {name:'Kamukunji',        reg:128516, uda:29.5, odm:0,    coord:53, trend:'stable', status:'WATCH'},
-  {name:'Embakasi South',   reg:167953, uda:17.4, odm:17.4, coord:48, trend:'stable', status:'WATCH'},
-  {name:'Embakasi East',    reg:154599, uda:31.3, odm:59.9, coord:42, trend:'stable', status:'MONITOR'},
-  {name:'Makadara',         reg:129627, uda:23.5, odm:43.9, coord:40, trend:'stable', status:'MONITOR'},
-  {name:'Dagoretti North',  reg:157659, uda:17.4, odm:63.3, coord:39, trend:'stable', status:'MONITOR'},
-  {name:'Mathare',          reg:123163, uda:19.9, odm:45.4, coord:37, trend:'stable', status:'MONITOR'},
-  {name:'Westlands',        reg:160739, uda:14.7, odm:70.1, coord:36, trend:'stable', status:'MONITOR'},
-  {name:'Kibra',            reg:128282, uda:19.1, odm:44.3, coord:34, trend:'stable', status:'MONITOR'},
-  {name:'Roysambu',         reg:153772, uda:50.0, odm:0,    coord:42, trend:'down',   status:'FLAGGED'},
-  {name:'Ruaraka',          reg:124482, uda:14.0, odm:68.4, coord:28, trend:'down',   status:'FLAGGED'},
+const NATIONAL_COUNTIES = [
+  {name:'Elgeyo/Marakwet', code:'028', reg:213904,  uda:96.9, odm:3.0,  turnout:78.0, status:'WIN'},
+  {name:'Kericho',          code:'035', reg:428126,  uda:95.3, odm:4.5,  turnout:78.6, status:'WIN'},
+  {name:'Bomet',            code:'036', reg:377023,  uda:95.3, odm:4.5,  turnout:79.9, status:'WIN'},
+  {name:'Nandi',            code:'029', reg:406393,  uda:91.3, odm:8.5,  turnout:76.1, status:'WIN'},
+  {name:'Tharaka-Nithi',    code:'013', reg:231966,  uda:89.8, odm:9.3,  turnout:70.1, status:'WIN'},
+  {name:'Embu',             code:'014', reg:334684,  uda:85.0, odm:14.1, turnout:66.6, status:'WIN'},
+  {name:'Kirinyaga',        code:'020', reg:376137,  uda:84.7, odm:14.5, turnout:69.8, status:'WIN'},
+  {name:'Nyeri',            code:'019', reg:482000,  uda:83.4, odm:15.9, turnout:68.3, status:'WIN'},
+  {name:"Murang'a",         code:'021', reg:621027,  uda:81.7, odm:17.5, turnout:68.1, status:'WIN'},
+  {name:'Baringo',          code:'030', reg:281107,  uda:80.7, odm:19.0, turnout:77.6, status:'WIN'},
+  {name:'Nyandarua',        code:'018', reg:361217,  uda:78.8, odm:20.5, turnout:67.1, status:'WIN'},
+  {name:'Meru',             code:'012', reg:772573,  uda:78.8, odm:20.5, turnout:66.2, status:'WIN'},
+  {name:'Uasin Gishu',      code:'027', reg:506317,  uda:78.0, odm:21.7, turnout:69.5, status:'WIN'},
+  {name:'Kiambu',           code:'022', reg:1275168, uda:73.5, odm:25.5, turnout:65.2, status:'WIN'},
+  {name:'Laikipia',         code:'031', reg:263273,  uda:70.5, odm:28.9, turnout:64.7, status:'WIN'},
+  {name:'Nakuru',           code:'032', reg:1055515, uda:66.4, odm:32.9, turnout:65.5, status:'WIN'},
+  {name:'West Pokot',       code:'024', reg:220042,  uda:63.3, odm:36.3, turnout:79.5, status:'WIN'},
+  {name:'Bungoma',          code:'039', reg:646612,  uda:63.2, odm:35.9, turnout:63.5, status:'WIN'},
+  {name:'Isiolo',           code:'011', reg:89535,   uda:54.8, odm:44.8, turnout:66.5, status:'WIN'},
+  {name:'Marsabit',         code:'010', reg:166944,  uda:51.2, odm:48.5, turnout:69.1, status:'WIN'},
+  {name:'Kajiado',          code:'034', reg:463389,  uda:48.1, odm:51.4, turnout:67.0, status:'WATCH'},
+  {name:'Narok',            code:'033', reg:398852,  uda:48.1, odm:51.7, turnout:77.7, status:'WATCH'},
+  {name:'Trans Nzoia',      code:'026', reg:399230,  uda:46.6, odm:52.9, turnout:63.4, status:'WATCH'},
+  {name:'Lamu',             code:'005', reg:81468,   uda:45.7, odm:52.2, turnout:62.5, status:'WATCH'},
+  {name:'Tana River',       code:'004', reg:141110,  uda:44.4, odm:55.0, turnout:67.0, status:'WATCH'},
+  {name:'Nairobi City',     code:'047', reg:2416551, uda:41.9, odm:57.3, turnout:56.0, status:'WATCH'},
+  {name:'Mombasa',          code:'001', reg:642362,  uda:41.0, odm:58.1, turnout:43.8, status:'WATCH'},
+  {name:'Samburu',          code:'025', reg:100052,  uda:40.3, odm:59.3, turnout:70.7, status:'WATCH'},
+  {name:'Nyamira',          code:'046', reg:323283,  uda:37.6, odm:61.8, turnout:65.2, status:'WATCH'},
+  {name:'Wajir',            code:'008', reg:207767,  uda:36.8, odm:62.6, turnout:64.7, status:'WATCH'},
+  {name:'Vihiga',           code:'038', reg:310063,  uda:36.7, odm:62.2, turnout:60.1, status:'WATCH'},
+  {name:'Kisii',            code:'045', reg:637111,  uda:33.6, odm:65.8, turnout:63.9, status:'MONITOR'},
+  {name:'Turkana',          code:'023', reg:238554,  uda:32.5, odm:67.0, turnout:60.6, status:'MONITOR'},
+  {name:'Kwale',            code:'002', reg:328316,  uda:29.0, odm:70.1, turnout:54.9, status:'MONITOR'},
+  {name:'Kakamega',         code:'037', reg:844709,  uda:28.0, odm:71.0, turnout:60.3, status:'MONITOR'},
+  {name:'Kitui',            code:'015', reg:532833,  uda:27.2, odm:71.5, turnout:62.4, status:'MONITOR'},
+  {name:'Kilifi',           code:'003', reg:588842,  uda:27.1, odm:71.6, turnout:49.0, status:'MONITOR'},
+  {name:'Taita Taveta',     code:'006', reg:182126,  uda:26.1, odm:72.9, turnout:61.8, status:'MONITOR'},
+  {name:'Garissa',          code:'007', reg:201513,  uda:25.6, odm:74.0, turnout:54.9, status:'MONITOR'},
+  {name:'Machakos',         code:'016', reg:687691,  uda:24.7, odm:74.3, turnout:60.2, status:'MONITOR'},
+  {name:'Mandera',          code:'009', reg:217034,  uda:20.9, odm:78.4, turnout:62.9, status:'MONITOR'},
+  {name:'Makueni',          code:'017', reg:479516,  uda:20.4, odm:78.8, turnout:61.0, status:'MONITOR'},
+  {name:'Busia',            code:'040', reg:416818,  uda:17.6, odm:81.7, turnout:67.1, status:'MONITOR'},
+  {name:'Migori',           code:'044', reg:469053,  uda:15.1, odm:84.6, turnout:74.5, status:'MONITOR'},
+  {name:'Kisumu',           code:'042', reg:607496,  uda:2.3,  odm:97.4, turnout:71.4, status:'MONITOR'},
+  {name:'Siaya',            code:'041', reg:533602,  uda:1.1,  odm:98.6, turnout:70.9, status:'MONITOR'},
+  {name:'Homa Bay',         code:'043', reg:551111,  uda:0.9,  odm:98.9, turnout:73.7, status:'MONITOR'},
 ];
 
 const MSINGI_FLAGS = [
@@ -1688,7 +1718,7 @@ const MSINGI_FLAGS = [
 ];
 
 function msingiStatusStyle(s) {
-  if(s==='HOLD')    return 'signal-hold';
+  if(s==='WIN')     return 'signal-hold';
   if(s==='WATCH')   return 'signal-watch';
   if(s==='FLAGGED') return 'signal-flag';
   return 'signal-monitor';
@@ -1698,33 +1728,24 @@ function renderMsingi() {
   document.getElementById('topbar-title').textContent = 'Msingi';
   document.getElementById('topbar-subtitle').textContent = 'Electoral Baseline Intelligence';
 
-  const totalReg = 2416551;
-  const rutoBase = 41.94;
-  const gap = 205620;
-  const nonVoters = 1064790;
-  const flagged = NAIROBI_CONST.filter(c=>c.status==='FLAGGED');
-  const watching = NAIROBI_CONST.filter(c=>c.status==='WATCH');
-  const holding  = NAIROBI_CONST.filter(c=>c.status==='HOLD');
+  const totalReg   = 22110015;
+  const rutoBase   = 50.49;
+  const margin     = 234748;
+  const nonVoters  = 7902866;
+  const winCount   = NATIONAL_COUNTIES.filter(c=>c.status==='WIN').length;
+  const watchCount = NATIONAL_COUNTIES.filter(c=>c.status==='WATCH').length;
+  const monCount   = NATIONAL_COUNTIES.filter(c=>c.status==='MONITOR').length;
 
-  const tableRows = [...flagged,...holding,...watching,...NAIROBI_CONST.filter(c=>c.status==='MONITOR')]
-    .map(c => {
-      const expected = Math.round(c.uda * 1.38);
-      const delta = c.coord - expected;
-      const deltaHtml = delta > 3
-        ? `<span class="delta-badge delta-pos">+${delta}</span>`
-        : delta < -5
-          ? `<span class="delta-badge delta-neg">${delta}</span>`
-          : `<span class="delta-badge delta-flat">~${delta>0?'+':''}${delta}</span>`;
-      const trendArrow = c.trend==='up' ? '<span style="color:#10B981">↑</span>' : c.trend==='down' ? '<span style="color:#EF4444">↓</span>' : '<span style="color:#64748B">→</span>';
-      return `<tr>
-        <td class="td-name">${c.name}</td>
-        <td class="td-reg">${fmt(c.reg)}</td>
-        <td><span class="baseline-tag">${c.uda}% UDA</span>${c.odm>0?` <span class="baseline-tag" style="margin-left:4px">${c.odm}% ODM</span>`:''}</td>
-        <td style="font-variant-numeric:tabular-nums;color:${c.coord<45?'#EF4444':c.coord<60?'#F59E0B':'#10B981'}">${c.coord}/100 ${trendArrow}</td>
-        <td>${deltaHtml}</td>
-        <td><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
-      </tr>`;
-    }).join('');
+  const tableRows = NATIONAL_COUNTIES.map(c => {
+    const udaColor = c.uda >= 50 ? '#10B981' : c.uda >= 35 ? '#F59E0B' : '#EF4444';
+    return `<tr>
+      <td class="td-name" style="min-width:130px">${c.name}</td>
+      <td class="td-reg">${fmt(c.reg)}</td>
+      <td><span class="baseline-tag" style="color:${udaColor};border-color:${udaColor}33;background:${udaColor}14">${c.uda}% UDA</span> <span class="baseline-tag">${c.odm}% ODM</span></td>
+      <td style="font-variant-numeric:tabular-nums;color:var(--text-secondary)">${c.turnout}%</td>
+      <td><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
+    </tr>`;
+  }).join('');
 
   const flagCards = MSINGI_FLAGS.map(f => `
     <div class="convergent-card" style="margin-bottom:16px">
@@ -1764,61 +1785,59 @@ function renderMsingi() {
       <h1>Msingi — Electoral Baseline</h1>
       <div class="page-sub">
         <span class="live-indicator">BASELINE</span>
-        <span>2022 foundation · Nairobi County · ${NAIROBI_CONST.length} constituencies monitored</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${flagged.length} flagged · ${watching.length} watch · ${holding.length} hold</span>
+        <span>2022 foundation · Kenya · All 47 counties</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${winCount} WIN · ${watchCount} WATCH · ${monCount} MONITOR</span>
       </div>
     </div>
 
     <div class="kpi-grid" style="margin-bottom:24px">
       <div class="kpi-card">
-        <div class="kpi-label">Nairobi Registered</div>
+        <div class="kpi-label">National Registered</div>
         <div class="kpi-value" style="background:linear-gradient(135deg,#8B5CF6,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(totalReg)}</div>
-        <div class="kpi-sub">2022 IEBC register · ward-level mapped</div>
-        <div class="kpi-trend up">85 wards fully baselined</div>
+        <div class="kpi-sub">2022 IEBC register · all 47 counties</div>
+        <div class="kpi-trend up">290 constituencies baselined</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">2022 Ruto Baseline</div>
-        <div class="kpi-value" style="color:#F59E0B">${rutoBase}%</div>
-        <div class="kpi-sub">561,775 votes · county level</div>
-        <div class="kpi-trend down">Deficit county — margin reduction target</div>
+        <div class="kpi-value" style="color:#10B981">${rutoBase}%</div>
+        <div class="kpi-sub">7,173,951 votes · presidential result</div>
+        <div class="kpi-trend up">Won 2022 · 20 of 47 counties</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Gap to Close</div>
-        <div class="kpi-value" style="color:#EF4444">-${fmt(gap)}</div>
-        <div class="kpi-sub">votes behind Raila 2022</div>
-        <div class="kpi-trend down">National buffer: 233,000 votes</div>
+        <div class="kpi-label">2022 Win Margin</div>
+        <div class="kpi-value" style="color:#10B981">+${fmt(margin)}</div>
+        <div class="kpi-sub">votes ahead of Raila 2022</div>
+        <div class="kpi-trend down">Thin buffer — must defend &amp; grow</div>
       </div>
-      <div class="kpi-card ${flagged.length>0?'accent-amber':''}">
+      <div class="kpi-card">
         <div class="kpi-label">Turnout Lever</div>
         <div class="kpi-value" style="background:linear-gradient(135deg,#2DD4BF,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(nonVoters)}</div>
         <div class="kpi-sub">registered non-voters 2022</div>
-        <div class="kpi-trend up">5% mobilization in UDA wards ≈ 53,000 votes</div>
+        <div class="kpi-trend up">5% mobilization in WIN counties ≈ 180K votes</div>
       </div>
     </div>
 
-    ${flagged.length > 0 ? `
     <div style="margin-bottom:24px">
       <div class="section-header" style="margin-bottom:14px">
         <h2>Convergent Signals — Requires Action</h2>
-        <span class="badge badge-critical">${flagged.length} flagged</span>
+        <span class="badge badge-critical">${MSINGI_FLAGS.length} flagged</span>
       </div>
       ${flagCards}
-    </div>` : ''}
+    </div>
 
     <div class="card" style="margin-bottom:0;padding:0 0 8px">
       <div class="card-header" style="padding:16px 16px 12px">
-        <h3>Constituency Intelligence</h3>
-        <span style="font-size:11px;color:var(--text-muted)">2022 baseline · live coordinator signal · divergence</span>
+        <h3>County Intelligence</h3>
+        <span style="font-size:11px;color:var(--text-muted)">2022 presidential baseline · all 47 counties</span>
       </div>
       <div style="overflow-x:auto">
         <table class="msingi-table">
           <thead>
             <tr>
-              <th>Constituency</th>
+              <th>County</th>
               <th>Registered</th>
-              <th>2022 Baseline</th>
-              <th>Coord Signal</th>
-              <th>Divergence</th>
+              <th>2022 Result</th>
+              <th>Turnout</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -1826,7 +1845,7 @@ function renderMsingi() {
         </table>
       </div>
       <div style="padding:10px 14px;font-size:10px;color:var(--text-muted);border-top:1px solid var(--border)">
-        Baseline: 2022 MCA/MP party results (presidential proxy). Coord Signal: field coordinator confidence 0–100. Divergence vs expected baseline performance.
+        Source: IEBC 2022 presidential results. WIN ≥ 50% UDA · WATCH 35–49% · MONITOR &lt; 35%.
       </div>
     </div>
   `;
