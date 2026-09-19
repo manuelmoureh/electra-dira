@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DIRA Command — Electra Labs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 /* ── CUSTOM PROPERTIES ─────────────────────────────────────────────────── */
@@ -50,6 +53,8 @@
   --transition-fast: 150ms cubic-bezier(0.4,0,0.2,1);
   --transition-base: 250ms cubic-bezier(0.4,0,0.2,1);
   --transition-slow: 400ms cubic-bezier(0.4,0,0.2,1);
+  --font-sans: 'Satoshi', -apple-system, 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
 }
 [data-theme="light"] {
   --bg-base: #F0F4FF;
@@ -74,7 +79,7 @@
 
 /* ── RESET + BASE ──────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+html, body { height: 100%; font-family: 'Satoshi', -apple-system, 'Inter', sans-serif; font-size: 14px; line-height: 1.6; }
 body {
   background: var(--bg-base);
   color: var(--text-primary);
@@ -323,7 +328,7 @@ body {
   opacity: 0.06; pointer-events: none;
 }
 .kpi-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
-.kpi-value { font-size: 32px; font-weight: 800; color: var(--text-primary); line-height: 1; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.kpi-value { font-size: 32px; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 6px; font-variant-numeric: tabular-nums; font-family: var(--font-mono); letter-spacing: -0.02em; }
 .kpi-sub { font-size: 12px; color: var(--text-secondary); }
 .kpi-trend { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; margin-top: 8px; }
 .kpi-trend.up { color: var(--green); }
@@ -600,17 +605,19 @@ body {
 .signal-monitor{ background:rgba(100,116,139,0.1);color:#64748B;border:1px solid rgba(100,116,139,0.15); }
 .msingi-table { width:100%;border-collapse:collapse; }
 .msingi-table thead th {
-  font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;
-  padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;
+  font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;
+  padding:9px 14px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;
+  font-family:var(--font-sans);
 }
 .msingi-table tbody tr {
   border-bottom:1px solid var(--border);transition:background var(--transition-fast);
 }
 .msingi-table tbody tr:hover { background:var(--bg-surface-hover); }
 .msingi-table tbody tr:last-child { border-bottom:none; }
-.msingi-table td { padding:10px 12px;font-size:12px;vertical-align:middle; }
-.msingi-table td.td-name { font-weight:600;color:var(--text-primary); }
-.msingi-table td.td-reg { color:var(--text-secondary);font-variant-numeric:tabular-nums; }
+.msingi-table td { padding:11px 14px;font-size:13px;vertical-align:middle; }
+.msingi-table td.td-name { font-weight:600;color:var(--text-primary);font-size:13px;font-family:var(--font-sans); }
+.msingi-table td.td-reg { color:var(--text-secondary);font-variant-numeric:tabular-nums;font-family:var(--font-mono);font-size:12px;letter-spacing:-0.01em; }
+.msingi-table td.td-pct { font-family:var(--font-mono);font-size:12px;font-variant-numeric:tabular-nums; }
 .delta-badge { font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px; }
 .delta-neg { color:#EF4444;background:rgba(239,68,68,0.1); }
 .delta-pos { color:#10B981;background:rgba(16,185,129,0.1); }
@@ -1724,50 +1731,60 @@ function msingiExpandCounty(code) {
 
 function renderCountyRow(c) {
   const udaCol = c.uda >= 50 ? '#10B981' : c.uda >= 35 ? '#F59E0B' : '#EF4444';
-  const nonV = Math.round(c.reg * (1 - c.turnout / 100));
-  const udaV = Math.round(c.reg * (c.turnout / 100) * (c.uda / 100));
-  const odmV = Math.round(c.reg * (c.turnout / 100) * (c.odm / 100));
+  const nonV  = Math.round(c.reg * (1 - c.turnout / 100));
+  const udaV  = Math.round(c.reg * (c.turnout / 100) * (c.uda / 100));
+  const odmV  = Math.round(c.reg * (c.turnout / 100) * (c.odm / 100));
+  const covPct = Math.round(c.reg / c.elig26 * 100);
   const isExp = _msingiExpanded === c.code;
   const strat = c.status === 'WIN'
-    ? `UDA stronghold. Priority: voter mobilization, not persuasion. Every 1pp turnout uplift here adds ~${fmt(Math.round(c.reg * 0.01 * c.uda / 100))} net votes.`
+    ? `UDA stronghold. Priority: mobilization, not persuasion. Every 1pp turnout adds ~${fmt(Math.round(c.reg * 0.01 * c.uda / 100))} net votes.`
     : c.status === 'WATCH'
-    ? 'Competitive county. Target high-registration wards with split history. ODM vote is soft in places — reachable with the right message.'
-    : 'Opposition territory. Do not over-invest. Monitor turnout trends and protect against unexpected county swings.';
+    ? 'Competitive. Target high-registration wards with split history. ODM vote is persuadable with the right message.'
+    : 'Opposition territory. Limited investment; monitor turnout and protect against unexpected swings.';
   return `<tr onclick="msingiExpandCounty('${c.code}')" style="cursor:pointer">
-    <td style="padding:10px 12px;min-width:140px">
-      <div style="display:flex;align-items:center;gap:6px">
-        <span style="font-size:10px;color:var(--text-muted);min-width:28px;font-variant-numeric:tabular-nums">${c.code}</span>
-        <span style="font-weight:500">${c.name}</span>
-        <span style="margin-left:auto;color:var(--text-muted);font-size:10px">${isExp?'▲':'▼'}</span>
+    <td style="padding:10px 14px;min-width:150px">
+      <div style="display:flex;align-items:center;gap:7px">
+        <span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);flex-shrink:0">${c.code}</span>
+        <span style="font-weight:500;font-size:13px">${c.name}</span>
+        <span style="margin-left:auto;color:var(--text-muted);font-size:9px">${isExp ? '▲' : '▼'}</span>
       </div>
     </td>
-    <td style="padding:10px 12px;font-variant-numeric:tabular-nums;color:var(--text-secondary)">${fmt(c.reg)}</td>
-    <td style="padding:10px 12px">
-      <span class="baseline-tag" style="color:${udaCol};border-color:${udaCol}33;background:${udaCol}14">${c.uda}% UDA</span>
-      <span class="baseline-tag" style="margin-left:3px">${c.odm}% ODM</span>
+    <td style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);font-variant-numeric:tabular-nums;white-space:nowrap">${fmt(c.reg)}</td>
+    <td style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap">
+      <span style="color:#2DD4BF">${fmt(c.elig26)}</span>
+      <span style="font-size:10px;color:var(--text-muted);margin-left:5px">${covPct}% reg.</span>
     </td>
-    <td style="padding:10px 12px;font-variant-numeric:tabular-nums;color:var(--text-secondary)">${c.turnout}%</td>
-    <td style="padding:10px 12px"><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
+    <td style="padding:10px 14px;min-width:140px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="flex:1;max-width:80px;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden">
+          <div style="height:100%;width:${c.uda}%;background:${udaCol};border-radius:3px"></div>
+        </div>
+        <span style="font-family:var(--font-mono);font-size:12px;color:${udaCol};font-variant-numeric:tabular-nums">${c.uda}%</span>
+      </div>
+    </td>
+    <td style="padding:10px 14px"><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
   </tr>${isExp ? `<tr>
     <td colspan="5" style="padding:0;border-bottom:1px solid var(--border)">
-      <div style="background:rgba(100,116,139,0.06);padding:16px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div style="background:rgba(100,116,139,0.04);padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;border-top:1px solid var(--border)">
         <div>
-          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">2022 Votes (est.)</div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px">2022 Vote Breakdown (est.)</div>
           <div style="font-size:13px;font-weight:600;color:#10B981">Ruto: ${fmt(udaV)}</div>
           <div style="font-size:13px;font-weight:600;color:#EF4444;margin-top:3px">Raila: ${fmt(odmV)}</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">${c.turnout}% turnout of ${fmt(c.reg)}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px">${c.turnout}% turnout · ${fmt(nonV)} didn't vote</div>
+          <div style="font-size:11px;color:${udaCol};margin-top:2px">~${fmt(Math.round(nonV*c.uda/100))} UDA non-voters to mobilize</div>
         </div>
         <div>
-          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Voter Pool · KNBS Est.</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Eligible 2026</div>
-          <div style="font-size:18px;font-weight:700;color:#2DD4BF;font-variant-numeric:tabular-nums">${fmt(c.elig26)}</div>
-          <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">Registration coverage</div>
-          <div style="font-size:15px;font-weight:700;color:${Math.round(c.reg/c.elig26*100)>=85?'#10B981':'#F59E0B'};margin-top:1px">${Math.round(c.reg/c.elig26*100)}% <span style="font-size:11px;font-weight:400;color:var(--text-muted)">(${fmt(c.elig26-c.reg)} unregistered)</span></div>
-          <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">2022 non-voters</div>
-          <div style="font-size:15px;font-weight:700;color:var(--text-secondary);margin-top:1px">${fmt(nonV)} <span style="font-size:11px;font-weight:400;color:${udaCol}">≈ ${fmt(Math.round(nonV*c.uda/100))} UDA potential</span></div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px">Voter Pool · KNBS 2026</div>
+          <div style="font-size:22px;font-weight:700;font-family:var(--font-mono);color:#2DD4BF;letter-spacing:-0.02em">${fmt(c.elig26)}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">estimated eligible</div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+            <div style="flex:1;height:4px;background:rgba(255,255,255,0.08);border-radius:2px"><div style="height:100%;width:${covPct}%;background:${covPct>=85?'#10B981':'#F59E0B'};border-radius:2px"></div></div>
+            <span style="font-size:11px;font-family:var(--font-mono);color:${covPct>=85?'#10B981':'#F59E0B'}">${covPct}%</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${fmt(c.elig26-c.reg)} unregistered</div>
         </div>
         <div>
-          <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Strategic Note</div>
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px">Intel Note</div>
           <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">${strat}</div>
         </div>
       </div>
@@ -1798,7 +1815,7 @@ function msingiStatusStyle(s) {
 
 function renderMsingi() {
   document.getElementById('topbar-title').textContent = 'Msingi';
-  document.getElementById('topbar-subtitle').textContent = 'Electoral Baseline Intelligence';
+  document.getElementById('topbar-subtitle').textContent = 'Battlefield Brief';
 
   _msingiFilter = 'ALL';
   _msingiExpanded = null;
@@ -1814,6 +1831,7 @@ function renderMsingi() {
   const totalReg   = NATIONAL_COUNTIES.reduce((s, c) => s + c.reg, 0);
   const totalUnreg = totalElig - totalReg;
   const regRate    = Math.round(totalReg / totalElig * 100);
+  const daysLeft   = Math.max(0, Math.ceil((new Date('2027-08-10') - new Date()) / 86400000));
 
 
   const filterTabs = ['ALL','WIN','WATCH','MONITOR'].map(f => {
@@ -1827,132 +1845,136 @@ function renderMsingi() {
   }).join('');
 
   document.getElementById('page-msingi').innerHTML = `
-    <div class="page-header">
-      <h1>Msingi — Electoral Baseline</h1>
-      <div class="page-sub">
-        <span class="live-indicator">BASELINE</span>
-        <span>2022 IEBC foundation · Kenya · All 47 counties</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${winC.length} WIN · ${watC.length} WATCH · ${monC.length} MONITOR</span>
+    <div class="page-header" style="margin-bottom:20px">
+      <h1 style="font-size:22px;font-weight:700;letter-spacing:-0.02em">Msingi</h1>
+      <div class="page-sub" style="margin-top:4px">
+        <span style="font-size:12px">Electoral Situation Analysis</span>
+        <span>·</span>
+        <span style="font-size:12px">Kenya 2027</span>
+        <span>·</span>
+        <span style="font-family:var(--font-mono);font-weight:600;color:var(--text-primary)">${daysLeft}</span>
+        <span style="font-size:12px">days to election</span>
+        <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">${winC.length} WIN · ${watC.length} WATCH · ${monC.length} MONITOR · Aug 10, 2027</span>
       </div>
     </div>
 
-    <div class="kpi-grid" style="margin-bottom:16px">
-      <div class="kpi-card">
-        <div class="kpi-label">National Registered</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#8B5CF6,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">22,110,015</div>
-        <div class="kpi-sub">2022 IEBC register · all 47 counties</div>
+    <!-- § THE SCALE -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px">
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Registered</div>
+        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.02em;line-height:1.1">25.0M</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">IEBC · Aug 2026</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">2022 Ruto Baseline</div>
-        <div class="kpi-value" style="color:#10B981">50.49%</div>
-        <div class="kpi-sub">7,173,951 votes · 20 of 47 counties won</div>
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">IEBC 2027 Target</div>
+        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:#2DD4BF;letter-spacing:-0.02em;line-height:1.1">28.5M</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">CVR Phase II active · Sep 2026</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">2022 Win Margin</div>
-        <div class="kpi-value" style="color:#10B981">+234,748</div>
-        <div class="kpi-sub">votes ahead of Raila Odinga</div>
-        <div class="kpi-trend down">Thin — must defend &amp; grow</div>
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">New Since 2022</div>
+        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:#10B981;letter-spacing:-0.02em;line-height:1.1">+2.93M</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">ECVR Phase I + routine CVR</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Turnout Lever</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#2DD4BF,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">7,902,866</div>
-        <div class="kpi-sub">registered non-voters 2022</div>
-        <div class="kpi-trend up">1pp uplift in WIN counties ≈ +${fmt(winUplift)} net votes</div>
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Est. Votes Cast '27</div>
+        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:var(--text-secondary);letter-spacing:-0.02em;line-height:1.1">~16.3M</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">at 65% turnout · 25M base</div>
       </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
-      <div onclick="msingiSetFilter('WIN')" style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(16,185,129,0.1)'" onmouseout="this.style.background='rgba(16,185,129,0.06)'">
-        <div style="font-size:10px;color:#10B981;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">WIN Counties</div>
-        <div style="font-size:28px;font-weight:800;color:#10B981;font-variant-numeric:tabular-nums">${winC.length}</div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${fmt(winReg)} registered voters</div>
-        <div style="font-size:10px;color:#10B981;margin-top:6px;font-weight:600">Filter table →</div>
-      </div>
-      <div onclick="msingiSetFilter('WATCH')" style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,0.1)'" onmouseout="this.style.background='rgba(245,158,11,0.06)'">
-        <div style="font-size:10px;color:#F59E0B;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">WATCH Counties</div>
-        <div style="font-size:28px;font-weight:800;color:#F59E0B;font-variant-numeric:tabular-nums">${watC.length}</div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${fmt(watReg)} registered voters</div>
-        <div style="font-size:10px;color:#F59E0B;margin-top:6px;font-weight:600">Filter table →</div>
-      </div>
-      <div onclick="msingiSetFilter('MONITOR')" style="background:rgba(100,116,139,0.06);border:1px solid rgba(100,116,139,0.2);border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(100,116,139,0.1)'" onmouseout="this.style.background='rgba(100,116,139,0.06)'">
-        <div style="font-size:10px;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">MONITOR Counties</div>
-        <div style="font-size:28px;font-weight:800;color:#64748B;font-variant-numeric:tabular-nums">${monC.length}</div>
-        <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${fmt(monReg)} registered voters</div>
-        <div style="font-size:10px;color:#64748B;margin-top:6px;font-weight:600">Filter table →</div>
+      <div style="padding:16px 18px">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Round 1 Threshold</div>
+        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:#8B5CF6;letter-spacing:-0.02em;line-height:1.1">50%+1</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">+ 25% in ≥24 of 47 counties</div>
       </div>
     </div>
 
-    <div style="background:rgba(20,40,60,0.5);border:1px solid rgba(45,212,191,0.15);border-radius:var(--radius-md);padding:20px 24px;margin-bottom:16px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(45,212,191,0.12)">
-        <div style="width:3px;height:18px;background:linear-gradient(#2DD4BF,#06B6D4);border-radius:2px;flex-shrink:0"></div>
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#2DD4BF">2026 Eligible Voter Landscape · KNBS Est.</div>
-        <div style="margin-left:auto;font-size:10px;color:var(--text-muted)">KNBS 2019 Census + 2026 projection · 18+ cohort</div>
+    <!-- § THE CONTEST -->
+    <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px">
+      <div style="padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02)">
+        <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)">The Contest</span>
+        <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">Declared &amp; likely candidates · as of Sep 2026</span>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:14px">
-        <div style="background:rgba(45,212,191,0.05);border:1px solid rgba(45,212,191,0.12);border-radius:8px;padding:14px 16px">
-          <div style="font-size:10px;color:#2DD4BF;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Est. Eligible 2026</div>
-          <div style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--text-primary)">${fmt(totalElig)}</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:3px">estimated 18+ population · all 47 counties</div>
-        </div>
-        <div style="background:rgba(45,212,191,0.05);border:1px solid rgba(45,212,191,0.12);border-radius:8px;padding:14px 16px">
-          <div style="font-size:10px;color:#2DD4BF;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Registration Coverage</div>
-          <div style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:${regRate>=85?'#10B981':'#F59E0B'}">${regRate}%</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${fmt(totalReg)} registered of ${fmt(totalElig)} eligible</div>
-        </div>
-        <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:8px;padding:14px 16px">
-          <div style="font-size:10px;color:#F87171;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Unregistered Gap</div>
-          <div style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#F87171">${fmt(totalUnreg)}</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:3px">eligible Kenyans not on the 2022 register</div>
-        </div>
+      <div style="display:grid;grid-template-columns:180px 1fr 150px 130px;align-items:center;padding:13px 18px;background:rgba(139,92,246,0.05);border-bottom:1px solid var(--border);gap:16px">
+        <div style="font-weight:600;font-size:13px;color:var(--text-primary)">William Ruto</div>
+        <div style="font-size:12px;color:var(--text-muted)">UDA · Kenya Kwanza</div>
+        <div style="font-size:11px;color:var(--text-muted)">National</div>
+        <div><span style="font-size:9px;font-weight:700;color:#8B5CF6;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);padding:3px 8px;border-radius:3px;letter-spacing:.05em">INCUMBENT</span></div>
       </div>
-      <div style="font-size:11px;color:var(--text-muted);line-height:1.7;padding-top:10px;border-top:1px solid rgba(45,212,191,0.08)">
-        <span style="color:#2DD4BF;font-weight:600">Intelligence note:</span> The ${fmt(totalUnreg)}-voter unregistered pool is the campaign's most unpredictable variable. Continuous Voter Registration (CVR) exercises ahead of 2027 will materially change county-level ceilings. WATCH and MONITOR counties — where youth and urban populations skew — carry the highest unregistered concentrations. Expand each county row for county-level registration coverage detail.
+      <div style="display:grid;grid-template-columns:180px 1fr 150px 130px;padding:6px 18px;background:rgba(255,255,255,0.015);gap:16px;border-bottom:1px solid var(--border)">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)">Name</div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)">Vehicle · Notes</div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)">Base</div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)">Status</div>
       </div>
-    </div>
-
-    <div style="background:rgba(20,20,40,0.6);border:1px solid rgba(139,92,246,0.12);border-radius:var(--radius-md);padding:20px 24px;margin-bottom:24px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)">
-        <div style="width:3px;height:18px;background:linear-gradient(#8B5CF6,#3B82F6);border-radius:2px;flex-shrink:0"></div>
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted)">Strategic Intelligence — 2022 Foundation</div>
-        <div style="margin-left:auto;font-size:10px;color:var(--text-muted)">IEBC 2022 · Confidence 0.92</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:0">
-        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
-          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#8B5CF6;padding-top:1px;flex-shrink:0">MARGIN</div>
-          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">The 234,748-vote buffer is the thinnest presidential win in Kenya's multi-party era — smaller than the registered voter population of Isiolo County. This margin does not survive a passive campaign. Every down-ballot loss that demobilises a UDA ward is a presidential risk.</div>
-        </div>
-        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
-          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#10B981;padding-top:1px;flex-shrink:0">NON-VOTERS</div>
-          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">7,902,866 registered Kenyans did not cast a vote in 2022. In WIN counties these non-voters are disproportionately UDA-aligned — low turnout cost the campaign more than opposition voters did. A 1pp mobilisation increase across WIN counties adds approximately 70,879 net votes, equivalent to 30% of the entire winning margin.</div>
-        </div>
-        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
-          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#10B981;padding-top:1px;flex-shrink:0">WIN DEFENCE</div>
-          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">20 fortress counties hold 9.1 million registered voters and delivered the presidency. A 2% turnout decline in these counties erases the margin before a single opposition vote changes. Fortress counties are not safe by default — they require active mobilisation infrastructure throughout the campaign cycle.</div>
-        </div>
-        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
-          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#F59E0B;padding-top:1px;flex-shrink:0">WATCH PRIORITY</div>
-          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">11 competitive counties (5.5M registered) represent the highest campaign ROI per shilling spent. The ODM vote in WATCH counties is softer than it appears — these voters are persuadable, not committed. Correctly invested, WATCH counties can double the margin. Under-invested, they can eliminate it.</div>
-        </div>
-        <div style="display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)">
-          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748B;padding-top:1px;flex-shrink:0">MONITOR POSTURE</div>
-          <div style="font-size:13px;color:var(--text-secondary);line-height:1.65">16 opposition-held counties (7.5M registered) are not zero-investment territory. Targeted presence in boundary wards reduces the clean-sweep and protects the national vote share buffer. The goal in MONITOR counties is not conversion — it is suppressing the opposition's margin, not building our own.</div>
-        </div>
-        <div style="display:flex;gap:16px;padding:12px 0">
-          <div style="min-width:88px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);padding-top:1px;flex-shrink:0">INTEL GAPS</div>
-          <div style="font-size:12px;color:var(--text-muted);line-height:1.7">
-            <div>· KNBS eligible voter pool is a 2026 projection estimate (2019 Census + growth/age factors). Actual 2027 register will differ — CVR exercises ongoing nationally; treat elig26 as directional, not precise.</div>
-            <div style="margin-top:4px">· No presidential ward-level 2022 results exist — county and constituency data is the finest granularity available. Ward signals use MCA results as proxy.</div>
-            <div style="margin-top:4px">· No 2027 opposition candidate landscape confirmed — a regionally credible challenger flips the competitive county calculus entirely.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-bottom:0;padding:0 0 8px">
-      <div class="card-header" style="padding:16px 16px 12px;flex-wrap:wrap;gap:10px;align-items:flex-start">
+      ${[
+        {name:'Kalonzo Musyoka', vehicle:'Wiper · WPF', note:'Coalition frontrunner in preference surveys', base:'Ukambani + Eastern', col:'#10B981'},
+        {name:'Edwin Sifuna',    vehicle:'ODM (faction)', note:'Fastest rising opposition figure · Gen Z appeal', base:'Nyanza · Youth', col:'#F59E0B'},
+        {name:'Fred Matiangi',  vehicle:'Jubilee', note:'Uhuru-backed · In coalition pact', base:'Gusii + Mt. Kenya', col:'#94A3B8'},
+        {name:'Rigathi Gachagua', vehicle:'DCP', note:'⚠ Court of Appeal ruling pending · Ballot or kingmaker', base:'Mt. Kenya', col:'#F87171'},
+        {name:'Martha Karua',   vehicle:'Narc-Kenya', note:'In coalition pact', base:'Mt. Kenya', col:'#94A3B8'},
+        {name:'David Maraga',   vehicle:'Independent', note:'Outside pact · Rule-of-law platform', base:'—', col:'#64748B'},
+      ].map(cd => `
+      <div style="display:grid;grid-template-columns:180px 1fr 150px 130px;align-items:flex-start;padding:11px 18px;border-bottom:1px solid var(--border);gap:16px">
+        <div style="font-weight:500;font-size:13px">${cd.name}</div>
         <div>
-          <h3>County Intelligence</h3>
-          <span style="font-size:11px;color:var(--text-muted)">2022 presidential baseline · click any row to expand</span>
+          <div style="font-size:12px;color:var(--text-secondary)">${cd.vehicle}</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px">${cd.note}</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);padding-top:1px">${cd.base}</div>
+        <div style="font-size:10px;font-weight:600;color:${cd.col};padding-top:3px">Declared</div>
+      </div>`).join('')}
+      <div style="padding:9px 18px;background:rgba(245,158,11,0.03);border-top:1px solid rgba(245,158,11,0.1)">
+        <span style="font-size:9px;font-weight:700;color:#F59E0B;letter-spacing:.05em;text-transform:uppercase">Coalition Note</span>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:8px">Unity Pact signed Aug 24, 2026 (Windsor Hotel, Kiambu). No flagbearer nominated. Deliberations ongoing as of Sep 2026.</span>
+      </div>
+      <div style="padding:12px 18px;border-top:1px solid var(--border)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Field Reports — Access Directly</div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          ${[
+            ['TIFA Research','Independent tracking polls'],
+            ['Infotrak','Quarterly tracker'],
+            ['The Star','Candidate coverage'],
+            ['Nation Africa','Campaign reporting'],
+            ['Standard Media','Political analysis'],
+            ['Africa Check','Fact verification'],
+          ].map(([name, note]) =>
+            `<div style="border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:10px;white-space:nowrap"><span style="font-weight:600;color:var(--text-secondary)">${name}</span><span style="color:var(--text-muted);margin-left:5px">· ${note}</span></div>`
+          ).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- § THE GATE -->
+    <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px">
+      <div style="padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02)">
+        <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)">The Gate — Constitutional Threshold</span>
+        <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">Article 138 · Constitution of Kenya 2010</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr">
+        <div style="padding:20px 22px;border-right:1px solid var(--border)">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8B5CF6;margin-bottom:10px">Condition 1 · National Majority</div>
+          <div style="font-size:36px;font-weight:700;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.03em;line-height:1">50% + 1</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:7px">of all valid votes cast nationally</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:8px;line-height:1.5">At 65% turnout on 28.5M target → <span style="font-family:var(--font-mono);color:var(--text-primary);font-weight:600">~9.3M votes</span> needed in Round 1</div>
+        </div>
+        <div style="padding:20px 22px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8B5CF6;margin-bottom:10px">Condition 2 · County Floor</div>
+          <div style="font-size:36px;font-weight:700;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.03em;line-height:1">24 / 47</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:7px">counties with ≥25% of votes cast</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:8px;line-height:1.5">Both conditions must be met simultaneously. Either alone is insufficient for a Round 1 win.</div>
+        </div>
+      </div>
+      <div style="padding:13px 22px;background:rgba(239,68,68,0.04);border-top:1px solid rgba(239,68,68,0.1)">
+        <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#F87171">If Either Fails → Runoff</span>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:10px">Top 2 candidates only · Simple majority wins · No county threshold · A fragmented opposition that cannot beat 50% in Round 1 consolidates all votes in the runoff.</span>
+      </div>
+    </div>
+
+    <!-- § COUNTY BATTLEFIELD -->
+    <div class="card" style="margin-bottom:16px;padding:0 0 8px">
+      <div class="card-header" style="padding:13px 16px 11px;flex-wrap:wrap;gap:10px;align-items:center;border-bottom:1px solid var(--border)">
+        <div>
+          <h3 style="font-size:14px;font-weight:600;margin:0">County Battlefield</h3>
+          <span style="font-size:10px;color:var(--text-muted)">2022 IEBC baseline · KNBS 2026 eligible est. · Click row to expand</span>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;align-items:center">${filterTabs}</div>
       </div>
@@ -1961,18 +1983,44 @@ function renderMsingi() {
           <thead>
             <tr>
               <th>County</th>
-              <th>Registered</th>
-              <th>2022 Result</th>
-              <th>Turnout</th>
+              <th>Registered '22</th>
+              <th>Est. Eligible '26</th>
+              <th>2022 UDA Share</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody id="msingi-tbody">${NATIONAL_COUNTIES.map(c => renderCountyRow(c)).join('')}</tbody>
         </table>
       </div>
-      <div style="padding:10px 14px;font-size:10px;color:var(--text-muted);border-top:1px solid var(--border)">
-        Source: IEBC 2022 presidential results. Estimated votes = registered × turnout% × party share. WIN ≥ 50% UDA · WATCH 35–49% · MONITOR &lt; 35%.
+      <div style="padding:9px 16px;font-size:10px;color:var(--text-muted);border-top:1px solid var(--border)">
+        Registered '22: IEBC 2022 register. Est. Eligible '26: KNBS 2019 Census + 2026 projection, 18+ cohort — directional. WIN ≥50% UDA · WATCH 35–49% · MONITOR &lt;35%.
       </div>
+    </div>
+
+    <!-- § OPEN VARIABLES -->
+    <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:4px">
+      <div style="padding:11px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)">Open Variables</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Unresolved factors that will materially shift the election calculus</div>
+      </div>
+      ${[
+        {label:'Coalition Flagbearer', status:'PENDING', sc:'#F59E0B',
+         note:'Unity Pact signed Aug 24, 2026. Kalonzo leads preference surveys. No selection methodology or deadline announced as of Sep 2026.'},
+        {label:'Gachagua · Court of Appeal', status:'PENDING', sc:'#F87171',
+         note:'High Court upheld impeachment but awarded KES 50M for violated fair-hearing rights. Appeal filed. If upheld: ballot candidacy in Mt. Kenya. If dismissed: kingmaker role — his bloc decides the coalition.'},
+        {label:"Sifuna's Decision", status:'PENDING', sc:'#F59E0B',
+         note:'Will he join Kalonzo-led coalition or run independently? At 15% TIFA (Jun 2026), he is indispensable to any opposition ticket — and a viable solo candidate for Gen Z and Nyanza votes.'},
+        {label:'Gen Z Turnout', status:'WATCH', sc:'#3B82F6',
+         note:'2.93M+ new registrations since 2022, disproportionately youth. Returned to protest Jun 2026 (Finance Act). No single candidate commands their vote. Electoral translation of street activism is the key unknown.'},
+        {label:'CVR Phase II', status:'ACTIVE', sc:'#10B981',
+         note:'IEBC resumed registration Sep 2026. Target: 28.5M total. New registrations will shift county ceilings — especially WATCH and MONITOR counties with large youth and urban populations.'},
+      ].map((v, i, arr) =>
+        `<div style="display:grid;grid-template-columns:200px 80px 1fr;align-items:flex-start;padding:12px 18px;${i < arr.length-1 ? 'border-bottom:1px solid var(--border)' : ''};gap:16px">
+          <div style="font-weight:500;font-size:13px">${v.label}</div>
+          <div style="padding-top:2px"><span style="font-size:9px;font-weight:700;letter-spacing:.06em;padding:3px 7px;border-radius:3px;border:1px solid ${v.sc}33;background:${v.sc}14;color:${v.sc}">${v.status}</span></div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">${v.note}</div>
+        </div>`
+      ).join('')}
     </div>
   `;
 
