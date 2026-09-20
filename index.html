@@ -118,6 +118,18 @@
   --space-10: 40px;
   --space-12: 48px;
 
+  /* ── Semantic color tokens (see COLOR_SYSTEM.md) */
+  --brand-deep:     #4000A7;
+  --brand-primary:  #7C3AED;
+  --brand-light:    #A78BFA;
+  --brand-faint:    #DDD6FE;
+  --status-win:     #10B981;
+  --status-watch:   #F59E0B;
+  --status-monitor: #64748B;
+  --status-flag:    #EF4444;
+  --data-pool:      #2DD4BF;
+  --opp-primary:    #F97316;
+
   /* ── Table tokens */
   --table-row-height:    40px;
   --table-header-height: 34px;
@@ -1848,6 +1860,18 @@ const NATIONAL_COUNTIES = [
   {name:'Homa Bay',         code:'043', reg:551111,  uda:0.9,  odm:98.9, turnout:73.7, status:'MONITOR', elig26:595000},
 ];
 
+// ── Color system (mirrors COLOR_SYSTEM.md — use these, never raw hex)
+const DC = {
+  WIN:      '#10B981',
+  WATCH:    '#F59E0B',
+  MONITOR:  '#64748B',
+  FLAG:     '#EF4444',
+  BRAND:    '#7C3AED',
+  BRAND_LT: '#A78BFA',
+  POOL:     '#2DD4BF',
+  OPP:      '#F97316',
+};
+
 // ── 2027 PROJECTION ENGINE ─────────────────────────────────────────────────
 // Methodology: 2022 IEBC baseline × county-group factor + structural adjusters
 // Sources: TIFA Research Jun 2026 (~32% national), Infotrak Q2 2026,
@@ -2001,7 +2025,7 @@ function renderCountyRow(c) {
         <div>
           <div style="font-size:9px;font-weight:600;color:var(--text-muted);margin-bottom:8px">2022 IEBC Baseline</div>
           <div style="font-size:12px;font-weight:600;color:#10B981">Ruto: ${fmt(udaV)}</div>
-          <div style="font-size:12px;font-weight:600;color:#EF4444;margin-top:3px">Raila: ${fmt(odmV)}</div>
+          <div style="font-size:12px;font-weight:600;color:#F97316;margin-top:3px">Raila: ${fmt(odmV)}</div>
           <div style="font-size:10px;color:var(--text-muted);margin-top:6px">${c.turnout}% turnout</div>
           <div style="font-size:10px;color:var(--text-muted);margin-top:2px">${fmt(nonV)} didn't vote</div>
         </div>
@@ -2117,7 +2141,7 @@ function renderMsingi() {
             <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.18);display:inline-block"></span>
             <span style="font-size:10px;font-weight:500;color:#F59E0B">${watC.length} Watch</span>
             <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.18);display:inline-block"></span>
-            <span style="font-size:10px;font-weight:500;color:#94A3B8">${monC.length} Monitor</span>
+            <span style="font-size:10px;font-weight:500;color:#64748B">${monC.length} Monitor</span>
           </div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -2216,7 +2240,7 @@ function renderMsingi() {
           {name:'Kalonzo Musyoka', vehicle:'Wiper · WPF', base:'Ukambani + East', col:'#10B981', poll:'~28% TIFA Jun\'26'},
           {name:'Edwin Sifuna',    vehicle:'ODM (faction)', base:'Nyanza · Youth', col:'#F59E0B', poll:'~15% TIFA Jun\'26'},
           {name:'Fred Matiangi',  vehicle:'Jubilee', base:'Gusii + Mt. Kenya', col:'#94A3B8', poll:'In pact'},
-          {name:'Rigathi Gachagua', vehicle:'DCP', base:'Mt. Kenya', col:'#F87171', poll:'⚠ Appeal pending'},
+          {name:'Rigathi Gachagua', vehicle:'DCP', base:'Mt. Kenya', col:'#EF4444', poll:'⚠ Appeal pending'},
           {name:'Martha Karua',   vehicle:'Narc-Kenya', base:'Mt. Kenya', col:'#94A3B8', poll:'In pact'},
           {name:'David Maraga',   vehicle:'Independent', base:'—', col:'#64748B', poll:'Outside pact'},
         ].map(cd => `
@@ -2382,7 +2406,7 @@ function renderMsingi() {
          note:'High Court upheld impeachment but awarded KES 50M for violated fair-hearing rights. Appeal filed. If upheld: ballot candidacy in Mt. Kenya. If dismissed: kingmaker role — his bloc decides the coalition.'},
         {label:"Sifuna's Decision", status:'Pending', sc:'#F59E0B',
          note:'Will he join Kalonzo-led coalition or run independently? At 15% TIFA (Jun 2026), he is indispensable to any opposition ticket — and a viable solo candidate for Gen Z and Nyanza votes.'},
-        {label:'Gen Z Turnout', status:'Watch', sc:'#3B82F6',
+        {label:'Gen Z Turnout', status:'Watch', sc:'#A78BFA',
          note:'2.93M+ new registrations since 2022, disproportionately youth. Returned to protest Jun 2026 (Finance Act). No single candidate commands their vote. Electoral translation of street activism is the key unknown.'},
         {label:'CVR Phase II', status:'Active', sc:'#10B981',
          note:'IEBC resumed registration Sep 2026. Target: 28.5M total. New registrations will shift county ceilings — especially Watch and Monitor counties with large youth and urban populations.'},
