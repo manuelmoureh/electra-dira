@@ -1257,6 +1257,13 @@ body {
 .lck-contact-track { flex:1; height:5px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
 .lck-contact-fill { height:100%; border-radius:3px; }
 .sty-eta { font-size:9px; color:#F59E0B; font-family:var(--font-mono); }
+
+/* Dira — County Intelligence */
+.dir-layout { display:grid; grid-template-columns:1fr 280px; gap:14px; align-items:start; }
+.dir-county-chip { display:flex; align-items:center; gap:8px; padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.dir-county-name { font-size:11px; font-weight:600; color:var(--text-primary); }
+.dir-county-tier { font-size:8px; font-weight:800; padding:2px 5px; border-radius:3px; letter-spacing:.06em; flex-shrink:0; }
+.dir-station-row { display:flex; align-items:center; gap:10px; padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
 </style>
 </head>
 <body>
@@ -3369,105 +3376,163 @@ function renderRungu() {
 }
 
 function renderDira() {
-  const nakuru = COUNTIES.find(c=>c.id===32);
-  const kw = KIAMUNYI_WARD;
-  const needRedeploy = !STATE.agentsRedeployed;
+  destroyChart('support-breakdown-chart');
+  destroyChart('coverage-history-chart');
 
-  document.getElementById('page-dira').innerHTML = `
-    <div class="page-header">
-      <h1>Dira — County Intelligence</h1>
-      <div class="page-sub"><span class="live-indicator">LIVE</span><span>Deep-drill county and ward intelligence</span></div>
-    </div>
+  var nakuru = COUNTIES.find(function(c){return c.id===32;});
+  var kw = KIAMUNYI_WARD;
+  var needRedeploy = !STATE.agentsRedeployed;
 
-    <div class="flex-row" style="margin-bottom:16px;align-items:center">
-      <div style="font-size:13px;color:var(--text-secondary);font-weight:500">County:</div>
-      <select id="county-select" style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);font-size:13px;padding:8px 14px;outline:none;cursor:pointer;min-width:220px" onchange="renderDiraCounty(parseInt(this.value))">
-        ${COUNTIES.map(c=>`<option value="${c.id}" ${c.id===32?'selected':''}>${c.name} — ${c.region}</option>`).join('')}
-      </select>
-    </div>
+  var el = document.getElementById('page-dira');
+  if (!el) return;
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
-      ${[{label:'Registered Voters',val:fmt(nakuru.reg_voters)},{label:'Coverage',val:nakuru.coverage+'%'},{label:'Field Agents',val:fmt(nakuru.agents+(STATE.agentsRedeployed?4:0))},{label:'Support Score',val:nakuru.score},{label:'Constituency',val:'11'}].map(s=>`<div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 16px;font-size:12px;color:var(--text-muted)">${s.label}: <strong style="color:var(--text-primary)">${s.val}</strong></div>`).join('')}
-      <span class="badge ${badgeClass(nakuru.tier)}">${nakuru.tier}</span>
-    </div>
+  var countyOpts = '';
+  for (var ci = 0; ci < COUNTIES.length; ci++) {
+    var co = COUNTIES[ci];
+    countyOpts += '<option value="' + co.id + '"' + (co.id===32?' selected':'') + '>' + co.name + ' &mdash; ' + co.region + '</option>';
+  }
 
-    <div class="flex-row" style="margin-bottom:20px">
-      <div class="card col-1-4">
-        <div class="card-header"><h3>Kiamunyi Ward — Support Breakdown</h3></div>
-        <div class="chart-container" style="height:200px"><canvas id="support-breakdown-chart"></canvas></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
-          <div style="text-align:center;padding:8px;background:rgba(16,185,129,0.08);border-radius:var(--radius-md)"><div style="font-size:20px;font-weight:800;color:#10B981">${fmt(STATE.kiamiunyiConfirmed)}</div><div style="font-size:10px;color:var(--text-muted)">CONFIRMED</div></div>
-          <div style="text-align:center;padding:8px;background:rgba(245,158,11,0.08);border-radius:var(--radius-md)"><div style="font-size:20px;font-weight:800;color:#F59E0B">${fmt(kw.undecided)}</div><div style="font-size:10px;color:var(--text-muted)">UNDECIDED</div></div>
-        </div>
-        <div style="margin-top:10px">
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px"><span>Target: ${fmt(kw.target_confirmed)}</span><span>${((STATE.kiamiunyiConfirmed/kw.target_confirmed)*100).toFixed(0)}% of target</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${(STATE.kiamiunyiConfirmed/kw.target_confirmed)*100}%;background:linear-gradient(90deg,#7C3AED,#10B981)"></div></div>
-        </div>
-      </div>
-      <div class="card col-1">
-        <div class="card-header"><h3>Coverage History — Kiamunyi</h3><span style="font-size:11px;color:var(--text-muted)">7 weeks</span></div>
-        <div class="chart-container" style="height:160px"><canvas id="coverage-history-chart"></canvas></div>
-        ${needRedeploy?`<div class="card-accent" style="margin-top:14px;padding:14px;border-radius:var(--radius-md)">
-          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:6px">⚠ AI RECOMMENDATION</div>
-          <div style="font-size:13px;color:var(--text-primary);margin-bottom:10px">Redeploy 4 agents from Menengai West (surplus) to Kiamunyi Ward. Predicted coverage increase: +18% in 14 days.</div>
-          <button class="btn-primary btn-sm redeploy-btn" onclick="executeRedeployment()">Execute Redeployment →</button>
-        </div>`:'<div style="margin-top:14px;padding:12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-md);font-size:12px;color:#10B981">✓ Redeployment executed — 4 agents transferred to Kiamunyi</div>'}
-      </div>
-    </div>
+  var STATS = [
+    {label:'Registered Voters', val:fmt(nakuru.reg_voters), sub:'Nakuru County', cls:'is-brand', vc:'#A78BFA'},
+    {label:'Coverage', val:nakuru.coverage+'%', sub:'field penetration', cls:'is-win', vc:'#10B981'},
+    {label:'Field Agents', val:fmt(nakuru.agents+(STATE.agentsRedeployed?4:0)), sub:'active operatives', cls:'is-pool', vc:'#2DD4BF'},
+    {label:'Support Score', val:nakuru.score, sub:'county index', cls:'is-watch', vc:'#F59E0B'},
+    {label:'Constituencies', val:'11', sub:'Nakuru sub-units', cls:'is-brand', vc:'#A78BFA'}
+  ];
+  var statsHTML = '';
+  for (var si = 0; si < STATS.length; si++) {
+    var s = STATS[si];
+    statsHTML += '<div class="if-stat ' + s.cls + '"><div class="if-stat-label">' + s.label + '</div>'
+      + '<div class="if-stat-val" style="color:' + s.vc + '">' + s.val + '</div>'
+      + '<div class="if-stat-sub">' + s.sub + '</div></div>';
+  }
 
-    <div class="card" style="margin-bottom:20px">
-      <div class="card-header"><h3>Nakuru Constituencies</h3><span style="font-size:11px;color:var(--text-muted)">11 constituencies</span></div>
-      <table class="data-table">
-        <thead><tr><th>Constituency</th><th>Reg. Voters</th><th>Agents</th><th>Coverage</th><th>Score</th><th>Tier</th><th>Wards</th></tr></thead>
-        <tbody>
-          ${NAKURU_CONSTITUENCIES.map(c=>`<tr>
-            <td style="font-weight:500">${c.name}</td>
-            <td>${fmt(c.reg_voters)}</td>
-            <td>${c.agents}</td>
-            <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:80px"><div class="progress-fill" style="width:${c.coverage}%;background:${c.coverage>=70?'#10B981':c.coverage>=55?'#F59E0B':'#EF4444'}"></div></div><span style="font-size:11px">${c.coverage}%</span></div></td>
-            <td style="font-weight:600;color:${tierColor(c.tier)}">${c.score}</td>
-            <td><span class="badge ${badgeClass(c.tier)}">${c.tier}</span></td>
-            <td style="color:var(--text-muted)">${c.ward_count}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
+  var targetPct = ((STATE.kiamiunyiConfirmed/kw.target_confirmed)*100).toFixed(0);
+  var targetBarW = (STATE.kiamiunyiConfirmed/kw.target_confirmed)*100;
 
-    <div class="card">
-      <div class="card-header"><h3>Kiamunyi Ward — Polling Stations</h3><span style="font-size:11px;color:var(--amber)">${kw.polling_stations.filter(s=>!s.agent).length} uncovered</span></div>
-      <table class="data-table">
-        <thead><tr><th>Station</th><th>Reg. Voters</th><th>Agent</th><th>Status</th><th>Confirmed</th><th>Undecided</th><th>Check-in</th></tr></thead>
-        <tbody>
-          ${kw.polling_stations.map(s=>`<tr>
-            <td style="font-weight:500">${s.name}</td>
-            <td>${fmt(s.reg_voters)}</td>
-            <td style="font-size:12px">${s.agent||'<span style="color:var(--red)">— Unassigned</span>'}</td>
-            <td><span class="badge ${s.status==='covered'?'badge-green':'badge-red'}">${s.status.toUpperCase()}</span></td>
-            <td style="color:#10B981;font-weight:600">${fmt(s.confirmed)}</td>
-            <td style="color:#F59E0B">${fmt(s.undecided)}</td>
-            <td>${s.check_in?'<span style="color:#10B981">✓</span>':'<span style="color:#94A3B8">—</span>'}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
+  var aiCardHTML = needRedeploy
+    ? '<div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:13px 14px;margin-top:12px">'
+      + '<div style="font-size:9px;font-weight:800;letter-spacing:.1em;color:#F59E0B;margin-bottom:5px">&#9888; AI RECOMMENDATION</div>'
+      + '<div style="font-size:11px;color:var(--text-primary);margin-bottom:10px;line-height:1.5">Redeploy 4 agents from Menengai West (surplus) to Kiamunyi Ward. Predicted coverage increase: +18% in 14 days.</div>'
+      + '<button class="btn-primary btn-sm redeploy-btn" style="font-size:11px;padding:7px 12px" onclick="executeRedeployment()">Execute Redeployment &rarr;</button>'
+      + '</div>'
+    : '<div style="margin-top:12px;padding:11px 13px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:8px;font-size:11px;color:#10B981">&#10003; Redeployment executed &mdash; 4 agents transferred to Kiamunyi</div>';
 
-  setTimeout(()=>{
+  var constHTML = '';
+  for (var ki = 0; ki < NAKURU_CONSTITUENCIES.length; ki++) {
+    var cn = NAKURU_CONSTITUENCIES[ki];
+    var barCol = cn.coverage >= 70 ? '#10B981' : cn.coverage >= 55 ? '#F59E0B' : '#EF4444';
+    var tc = tierColor(cn.tier);
+    constHTML += '<div class="dir-county-chip">'
+      + '<div style="flex:1;min-width:0">'
+      + '<div class="dir-county-name">' + cn.name + '</div>'
+      + '<div style="font-size:9px;color:var(--text-muted);margin-top:1px">' + fmt(cn.reg_voters) + ' reg &middot; ' + cn.agents + ' agents</div>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:5px">'
+      + '<div style="width:44px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden"><div style="height:100%;width:' + cn.coverage + '%;background:' + barCol + ';border-radius:2px"></div></div>'
+      + '<span style="font-size:9px;font-weight:700;color:' + barCol + ';width:28px;text-align:right">' + cn.coverage + '%</span>'
+      + '</div>'
+      + '<span class="dir-county-tier" style="background:' + tc + '22;color:' + tc + '">' + cn.tier + '</span>'
+      + '</div>';
+  }
+
+  var uncoveredCount = 0;
+  for (var ui = 0; ui < kw.polling_stations.length; ui++) {
+    if (!kw.polling_stations[ui].agent) uncoveredCount++;
+  }
+
+  var stationHTML = '';
+  for (var pi = 0; pi < kw.polling_stations.length; pi++) {
+    var ps = kw.polling_stations[pi];
+    var isCov = ps.status === 'covered';
+    var stBg = isCov ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)';
+    var stC = isCov ? '#10B981' : '#EF4444';
+    var agentTxt = ps.agent ? ps.agent : '<span style="color:#EF4444">Unassigned</span>';
+    var checkinTxt = ps.check_in ? '<span style="color:#10B981">&#10003;</span>' : '<span style="color:#475569">&mdash;</span>';
+    stationHTML += '<div class="dir-station-row">'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="font-size:11px;font-weight:600;color:var(--text-primary)">' + ps.name + '</div>'
+      + '<div style="font-size:9px;color:var(--text-muted);margin-top:1px">' + fmt(ps.reg_voters) + ' reg &middot; ' + agentTxt + '</div>'
+      + '</div>'
+      + '<div style="text-align:right;flex-shrink:0">'
+      + '<div style="font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;background:' + stBg + ';color:' + stC + ';letter-spacing:.05em">' + (isCov?'COVERED':'UNCOVERED') + '</div>'
+      + '<div style="display:flex;align-items:center;gap:6px;margin-top:3px;justify-content:flex-end">'
+      + '<span style="font-size:9px;color:#10B981">' + fmt(ps.confirmed) + ' cfmd</span>'
+      + checkinTxt
+      + '</div>'
+      + '</div>'
+      + '</div>';
+  }
+
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<h1 style="color:#7C3AED">Dira</h1>'
+    + '<span style="font-size:12px;font-weight:500;color:var(--text-muted)">County Intelligence</span>'
+    + '</div>'
+    + '<div class="page-sub"><span class="live-indicator">LIVE</span><span>Deep-drill county and ward intelligence</span></div>'
+    + '</div>'
+    + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">'
+    + '<span style="font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--text-muted)">COUNTY</span>'
+    + '<select id="county-select" style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);font-size:13px;padding:8px 14px;outline:none;cursor:pointer;min-width:220px" onchange="renderDiraCounty(parseInt(this.value))">'
+    + countyOpts
+    + '</select>'
+    + '</div>'
+    + '<div class="if-stats-row">' + statsHTML + '</div>'
+    + '<div class="dir-layout">'
+    + '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card">'
+    + '<div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">KIAMUNYI WARD &mdash; SUPPORT BREAKDOWN</span></div>'
+    + '<div style="height:180px"><canvas id="support-breakdown-chart"></canvas></div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">'
+    + '<div style="text-align:center;padding:8px;background:rgba(16,185,129,0.08);border-radius:var(--radius-md)"><div style="font-size:20px;font-weight:800;color:#10B981;font-family:var(--font-mono)">' + fmt(STATE.kiamiunyiConfirmed) + '</div><div style="font-size:9px;letter-spacing:.07em;color:var(--text-muted)">CONFIRMED</div></div>'
+    + '<div style="text-align:center;padding:8px;background:rgba(245,158,11,0.08);border-radius:var(--radius-md)"><div style="font-size:20px;font-weight:800;color:#F59E0B;font-family:var(--font-mono)">' + fmt(kw.undecided) + '</div><div style="font-size:9px;letter-spacing:.07em;color:var(--text-muted)">UNDECIDED</div></div>'
+    + '</div>'
+    + '<div style="margin-top:10px">'
+    + '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:4px"><span>Target: ' + fmt(kw.target_confirmed) + '</span><span>' + targetPct + '% of target</span></div>'
+    + '<div class="progress-bar"><div class="progress-fill" style="width:' + targetBarW + '%;background:linear-gradient(90deg,#7C3AED,#10B981)"></div></div>'
+    + '</div>'
+    + aiCardHTML
+    + '</div>'
+    + '<div class="card">'
+    + '<div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">COVERAGE HISTORY &mdash; KIAMUNYI</span><span style="font-size:10px;color:var(--text-muted)">7 weeks</span></div>'
+    + '<div style="height:150px"><canvas id="coverage-history-chart"></canvas></div>'
+    + '</div>'
+    + '</div>'
+    + '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">NAKURU CONSTITUENCIES</span>'
+    + '<span style="font-size:9px;color:var(--text-muted)">11 sub-units</span>'
+    + '</div>'
+    + constHTML
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">POLLING STATIONS &mdash; KIAMUNYI</span>'
+    + '<span style="font-size:9px;color:#F59E0B;font-weight:700">' + uncoveredCount + ' uncovered</span>'
+    + '</div>'
+    + stationHTML
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  setTimeout(function(){
     mkChart('support-breakdown-chart',{
       type:'doughnut',
-      data:{labels:['Confirmed','Leaning','Undecided','Opposition'],datasets:[{data:[STATE.kiamiunyiConfirmed,kw.leaning,kw.undecided,kw.opposition],backgroundColor:['rgba(16,185,129,0.85)','rgba(59,130,246,0.85)','rgba(245,158,11,0.85)','rgba(239,68,68,0.85)'],borderColor:['#10B981','#3B82F6','#F59E0B','#EF4444'],borderWidth:2,hoverOffset:6}]},
-      options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:10},padding:8,boxWidth:8}},tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8',callbacks:{label:ctx=>` ${ctx.label}: ${fmt(ctx.parsed)} voters`}}}}
+      data:{labels:['Confirmed','Leaning','Undecided','Opposition'],datasets:[{data:[STATE.kiamiunyiConfirmed,kw.leaning,kw.undecided,kw.opposition],backgroundColor:['rgba(16,185,129,0.85)','rgba(167,139,250,0.7)','rgba(245,158,11,0.85)','rgba(239,68,68,0.85)'],borderColor:['#10B981','#A78BFA','#F59E0B','#EF4444'],borderWidth:2,hoverOffset:6}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{size:10},padding:8,boxWidth:8}},tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8',callbacks:{label:function(ctx){return ' '+ctx.label+': '+fmt(ctx.parsed)+' voters';}}}}}
     });
     mkChart('coverage-history-chart',{
       type:'bar',
-      data:{labels:['Wk 1','Wk 2','Wk 3','Wk 4','Wk 5','Wk 6','Wk 7'],datasets:[{label:'Coverage %',data:KIAMUNYI_WARD.coverage_history,backgroundColor:KIAMUNYI_WARD.coverage_history.map((_,i,a)=>i===a.length-1?'rgba(124,58,237,0.85)':'rgba(124,58,237,0.35)'),borderColor:'#7C3AED',borderWidth:1,borderRadius:4}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8',callbacks:{label:ctx=>` ${ctx.parsed.y}% coverage`}}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:10},callback:v=>v+'%'},min:40,max:80}}}
+      data:{labels:['Wk 1','Wk 2','Wk 3','Wk 4','Wk 5','Wk 6','Wk 7'],datasets:[{label:'Coverage %',data:KIAMUNYI_WARD.coverage_history,backgroundColor:KIAMUNYI_WARD.coverage_history.map(function(_,i,a){return i===a.length-1?'rgba(124,58,237,0.85)':'rgba(124,58,237,0.35)';}),borderColor:'#7C3AED',borderWidth:1,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8',callbacks:{label:function(ctx){return ' '+ctx.parsed.y+'% coverage';}}}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:10},callback:function(v){return v+'%';}},min:40,max:80}}}
     });
   },80);
 }
 
 function renderDiraCounty(countyId) {
-  const sel = document.getElementById('county-select');
+  var sel = document.getElementById('county-select');
   if(sel) sel.value = countyId;
   renderDira();
 }
