@@ -1015,6 +1015,57 @@ body {
 .sig-soc-text { font-size:11.5px; color:var(--text-secondary); line-height:1.45; flex:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
 .sig-soc-meta { display:flex; align-items:center; gap:7px; font-size:9.5px; color:var(--text-muted); font-family:var(--font-mono); margin-top:auto; }
 .sig-soc-sent { padding:1px 6px; border-radius:4px; font-size:8.5px; font-weight:800; }
+/* Amplifier */
+.amp-layout { display:grid; grid-template-columns:1fr 290px; gap:14px; }
+.amp-stats-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.amp-stat { flex:1; min-width:130px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:11px 14px; position:relative; overflow:hidden; }
+.amp-stat::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; border-radius:2px 2px 0 0; }
+.amp-stat.s-brand::before { background:linear-gradient(90deg,#7C3AED,#A78BFA); }
+.amp-stat.s-win::before { background:#10B981; }
+.amp-stat.s-flag::before { background:#EF4444; }
+.amp-stat.s-watch::before { background:#F59E0B; }
+.amp-stat.s-pool::before { background:#2DD4BF; }
+.amp-stat-label { font-size:9px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px; font-family:var(--font-mono); }
+.amp-stat-val { font-size:20px; font-weight:800; line-height:1; }
+.amp-stat-sub { font-size:10px; color:var(--text-muted); margin-top:3px; }
+/* Rapid response */
+.amp-rr-list { display:flex; flex-direction:column; gap:0; }
+.amp-rr-item { display:flex; align-items:flex-start; gap:10px; padding:11px 14px; border-bottom:1px solid var(--border); position:relative; }
+.amp-rr-item:last-child { border-bottom:none; }
+.amp-rr-sev { width:3px; min-width:3px; border-radius:2px; align-self:stretch; margin-top:2px; flex-shrink:0; }
+.amp-rr-body { flex:1; min-width:0; }
+.amp-rr-title { font-size:12px; font-weight:600; color:var(--text-primary); margin-bottom:4px; line-height:1.35; }
+.amp-rr-counter { font-size:11px; color:var(--text-secondary); line-height:1.4; margin-bottom:6px; background:rgba(124,58,237,0.07); border:1px solid rgba(124,58,237,0.18); border-radius:6px; padding:5px 8px; }
+.amp-rr-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.amp-rr-pill { padding:2px 7px; border-radius:4px; font-size:8px; font-weight:800; letter-spacing:.06em; font-family:var(--font-mono); }
+.amp-rr-deploy { padding:4px 10px; border-radius:6px; font-size:10px; font-weight:700; background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.3); color:#A78BFA; cursor:pointer; transition:all .15s; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+.amp-rr-deploy:hover { background:rgba(124,58,237,0.28); border-color:rgba(124,58,237,0.5); }
+/* Talking points */
+.amp-tp-row { margin-bottom:12px; }
+.amp-tp-row:last-child { margin-bottom:0; }
+.amp-tp-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+.amp-tp-label { font-size:12px; font-weight:600; color:var(--text-primary); }
+.amp-tp-stat { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); }
+.amp-tp-track { height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
+.amp-tp-fill { height:100%; border-radius:3px; transition:width .6s ease; }
+.amp-tp-evidence { font-size:10px; color:var(--text-muted); margin-top:3px; font-style:italic; }
+/* Campaigns */
+.amp-camp-row { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); }
+.amp-camp-row:last-child { border-bottom:none; }
+.amp-camp-name { flex:1; min-width:0; }
+.amp-camp-title { font-size:12px; font-weight:600; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.amp-camp-seg { font-size:10px; color:var(--text-muted); }
+.amp-camp-metrics { display:flex; flex-direction:column; align-items:flex-end; gap:2px; flex-shrink:0; }
+.amp-camp-rate { font-size:13px; font-weight:700; }
+.amp-camp-active { font-size:9px; color:var(--text-muted); font-family:var(--font-mono); }
+/* channel bars */
+.amp-ch-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.amp-ch-label { font-size:11px; color:var(--text-secondary); width:74px; flex-shrink:0; }
+.amp-ch-track { flex:1; height:5px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
+.amp-ch-fill { height:100%; border-radius:3px; }
+.amp-ch-val { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); width:28px; text-align:right; flex-shrink:0; }
+@keyframes amp-pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+.amp-live-dot { width:7px; height:7px; border-radius:50%; background:#EF4444; display:inline-block; animation:amp-pulse 1.8s infinite; margin-left:6px; vertical-align:middle; }
 </style>
 </head>
 <body>
@@ -1143,29 +1194,21 @@ body {
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Home
       </div>
-      <div class="nav-item" data-page="rungu" onclick="navigateTo('rungu',this)">
-        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Rungu
-      </div>
       <div class="nav-item" data-page="msingi" onclick="navigate('msingi')">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
         Msingi
-      </div>
-      <div class="nav-item" data-page="dira" onclick="navigateTo('dira',this)">
-        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-        Dira
       </div>
       <div class="nav-item" data-page="signal" onclick="navigateTo('signal',this)">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6.7A18.3 18.3 0 0 1 12 3.5c4 0 7.7 1.3 10.7 3.4"/><path d="M4.5 10.2A12.8 12.8 0 0 1 12 7.5c2.9 0 5.6.9 7.7 2.5"/><path d="M8 13.7A7.3 7.3 0 0 1 12 12c1.6 0 3.1.5 4.3 1.4"/><circle cx="12" cy="17" r="1.5"/></svg>
         Signal
       </div>
-      <div class="nav-item" data-page="iforce" onclick="navigateTo('iforce',this)">
-        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        I-Force
-      </div>
       <div class="nav-item" data-page="amplifier" onclick="navigateTo('amplifier',this)">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Amplifier
+      </div>
+      <div class="nav-item" data-page="iforce" onclick="navigateTo('iforce',this)">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        I-Force
       </div>
       <div class="nav-item" data-page="kura" onclick="navigateTo('kura',this)">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -1186,6 +1229,14 @@ body {
       <div class="nav-item" data-page="lock" onclick="navigateTo('lock',this)">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         The Lock
+      </div>
+      <div class="nav-item" data-page="dira" onclick="navigateTo('dira',this)">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        Dira
+      </div>
+      <div class="nav-item" data-page="rungu" onclick="navigateTo('rungu',this)">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Rungu
       </div>
 
       <div class="nav-section-label">System</div>
@@ -4038,107 +4089,209 @@ function renderIForce() {
 }
 
 function renderAmplifier() {
-  const totalConversations = 1247;
-  const converted = 412;
-  const active = 238;
+  const DC = DIRA_COLORS;
+  const STATS = [
+    {label:'Active Convos',val:'47,312',sub:'↑ 8% vs yesterday',cls:'s-brand',vc:'#A78BFA'},
+    {label:'Converted Today',val:'15,840',sub:'33.5% conversion rate',cls:'s-win',vc:'#10B981'},
+    {label:'Rapid Response',val:'3',sub:'escalations queued',cls:'s-flag',vc:'#EF4444'},
+    {label:'SHA Reach Today',val:'2.8M',sub:'positive impressions',cls:'s-win',vc:'#10B981'},
+    {label:'Messages Deployed',val:'94,600',sub:'across 6 campaigns',cls:'s-pool',vc:'#2DD4BF'},
+    {label:'Avg Sentiment Shift',val:'+0.41',sub:'47K conversations',cls:'s-brand',vc:'#A78BFA'},
+  ];
+
+  const RR = [
+    {
+      sev:'CRIT', svc:'#EF4444',
+      title:'SHA system glitch narrative spreading — X · 5.2K shares in 3h',
+      platform:'X (Twitter)', impressions:'180K',
+      counter:'SHA has enrolled 32.3 million Kenyans — system enhancements are ongoing. Temporary access issues do not affect coverage status.',
+      action:'sha_counter_v3'
+    },
+    {
+      sev:'HIGH', svc:'#F59E0B',
+      title:'#TeachersTaxed trending — HELB deduction grievance',
+      platform:'X + Facebook', impressions:'64K',
+      counter:'HELB arrears cleared for 82,000 teachers under the reform — net take-home has improved. Share the official breakdown.',
+      action:'helb_teacher_counter'
+    },
+    {
+      sev:'HIGH', svc:'#F59E0B',
+      title:'Maize price spike attributed to government policy',
+      platform:'WhatsApp', impressions:'31K groups',
+      counter:'Inflation has fallen from 9.4% (Jan 2023) to 6.6% (Sep 2024) under this administration. Share KNBS data.',
+      action:'inflation_counter_v2'
+    }
+  ];
+
+  const CAMPAIGNS = [
+    {name:'SHA Positive Perception',seg:'Central Kenya',active:12400,pickup:67,trend:'+4%',status:'WIN'},
+    {name:'Hustler Fund Re-engagement',seg:'Rift Valley',active:8200,pickup:71,trend:'+6%',status:'WIN'},
+    {name:'Youth Employment (Kazi Majuu)',seg:'Nairobi / Mombasa',active:6800,pickup:58,trend:'+2%',status:'WIN'},
+    {name:'Affordable Housing Awareness',seg:'Nairobi Informal',active:5400,pickup:63,trend:'+5%',status:'WIN'},
+    {name:'HELB Reform Relief',seg:'University Towns',active:4100,pickup:77,trend:'+9%',status:'WIN'},
+    {name:'Cost of Living Counter',seg:'National — Undecided',active:3200,pickup:31,trend:'-2%',status:'WATCH'},
+  ];
+
+  const TP = [
+    {label:'Hustler Fund',evidence:'KSh 90B disbursed · 28M beneficiaries',pct:72,color:'#10B981'},
+    {label:'SHA Healthcare',evidence:'32.3M enrolled — largest health cover in Africa',pct:68,color:'#10B981'},
+    {label:'NYOTA Youth Skills',evidence:'820K youth trained · KSh 2B fund',pct:61,color:'#A78BFA'},
+    {label:'Affordable Housing',evidence:'8,807 units complete · Nairobi, Nakuru, Kisumu',pct:57,color:'#A78BFA'},
+    {label:'Kazi Majuu Jobs',evidence:'540K diaspora placements since 2023',pct:54,color:'#F59E0B'},
+    {label:'Security (NYS Reform)',evidence:'NYS graduates 42K per year',pct:49,color:'#F59E0B'},
+    {label:'Cost of Living',evidence:'Inflation 6.6% — contested vs food prices',pct:31,color:'#EF4444'},
+  ];
+
+  const CHANNELS = [
+    {label:'WhatsApp',pct:44,color:'#25D366'},
+    {label:'X (Twitter)',pct:22,color:'#A78BFA'},
+    {label:'Facebook',pct:18,color:'#4267B2'},
+    {label:'SMS (IVR)',pct:10,color:'#2DD4BF'},
+    {label:'TikTok',pct:6,color:'#FF0050'},
+  ];
+
+  const LANGS = [
+    {label:'Swahili',pct:58,color:'#7C3AED'},
+    {label:'English',pct:21,color:'#A78BFA'},
+    {label:'Kikuyu',pct:9,color:'#10B981'},
+    {label:'Kalenjin',pct:7,color:'#F59E0B'},
+    {label:'Luo',pct:5,color:'#2DD4BF'},
+  ];
+
+  function rrItem(r) {
+    return `<div class="amp-rr-item">
+      <div class="amp-rr-sev" style="background:${r.svc}"></div>
+      <div class="amp-rr-body">
+        <div class="amp-rr-title">${r.title}</div>
+        <div class="amp-rr-counter">
+          <span style="font-size:9px;font-weight:700;color:#A78BFA;font-family:var(--font-mono);letter-spacing:.06em">COUNTER: </span>${r.counter}
+        </div>
+        <div class="amp-rr-meta">
+          <span class="amp-rr-pill" style="background:${r.svc}22;color:${r.svc};border:1px solid ${r.svc}44">${r.sev}</span>
+          <span style="font-size:10px;color:var(--text-muted)">${r.platform}</span>
+          <span style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono)">${r.impressions} reach</span>
+        </div>
+      </div>
+      <button class="amp-rr-deploy" onclick="(()=>{showToast('Deploying counter-narrative to affected segments...','info');setTimeout(()=>{showToast('✓ Counter-narrative activated for '+Math.floor(Math.random()*8000+4000).toLocaleString()+' contacts','success');},1600);})()">Deploy →</button>
+    </div>`;
+  }
+
+  function tpRow(t) {
+    const barColor = t.pct >= 60 ? t.color : t.pct >= 45 ? t.color : '#EF4444';
+    return `<div class="amp-tp-row">
+      <div class="amp-tp-header">
+        <span class="amp-tp-label">${t.label}</span>
+        <span class="amp-tp-stat">${t.pct}% positive shift</span>
+      </div>
+      <div class="amp-tp-track"><div class="amp-tp-fill" style="width:${t.pct}%;background:${barColor}"></div></div>
+      <div class="amp-tp-evidence">${t.evidence}</div>
+    </div>`;
+  }
+
+  function campRow(c) {
+    const sc = c.status==='WIN' ? DC.WIN : DC.WATCH;
+    const trendColor = c.trend.startsWith('+') ? DC.WIN : DC.FLAG;
+    return `<div class="amp-camp-row">
+      <div style="width:6px;height:6px;border-radius:50%;background:${sc};flex-shrink:0;margin-top:2px"></div>
+      <div class="amp-camp-name">
+        <div class="amp-camp-title">${c.name}</div>
+        <div class="amp-camp-seg">${c.seg}</div>
+      </div>
+      <div class="amp-camp-metrics">
+        <div class="amp-camp-rate" style="color:${sc}">${c.pickup}%</div>
+        <div class="amp-camp-active">${c.active.toLocaleString()} active <span style="color:${trendColor}">${c.trend}</span></div>
+      </div>
+    </div>`;
+  }
 
   document.getElementById('page-amplifier').innerHTML = `
     <div class="page-header">
-      <h1>Amplifier — AI Voter Outreach</h1>
-      <div class="page-sub"><span class="live-indicator">LIVE</span><span>AI-powered voter persuasion conversations</span></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <h1 style="background:linear-gradient(135deg,#A78BFA 0%,#7C3AED 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Amplifier</h1>
+        <span class="amp-live-dot"></span>
+      </div>
+      <div class="page-sub">Narrative command · counter-narrative deployment · AI voter outreach</div>
     </div>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
-      ${[
-        {label:'Total Conversations',val:fmt(totalConversations),color:'var(--text-primary)'},
-        {label:'Converted',val:converted,color:'#10B981'},
-        {label:'Active Now',val:active,color:'#3B82F6'},
-        {label:'Avg Sentiment Shift',val:'+0.41',color:'#10B981'},
-        {label:'Conversion Rate',val:((converted/totalConversations)*100).toFixed(1)+'%',color:'#8B5CF6'}
-      ].map(s=>`<div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 16px">
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:2px">${s.label}</div>
-        <div style="font-size:18px;font-weight:700;color:${s.color}">${s.val}</div>
+    <div class="amp-stats-row">
+      ${STATS.map(s=>`<div class="amp-stat ${s.cls}">
+        <div class="amp-stat-label">${s.label}</div>
+        <div class="amp-stat-val" style="color:${s.vc}">${s.val}</div>
+        <div class="amp-stat-sub">${s.sub}</div>
       </div>`).join('')}
     </div>
 
-    <div class="flex-row">
-      <div class="col-1-4 flex-col">
-        ${CONVERSATIONS.map(conv=>`<div class="card">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-            <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#3B82F6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;flex-shrink:0">${conv.voter_name.charAt(0)}</div>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600;color:var(--text-primary)">${conv.voter_name}</div>
-              <div style="font-size:11px;color:var(--text-muted)">${conv.ward} · ${conv.county}</div>
+    <div class="amp-layout">
+      <!-- LEFT -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="card-header" style="padding:13px 14px 11px;border-bottom:1px solid var(--border)">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--text-primary)">RAPID RESPONSE</span>
+              <span class="amp-live-dot"></span>
             </div>
-            <span class="badge ${conv.status==='converted'?'badge-green':conv.status==='strong_supporter'?'badge-green':conv.status==='soft_persuasion'?'badge-warn':'badge-info'}">${conv.status.replace('_',' ')}</span>
+            <span style="font-size:10px;color:${DC.WATCH};font-weight:700;font-family:var(--font-mono)">3 ESCALATIONS</span>
           </div>
-          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-            <span class="badge badge-info">${conv.language}</span>
-            <span style="font-size:11px;color:${conv.shift>0?'#10B981':'#EF4444'};font-weight:600">Shift: ${conv.shift>0?'+':''}${conv.shift.toFixed(2)}</span>
-            <span style="font-size:11px;color:var(--text-muted)">${relativeTime(conv.last_contact)}</span>
+          <div class="amp-rr-list">${RR.map(rrItem).join('')}</div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">TALKING POINT EFFECTIVENESS</span>
+            <span style="font-size:10px;color:var(--text-muted)">47,312 conversations today</span>
           </div>
-          <div class="chat-container" style="max-height:220px">
-            ${conv.messages.map(m=>`<div class="chat-msg ${m.role==='system'?'outbound':'inbound'}">
-              <div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:${m.role==='system'?'linear-gradient(135deg,#7C3AED,#3B82F6)':'var(--bg-elevated)'};color:${m.role==='system'?'#fff':'var(--text-muted)'}">${m.role==='system'?'AI':conv.voter_name.charAt(0)}</div>
-              <div class="chat-bubble"><span style="font-size:12px">${m.text}</span></div>
-            </div>`).join('')}
-          </div>
-        </div>`).join('')}
+          ${TP.map(tpRow).join('')}
+        </div>
       </div>
 
-      <div class="col-1 flex-col">
-        <div class="card">
-          <div class="card-header"><h3>Talking Point Effectiveness</h3><span style="font-size:11px;color:var(--text-muted)">Sentiment shift %</span></div>
-          <div class="chart-container" style="height:220px"><canvas id="talking-points-chart"></canvas></div>
+      <!-- RIGHT -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="card-header" style="padding:13px 14px 11px;border-bottom:1px solid var(--border)">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">ACTIVE CAMPAIGNS</span>
+            <span style="font-size:10px;color:${DC.WIN};font-weight:700;font-family:var(--font-mono)">6 LIVE</span>
+          </div>
+          <div style="padding:4px 14px 8px">${CAMPAIGNS.map(campRow).join('')}</div>
         </div>
 
         <div class="card">
-          <div class="card-header"><h3>Language Distribution</h3></div>
-          ${[{lang:'Swahili',pct:58,color:'#7C3AED'},{lang:'English',pct:24,color:'#3B82F6'},{lang:'Kikuyu',pct:9,color:'#10B981'},{lang:'Kalenjin',pct:6,color:'#F59E0B'},{lang:'Luo',pct:3,color:'#EF4444'}].map(l=>`<div style="margin-bottom:10px">
-            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
-              <span style="color:var(--text-primary);font-weight:500">${l.lang}</span>
-              <span style="color:var(--text-muted)">${l.pct}%</span>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${l.pct}%;background:${l.color}"></div></div>
+          <div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">CHANNELS</span></div>
+          ${CHANNELS.map(c=>`<div class="amp-ch-row">
+            <span class="amp-ch-label">${c.label}</span>
+            <div class="amp-ch-track"><div class="amp-ch-fill" style="width:${c.pct}%;background:${c.color}"></div></div>
+            <span class="amp-ch-val">${c.pct}%</span>
           </div>`).join('')}
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text-muted);margin-bottom:6px">LANGUAGE</div>
+            ${LANGS.map(l=>`<div class="amp-ch-row">
+              <span class="amp-ch-label">${l.label}</span>
+              <div class="amp-ch-track"><div class="amp-ch-fill" style="width:${l.pct}%;background:${l.color}"></div></div>
+              <span class="amp-ch-val">${l.pct}%</span>
+            </div>`).join('')}
+          </div>
         </div>
 
         <div class="card">
-          <div class="card-header"><h3>Quick Deploy</h3></div>
+          <div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">QUICK DEPLOY</span></div>
           <div style="display:flex;flex-direction:column;gap:8px">
-            <div style="display:flex;gap:8px">
-              <input type="text" placeholder="Enter message or talking point..." style="flex:1;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);font-size:13px;padding:9px 14px;outline:none" id="amp-message">
-              <select id="amp-target" style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);font-size:12px;padding:9px;outline:none;cursor:pointer">
-                <option>All Nakuru Undecided</option>
-                <option>Kiamunyi Ward</option>
-                <option>Teachers Segment</option>
-                <option>Youth (18-35)</option>
-              </select>
-            </div>
-            <button class="btn-primary" onclick="(()=>{const msg=document.getElementById('amp-message').value;if(!msg){showToast('Enter a message first','warning');return;}showToast('Queuing AI conversations for selected segment...','info');setTimeout(()=>{addAudit('Current User','National Ops Director','amplifier.deploy','Nakuru Undecided',msg);showToast('✓ '+Math.floor(Math.random()*500+200)+' conversations initiated','success');},1500);})()">Deploy to Segment →</button>
+            <textarea id="amp-message" rows="3" placeholder="Enter talking point or counter-narrative message…" style="width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:12px;padding:9px 12px;outline:none;resize:none;font-family:var(--font-sans);box-sizing:border-box"></textarea>
+            <select id="amp-target" style="width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:12px;padding:8px;outline:none;cursor:pointer">
+              <option value="undecided_national">All Undecided — National</option>
+              <option value="sha_concerned">SHA Concerned Voters</option>
+              <option value="teachers">Teachers Segment</option>
+              <option value="youth_1835">Youth 18–35</option>
+              <option value="coast_persuadable">Coast Persuadable</option>
+              <option value="rift_valley">Rift Valley Supporters</option>
+            </select>
+            <button class="btn-primary" onclick="(()=>{const msg=document.getElementById('amp-message').value;if(!msg.trim()){showToast('Enter a message first','warning');return;}const tgt=document.getElementById('amp-target').options[document.getElementById('amp-target').selectedIndex].text;showToast('Queuing AI conversations for: '+tgt+'…','info');setTimeout(()=>{const n=(Math.floor(Math.random()*2000+800)).toLocaleString();addAudit('Current User','National Ops Director','amplifier.deploy',tgt,msg.substring(0,80));showToast('✓ '+n+' conversations initiated','success');},1600);})()">Deploy to Segment →</button>
           </div>
         </div>
       </div>
     </div>
   `;
-
-  setTimeout(()=>{
-    mkChart('talking-points-chart',{
-      type:'bar',
-      data:{
-        labels:['SHA Healthcare','Hustler Fund','Cost of Living','Security','HELB Reform'],
-        datasets:[{
-          label:'Positive shift %',
-          data:[68,72,31,54,48],
-          backgroundColor:['rgba(16,185,129,0.8)','rgba(16,185,129,0.8)','rgba(239,68,68,0.8)','rgba(59,130,246,0.8)','rgba(245,158,11,0.8)'],
-          borderColor:['#10B981','#10B981','#EF4444','#3B82F6','#F59E0B'],
-          borderWidth:1,borderRadius:4
-        }]
-      },
-      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8',callbacks:{label:ctx=>` ${ctx.parsed.x}% positive sentiment shift`}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:10},callback:v=>v+'%'},min:0,max:100},y:{grid:{display:false},ticks:{color:'#94A3B8',font:{size:11}}}}}
-    });
-  },80);
 }
+
+// END V2 PART 2B
 
 // END V2 PART 2B
 
@@ -5303,6 +5456,7 @@ function renderAudit() {
 // ============================================================
 function navigate(page) {
   STATE.page = page;
+  if (window.location.hash.replace(/^#/,'') !== page) history.replaceState(null,'','#'+page);
   document.querySelectorAll('.page').forEach(p => {
     p.classList.add('hidden');
     p.classList.remove('active');
@@ -5522,7 +5676,12 @@ document.addEventListener('DOMContentLoaded', () => {
   applyRole('national-ops');
   startClock();
   simulateRealTime();
-  navigate(STATE.page || 'home');
+  const _startPage = window.location.hash.replace(/^#/,'');
+  navigate((_startPage && document.getElementById('page-'+_startPage)) ? _startPage : 'home');
+  window.addEventListener('hashchange', () => {
+    const p = window.location.hash.replace(/^#/,'');
+    if (p && document.getElementById('page-'+p) && STATE.page !== p) navigate(p);
+  });
   addAudit('System', 'System', 'session.started', 'Dira Command V3', 'Dashboard session initialized');
   addAudit('Current User', 'National Ops Director', 'auth.login', 'Dashboard', 'Authenticated via SSO · 2FA confirmed');
 
