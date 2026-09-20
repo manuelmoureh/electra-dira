@@ -1066,6 +1066,52 @@ body {
 .amp-ch-val { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); width:28px; text-align:right; flex-shrink:0; }
 @keyframes amp-pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
 .amp-live-dot { width:7px; height:7px; border-radius:50%; background:#EF4444; display:inline-block; animation:amp-pulse 1.8s infinite; margin-left:6px; vertical-align:middle; }
+/* I-Force */
+.if-layout { display:grid; grid-template-columns:1fr 270px; gap:14px; }
+.if-stats-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.if-stat { flex:1; min-width:120px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:11px 14px; position:relative; overflow:hidden; }
+.if-stat::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; border-radius:2px 2px 0 0; }
+.if-stat.is-brand::before { background:linear-gradient(90deg,#7C3AED,#A78BFA); }
+.if-stat.is-win::before { background:#10B981; }
+.if-stat.is-flag::before { background:#EF4444; }
+.if-stat.is-watch::before { background:#F59E0B; }
+.if-stat.is-pool::before { background:#2DD4BF; }
+.if-stat-label { font-size:9px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px; font-family:var(--font-mono); }
+.if-stat-val { font-size:20px; font-weight:800; line-height:1; }
+.if-stat-sub { font-size:10px; color:var(--text-muted); margin-top:3px; }
+/* Activity feed */
+.if-feed { display:flex; flex-direction:column; gap:0; max-height:340px; overflow-y:auto; }
+.if-feed-item { display:flex; align-items:flex-start; gap:8px; padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.if-feed-item.new-activity { animation:if-slide-in .4s ease-out; }
+@keyframes if-slide-in { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+.if-feed-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.if-feed-body { flex:1; min-width:0; }
+.if-feed-text { font-size:11.5px; color:var(--text-secondary); line-height:1.38; }
+.if-feed-text strong { color:var(--text-primary); font-weight:600; }
+.if-feed-meta { font-size:9.5px; color:var(--text-muted); margin-top:2px; font-family:var(--font-mono); }
+.if-feed-tag { padding:1px 6px; border-radius:4px; font-size:8px; font-weight:800; letter-spacing:.06em; font-family:var(--font-mono); }
+/* Silent alert */
+.if-silent-item { display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.if-silent-item:last-child { border-bottom:none; }
+.if-silent-name { flex:1; font-size:12px; font-weight:600; color:var(--text-primary); }
+.if-silent-meta { font-size:10px; color:#EF4444; font-family:var(--font-mono); }
+.if-call-btn { padding:3px 9px; border-radius:5px; font-size:10px; font-weight:700; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); color:#FCA5A5; cursor:pointer; transition:all .15s; }
+.if-call-btn:hover { background:rgba(239,68,68,0.25); }
+/* Roster rows */
+.if-agent-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
+.if-agent-row:last-child { border-bottom:none; }
+.if-agent-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#7C3AED,#A78BFA); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#fff; flex-shrink:0; }
+.if-agent-info { flex:1; min-width:0; }
+.if-agent-name { font-size:12px; font-weight:600; color:var(--text-primary); }
+.if-agent-ward { font-size:10px; color:var(--text-muted); }
+.if-agent-metrics { display:flex; flex-direction:column; align-items:flex-end; gap:1px; flex-shrink:0; }
+.if-agent-rate { font-size:13px; font-weight:800; color:#10B981; }
+.if-agent-conv { font-size:9px; color:var(--text-muted); font-family:var(--font-mono); }
+/* Coverage region bars */
+.if-reg-row { margin-bottom:9px; }
+.if-reg-header { display:flex; justify-content:space-between; font-size:11px; margin-bottom:3px; }
+.if-reg-name { color:var(--text-secondary); font-weight:500; }
+.if-reg-val { font-weight:700; font-family:var(--font-mono); }
 </style>
 </head>
 <body>
@@ -3937,155 +3983,182 @@ function _OLD_renderSignal_UNUSED() {
 }
 
 function renderIForce() {
+  if (window._ifInterval) { clearInterval(window._ifInterval); window._ifInterval = null; }
+
   const totalAgents = COUNTIES.reduce((s,c)=>s+c.agents,0);
-  const nakuruAgents = STATE.kiamiunyiAgents + (STATE.agentsRedeployed?4:0) + 688;
   const top10 = [...COUNTIES].sort((a,b)=>b.agents-a.agents).slice(0,10);
-  let activeTab = 'roster';
+  const avgCov = (COUNTIES.reduce((s,c)=>s+c.coverage,0)/COUNTIES.length).toFixed(0);
+  const gaps = COUNTIES.filter(c=>c.coverage<50);
+
+  const STATS = [
+    {label:'Total Agents',val:fmt(totalAgents),sub:'across 47 counties',cls:'is-brand',vc:'#A78BFA'},
+    {label:'Active Now',val:fmt(Math.floor(totalAgents*0.83)),sub:'83% deployment rate',cls:'is-win',vc:'#10B981'},
+    {label:'Converts Today',val:'3,840',sub:'↑ 12% vs yesterday',cls:'is-win',vc:'#10B981'},
+    {label:'Silent 48h+',val:String(SILENT_AGENTS.length),sub:'require follow-up',cls:'is-flag',vc:'#EF4444'},
+    {label:'Coverage Gaps',val:String(gaps.length),sub:'counties below 50%',cls:'is-watch',vc:'#F59E0B'},
+    {label:'Avg Coverage',val:avgCov+'%',sub:'national average',cls:'is-pool',vc:'#2DD4BF'},
+  ];
+
+  const ACTIVITY_POOL = [
+    {text:'<strong>James Mwangi</strong> (Kiamunyi, Nakuru) — 3 new converts confirmed',tag:'CONVERT',tc:'#10B981',dot:'#10B981'},
+    {text:'<strong>Mary Njeri</strong> (Kiamunyi, Nakuru) — checked in · 41 contacts today',tag:'CHECK-IN',tc:'#A78BFA',dot:'#7C3AED'},
+    {text:'Rally confirmed at <strong>Nakuru ASK Showground</strong> — 920 RSVPs, mobilise T-1 agents',tag:'RALLY',tc:'#2DD4BF',dot:'#2DD4BF'},
+    {text:'<strong>Francis Mwenda</strong> (Nakuru East) — voter reg drive +44 new registrations',tag:'REGISTER',tc:'#10B981',dot:'#10B981'},
+    {text:'<strong>Eunice Wambua</strong> (London ward) — SHA opposition leaflets sighted, reported to Signal',tag:'INTEL',tc:'#F59E0B',dot:'#F59E0B'},
+    {text:'Coverage surge in <strong>Molo</strong> — 12 new agents deployed from Nakuru pool',tag:'DEPLOY',tc:'#A78BFA',dot:'#7C3AED'},
+    {text:'<strong>David Kipchoge</strong> (Kaptembwa) — 6 converts, best rate in county today',tag:'CONVERT',tc:'#10B981',dot:'#10B981'},
+    {text:'<strong>Beatrice Chemutai</strong> (Kaptembwa) — still silent 72h · escalated to field supervisor',tag:'ALERT',tc:'#EF4444',dot:'#EF4444'},
+    {text:'WhatsApp coordination group for <strong>Nakuru North</strong> — 38 agents joined',tag:'COORD',tc:'#2DD4BF',dot:'#2DD4BF'},
+    {text:'<strong>Grace Akinyi</strong> (Kisumu Central) — 5 converts from SHA beneficiary event',tag:'CONVERT',tc:'#10B981',dot:'#10B981'},
+    {text:'<strong>Peter Omondi</strong> (Kisumu East) — door-to-door canvass complete · 88 households',tag:'CHECK-IN',tc:'#A78BFA',dot:'#7C3AED'},
+    {text:'Agent redeployment: <strong>4 Nairobi agents</strong> transferred to Turkana coverage gap',tag:'DEPLOY',tc:'#A78BFA',dot:'#7C3AED'},
+  ];
+
+  const SEED_FEED = ACTIVITY_POOL.slice(0,6);
+  let _feedIdx = SEED_FEED.length;
+
+  function feedItemHTML(act, animate) {
+    const mins = Math.floor(Math.random()*8)+1;
+    return '<div class="if-feed-item' + (animate?' new-activity':'') + '">'
+      + '<div class="if-feed-dot" style="background:' + act.dot + '"></div>'
+      + '<div class="if-feed-body">'
+      + '<div class="if-feed-text">' + act.text + '</div>'
+      + '<div class="if-feed-meta">'
+      + '<span class="if-feed-tag" style="background:' + act.tc + '22;color:' + act.tc + ';border:1px solid ' + act.tc + '44">' + act.tag + '</span>'
+      + ' ' + mins + 'm ago'
+      + '</div></div></div>';
+  }
 
   function renderTab(tab) {
-    activeTab = tab;
-    document.querySelectorAll('.iforce-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
-    const content = document.getElementById('iforce-content');
+    document.querySelectorAll('.iforce-tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tab);});
+    var content = document.getElementById('iforce-content');
     if(!content) return;
 
     if(tab==='roster') {
-      content.innerHTML = `
-        <div class="grid-2" style="margin-bottom:16px">
-          <div class="card">
-            <div class="card-header"><h3>Top Performers — Kiamunyi Ward</h3></div>
-            <table class="data-table">
-              <thead><tr><th>Agent</th><th>Ward</th><th>Converts</th><th>Contacts</th><th>Rate</th><th>Status</th></tr></thead>
-              <tbody>
-                ${TOP_AGENTS.map(a=>`<tr>
-                  <td style="font-weight:600">${a.name}</td>
-                  <td style="font-size:12px;color:var(--text-muted)">${a.ward}</td>
-                  <td style="color:#10B981;font-weight:700">${a.converts}</td>
-                  <td>${a.contacts}</td>
-                  <td style="font-weight:600">${((a.converts/a.contacts)*100).toFixed(0)}%</td>
-                  <td><span class="badge badge-green">${a.status.toUpperCase()}</span></td>
-                </tr>`).join('')}
-              </tbody>
-            </table>
-          </div>
-          <div class="card">
-            <div class="card-header"><h3>Silent Agents — Nakuru County</h3><span class="badge badge-warn">4 agents</span></div>
-            <table class="data-table">
-              <thead><tr><th>Agent</th><th>Ward</th><th>Last Check-in</th><th>Action</th></tr></thead>
-              <tbody>
-                ${SILENT_AGENTS.map(a=>`<tr>
-                  <td style="font-weight:600">${a.name}</td>
-                  <td>${a.ward}</td>
-                  <td style="color:#EF4444">${relativeTime(a.last_check)}</td>
-                  <td><button class="btn-secondary btn-sm" onclick="showToast('Call initiated to ${a.name}','info')">Call Now</button></td>
-                </tr>`).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3>Nakuru East Agents</h3></div>
-          <table class="data-table">
-            <thead><tr><th>Agent</th><th>Ward</th><th>Converts</th><th>Contacts</th><th>Phone</th><th>Status</th></tr></thead>
-            <tbody>
-              ${NAKURU_EAST_AGENTS.map(a=>`<tr>
-                <td style="font-weight:600">${a.name}</td>
-                <td>${a.ward}</td>
-                <td style="color:#10B981;font-weight:700">${a.converts}</td>
-                <td>${a.contacts}</td>
-                <td style="font-size:12px;font-family:monospace">${a.phone}</td>
-                <td><span class="badge badge-green">ACTIVE</span></td>
-              </tr>`).join('')}
-            </tbody>
-          </table>
-        </div>`;
+      var allAgents = TOP_AGENTS.concat(NAKURU_EAST_AGENTS).sort(function(a,b){return (b.converts/b.contacts)-(a.converts/a.contacts);});
+      var rosterHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'
+        + '<div class="card">'
+        + '<div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">TOP PERFORMERS</span><span style="font-size:10px;color:var(--text-muted)">by conversion rate</span></div>'
+        + allAgents.map(function(a){return '<div class="if-agent-row">'
+            + '<div class="if-agent-avatar">' + a.name.charAt(0) + '</div>'
+            + '<div class="if-agent-info"><div class="if-agent-name">' + a.name + '</div><div class="if-agent-ward">' + a.ward + ' · ' + a.county + '</div></div>'
+            + '<div class="if-agent-metrics"><div class="if-agent-rate">' + ((a.converts/a.contacts)*100).toFixed(0) + '%</div><div class="if-agent-conv">' + a.converts + '/' + a.contacts + ' convts</div></div>'
+            + '</div>';}).join('')
+        + '</div>'
+        + '<div class="card">'
+        + '<div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:#EF4444">SILENT AGENTS</span><span style="font-size:10px;color:#EF4444;font-weight:700;font-family:var(--font-mono)">' + SILENT_AGENTS.length + ' AGENTS</span></div>'
+        + '<div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;padding:6px 8px;background:rgba(239,68,68,0.07);border-radius:6px;border:1px solid rgba(239,68,68,0.18)">No check-in in 48h+ — requires immediate supervisor contact</div>'
+        + SILENT_AGENTS.map(function(a){return '<div class="if-silent-item">'
+            + '<div class="if-agent-avatar" style="width:26px;height:26px;font-size:10px;background:rgba(239,68,68,0.2)">' + a.name.charAt(0) + '</div>'
+            + '<div class="if-agent-info" style="flex:1;min-width:0"><div class="if-silent-name">' + a.name + '</div><div class="if-silent-meta">' + a.ward + ' · ' + relativeTime(a.last_check) + '</div></div>'
+            + '<button class="if-call-btn" onclick="showToast(\'Calling ' + a.name + '…\',\'info\')">Call</button>'
+            + '</div>';}).join('')
+        + '</div></div>';
+      content.innerHTML = rosterHTML;
+
     } else if(tab==='coverage') {
-      content.innerHTML = `
-        <div class="flex-row" style="margin-bottom:16px">
-          <div class="card col-1">
-            <div class="card-header"><h3>Agent Density — Top 10 Counties</h3><span style="font-size:11px;color:var(--text-muted)">Agents per 1,000 voters</span></div>
-            <div class="chart-container" style="height:280px"><canvas id="agent-density-chart"></canvas></div>
-          </div>
-          <div class="card col-1">
-            <div class="card-header"><h3>Coverage by Region</h3></div>
-            ${['Central','Rift Valley','Eastern','Coast','Nairobi','Western','Nyanza','North Eastern'].map(r=>{
-              const rc = COUNTIES.filter(c=>c.region===r);
-              const avgCov = rc.length ? (rc.reduce((s,c)=>s+c.coverage,0)/rc.length).toFixed(0) : 0;
-              const color = avgCov>=70?'#10B981':avgCov>=55?'#F59E0B':'#EF4444';
-              return `<div style="margin-bottom:10px">
-                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
-                  <span style="color:var(--text-primary);font-weight:500">${r}</span>
-                  <span style="color:${color};font-weight:600">${avgCov}%</span>
-                </div>
-                <div class="progress-bar"><div class="progress-fill" style="width:${avgCov}%;background:${color}"></div></div>
-              </div>`;
-            }).join('')}
-          </div>
-        </div>`;
-      setTimeout(()=>{
+      var covHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'
+        + '<div class="card"><div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">AGENT DENSITY</span><span style="font-size:10px;color:var(--text-muted)">top 10 · per 1,000 voters</span></div><div class="chart-container" style="height:240px"><canvas id="agent-density-chart"></canvas></div></div>'
+        + '<div class="card"><div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">COVERAGE BY REGION</span></div>'
+        + ['Central','Rift Valley','Eastern','Coast','Nairobi','Western','Nyanza','North Eastern'].map(function(r){
+            var rc = COUNTIES.filter(function(c){return c.region===r;});
+            var cv = rc.length ? Math.round(rc.reduce(function(s,c){return s+c.coverage;},0)/rc.length) : 0;
+            var col = cv>=70?'#10B981':cv>=55?'#F59E0B':'#EF4444';
+            return '<div class="if-reg-row"><div class="if-reg-header"><span class="if-reg-name">' + r + '</span><span class="if-reg-val" style="color:' + col + '">' + cv + '%</span></div>'
+              + '<div class="amp-tp-track"><div class="amp-tp-fill" style="width:' + cv + '%;background:' + col + '"></div></div></div>';
+          }).join('')
+        + '</div></div>';
+      content.innerHTML = covHTML;
+      setTimeout(function(){
         mkChart('agent-density-chart',{
           type:'bar',
-          data:{
-            labels:top10.map(c=>c.name),
-            datasets:[{label:'Agents per 1,000 voters',data:top10.map(c=>(c.agents/c.reg_voters*1000).toFixed(1)),backgroundColor:top10.map(c=>tierColor(c.tier)+'CC'),borderColor:top10.map(c=>tierColor(c.tier)),borderWidth:1,borderRadius:4}]
-          },
+          data:{labels:top10.map(function(c){return c.name;}),datasets:[{label:'Agents per 1,000 voters',data:top10.map(function(c){return +(c.agents/c.reg_voters*1000).toFixed(1);}),backgroundColor:top10.map(function(c){return tierColor(c.tier)+'BB';}),borderColor:top10.map(function(c){return tierColor(c.tier);}),borderWidth:1,borderRadius:4}]},
           options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:10}}},y:{grid:{display:false},ticks:{color:'#94A3B8',font:{size:11}}}}}
         });
       },80);
+
     } else if(tab==='gaps') {
-      const gaps = COUNTIES.filter(c=>c.coverage<50).sort((a,b)=>a.coverage-b.coverage);
-      content.innerHTML = `
-        <div class="card">
-          <div class="card-header"><h3>Coverage Gaps — Counties Below 50%</h3><span class="badge badge-critical">${gaps.length} counties</span></div>
-          <table class="data-table">
-            <thead><tr><th>County</th><th>Region</th><th>Coverage</th><th>Agents</th><th>Tier</th><th>Deficit</th><th>Action</th></tr></thead>
-            <tbody>
-              ${gaps.map(c=>{
-                const needed = Math.ceil((c.reg_voters*0.55/1000)-c.agents);
-                return `<tr>
-                  <td style="font-weight:600">${c.name}</td>
-                  <td style="font-size:12px;color:var(--text-muted)">${c.region}</td>
-                  <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.coverage}%;background:#EF4444"></div></div><span style="color:#EF4444;font-weight:600;font-size:12px">${c.coverage}%</span></div></td>
-                  <td>${c.agents}</td>
-                  <td><span class="badge ${badgeClass(c.tier)}">${c.tier}</span></td>
-                  <td style="color:#EF4444;font-weight:600">+${needed} needed</td>
-                  <td><button class="btn-secondary btn-sm" onclick="showToast('Redeployment request sent for ${c.name}','info')">Request</button></td>
-                </tr>`;
-              }).join('')}
-            </tbody>
-          </table>
-        </div>`;
+      var gapList = gaps.slice().sort(function(a,b){return a.coverage-b.coverage;});
+      var gapHTML = '<div class="card" style="padding:0;overflow:hidden">'
+        + '<div class="card-header" style="padding:13px 14px;border-bottom:1px solid var(--border)"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">COVERAGE GAPS</span><span style="font-size:10px;color:#EF4444;font-weight:700;font-family:var(--font-mono)">' + gapList.length + ' COUNTIES BELOW 50%</span></div>'
+        + '<div style="padding:4px 14px 10px">'
+        + gapList.map(function(c){
+            var needed = Math.ceil((c.reg_voters*0.55/1000)-c.agents);
+            return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)">'
+              + '<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;color:var(--text-primary)">' + c.name + '</div><div style="font-size:10px;color:var(--text-muted)">' + c.region + ' · <span class="badge ' + badgeClass(c.tier) + '" style="font-size:8px">' + c.tier + '</span></div></div>'
+              + '<div style="width:90px"><div class="amp-tp-track"><div class="amp-tp-fill" style="width:' + c.coverage + '%;background:#EF4444"></div></div><div style="font-size:10px;color:#EF4444;font-weight:700;margin-top:2px">' + c.coverage + '% coverage</div></div>'
+              + '<div style="text-align:right;flex-shrink:0"><div style="font-size:11px;font-weight:700;color:#F59E0B">+' + needed + ' needed</div><button class="if-call-btn" style="margin-top:3px;font-size:9px" onclick="showToast(\'Redeployment sent — ' + c.name + '\',\'info\')">Request →</button></div>'
+              + '</div>';
+          }).join('')
+        + '</div></div>';
+      content.innerHTML = gapHTML;
     }
   }
 
-  document.getElementById('page-iforce').innerHTML = `
-    <div class="page-header">
-      <h1>I-Force — Field Agent Network</h1>
-      <div class="page-sub"><span class="live-indicator">LIVE</span><span>${fmt(totalAgents)} agents across 47 counties</span></div>
-    </div>
+  var statsRow = STATS.map(function(s){
+    return '<div class="if-stat ' + s.cls + '"><div class="if-stat-label">' + s.label + '</div><div class="if-stat-val" style="color:' + s.vc + '">' + s.val + '</div><div class="if-stat-sub">' + s.sub + '</div></div>';
+  }).join('');
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
-      ${[
-        {label:'Total Agents',val:fmt(totalAgents)},
-        {label:'Active',val:fmt(Math.floor(totalAgents*0.83))},
-        {label:'Silent 48h+',val:'4'},
-        {label:'Nakuru Agents',val:fmt(nakuruAgents)+(STATE.agentsRedeployed?' (+4)':'')},
-        {label:'Avg Coverage',val:(COUNTIES.reduce((s,c)=>s+c.coverage,0)/COUNTIES.length).toFixed(0)+'%'}
-      ].map(s=>`<div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 16px">
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:2px">${s.label}</div>
-        <div style="font-size:18px;font-weight:700;color:var(--text-primary)">${s.val}</div>
-      </div>`).join('')}
-    </div>
+  var silentPanel = SILENT_AGENTS.map(function(a){
+    return '<div class="if-silent-item">'
+      + '<div class="if-agent-avatar" style="width:26px;height:26px;font-size:10px;background:rgba(239,68,68,0.2)">' + a.name.charAt(0) + '</div>'
+      + '<div style="flex:1;min-width:0"><div class="if-silent-name">' + a.name + '</div><div class="if-silent-meta">' + a.ward + ' · ' + relativeTime(a.last_check) + '</div></div>'
+      + '<button class="if-call-btn" onclick="showToast(\'Calling ' + a.name + '…\',\'info\')">Call</button>'
+      + '</div>';
+  }).join('');
 
-    <div class="tab-bar" style="margin-bottom:16px">
-      ${['roster','coverage','gaps'].map(t=>`<div class="tab iforce-tab ${t==='roster'?'active':''}" data-tab="${t}">${t.charAt(0).toUpperCase()+t.slice(1)}</div>`).join('')}
-    </div>
-    <div id="iforce-content"></div>
-  `;
+  var seedFeedHTML = SEED_FEED.map(function(a){return feedItemHTML(a,false);}).join('');
 
-  document.querySelectorAll('.iforce-tab').forEach(t=>{
-    t.onclick = ()=>renderTab(t.dataset.tab);
+  document.getElementById('page-iforce').innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<h1 style="background:linear-gradient(135deg,#2DD4BF 0%,#A78BFA 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent">I-Force</h1>'
+    + '<span class="amp-live-dot"></span>'
+    + '</div>'
+    + '<div class="page-sub">Ground force · ' + fmt(totalAgents) + ' agents · 47 counties · live field tracking</div>'
+    + '</div>'
+    + '<div class="if-stats-row">' + statsRow + '</div>'
+    + '<div class="if-layout">'
+    + '<div style="display:flex;flex-direction:column;gap:0">'
+    + '<div style="display:flex;gap:4px;margin-bottom:12px">'
+    + '<div class="tab iforce-tab active" data-tab="roster" style="font-size:11px;padding:6px 14px">Roster</div>'
+    + '<div class="tab iforce-tab" data-tab="coverage" style="font-size:11px;padding:6px 14px">Coverage Map</div>'
+    + '<div class="tab iforce-tab" data-tab="gaps" style="font-size:11px;padding:6px 14px">Gaps</div>'
+    + '</div>'
+    + '<div id="iforce-content"></div>'
+    + '</div>'
+    + '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 12px;border-bottom:1px solid var(--border)">'
+    + '<div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">FIELD ACTIVITY</span><span class="amp-live-dot"></span></div>'
+    + '<span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">LIVE</span>'
+    + '</div>'
+    + '<div class="if-feed" id="if-feed-list">' + seedFeedHTML + '</div>'
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 12px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:#EF4444">SILENT AGENTS</span>'
+    + '<span style="font-size:9px;color:#EF4444;font-weight:700;font-family:var(--font-mono)">' + SILENT_AGENTS.length + ' FLAGGED</span>'
+    + '</div>'
+    + '<div>' + silentPanel + '</div>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  document.querySelectorAll('.iforce-tab').forEach(function(t){
+    t.onclick = function(){renderTab(t.dataset.tab);};
   });
   renderTab('roster');
+
+  window._ifInterval = setInterval(function(){
+    var list = document.getElementById('if-feed-list');
+    if(!list) { clearInterval(window._ifInterval); return; }
+    var act = ACTIVITY_POOL[_feedIdx % ACTIVITY_POOL.length];
+    _feedIdx++;
+    list.insertAdjacentHTML('afterbegin', feedItemHTML(act, true));
+    var items = list.querySelectorAll('.if-feed-item');
+    if(items.length > 10) items[items.length-1].remove();
+  }, 5000);
 }
 
 function renderAmplifier() {
