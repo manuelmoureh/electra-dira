@@ -1112,6 +1112,22 @@ body {
 .if-reg-header { display:flex; justify-content:space-between; font-size:11px; margin-bottom:3px; }
 .if-reg-name { color:var(--text-secondary); font-weight:500; }
 .if-reg-val { font-weight:700; font-family:var(--font-mono); }
+/* Kura Connect */
+.kc-layout { display:grid; grid-template-columns:1fr 260px; gap:14px; }
+.kc-response-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px; }
+.kc-response-opt { text-align:center; padding:10px 6px; border-radius:8px; border:1px solid var(--border); background:rgba(255,255,255,0.02); }
+.kc-response-val { font-size:16px; font-weight:800; line-height:1; margin-bottom:2px; }
+.kc-response-label { font-size:9px; color:var(--text-muted); font-family:var(--font-mono); letter-spacing:.04em; }
+.kc-audio-row { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+.kc-audio-row:last-child { border-bottom:none; }
+.kc-audio-name { flex:1; font-size:12px; font-weight:600; color:var(--text-primary); }
+.kc-audio-lang { font-size:10px; color:var(--text-muted); }
+.kc-audio-perf { font-size:12px; font-weight:700; }
+.kc-county-chip { padding:6px 10px; border-radius:8px; background:rgba(255,255,255,0.04); border:1px solid var(--border); }
+.kc-county-name { font-size:10px; color:var(--text-muted); margin-bottom:2px; }
+.kc-county-rate { font-size:14px; font-weight:800; }
+.kc-county-sub { font-size:9px; color:var(--text-muted); font-family:var(--font-mono); }
+.kc-live-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 8px; border-radius:20px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); font-size:9px; font-weight:700; color:#10B981; font-family:var(--font-mono); }
 </style>
 </head>
 <body>
@@ -4419,186 +4435,164 @@ function dispatchElectionAgent(stationId) {
 // renderKuraConnect() — IVR Pipeline
 // ============================================================
 function renderKuraConnect() {
+  if (window._kcInterval) { clearInterval(window._kcInterval); window._kcInterval = null; }
   destroyChart('ivr-response-chart');
   destroyChart('ivr-daily-chart');
 
-  const el = document.getElementById('page-kura');
+  var el = document.getElementById('page-kura');
   if (!el) return;
 
-  el.innerHTML = `
-    <div class="section-header">
-      <div>
-        <h2 style="margin:0 0 4px;font-size:1.25rem;font-weight:700;color:var(--text-primary)">Kura Connect — IVR Pipeline</h2>
-        <p style="margin:0;color:var(--text-muted);font-size:.85rem">Interactive Voice Response campaign management &amp; voter outreach</p>
-      </div>
-      <div class="flex-row" style="gap:8px">
-        <span class="live-indicator">● LIVE</span>
-        <button class="btn-primary btn-sm" onclick="showToast('Opening campaign wizard...','info')">+ New Campaign</button>
-      </div>
-    </div>
+  var STATS = [
+    {label:'Calls Attempted',val:'45,821',sub:'Nakuru County push',cls:'is-brand',vc:'#A78BFA'},
+    {label:'Answered',val:'32,441',sub:'70.8% pickup rate',cls:'is-win',vc:'#10B981'},
+    {label:'Completed',val:'28,891',sub:'89.1% completion rate',cls:'is-win',vc:'#10B981'},
+    {label:'Callback Requests',val:'1,732',sub:'high intent signal',cls:'is-pool',vc:'#2DD4BF'},
+    {label:'Audio Assets',val:'4',sub:'3 languages active',cls:'is-brand',vc:'#A78BFA'},
+    {label:'Active Counties',val:'5',sub:'Central + Rift Valley',cls:'is-watch',vc:'#F59E0B'},
+  ];
 
-    <div class="flex-row" style="gap:16px;margin-bottom:16px">
-      <div class="kpi-card accent-green" style="flex:1">
-        <div class="kpi-label">Calls Attempted</div>
-        <div class="kpi-value">45,821</div>
-        <div class="kpi-sub">Nakuru County push</div>
-      </div>
-      <div class="kpi-card accent-blue" style="flex:1">
-        <div class="kpi-label">Answered</div>
-        <div class="kpi-value">32,441</div>
-        <div class="kpi-trend up">▲ 70.8% pickup rate</div>
-      </div>
-      <div class="kpi-card accent-violet" style="flex:1">
-        <div class="kpi-label">Completed</div>
-        <div class="kpi-value">28,891</div>
-        <div class="kpi-sub">89.1% completion</div>
-      </div>
-      <div class="kpi-card accent-amber" style="flex:1">
-        <div class="kpi-label">Callback Requests</div>
-        <div class="kpi-value">1,732</div>
-        <div class="kpi-trend up">▲ High intent signal</div>
-      </div>
-    </div>
+  var AUDIO = [
+    {name:'Hustler Fund â€” Testimonial A',lang:'Kikuyu',dur:'38s',uses:'18,421',perf:73.1,color:'#10B981'},
+    {name:'SHA Healthcare â€” Beneficiary',lang:'Kiswahili',dur:'44s',uses:'12,300',perf:68.4,color:'#10B981'},
+    {name:'SGR Benefits â€” Jobs Message',lang:'Kiswahili',dur:'35s',uses:'8,100',perf:61.2,color:'#F59E0B'},
+    {name:'Kazi Majuu â€” Youth Story',lang:'Luo',dur:'40s',uses:'5,240',perf:58.9,color:'#F59E0B'},
+  ];
 
-    <div class="grid-2" style="gap:16px;margin-bottom:16px">
+  var COUNTIES_IVR = [
+    {name:'Nakuru',rate:70.8,color:'#10B981'},
+    {name:'Kiambu',rate:64.2,color:'#10B981'},
+    {name:"Murang'a",rate:58.7,color:'#A78BFA'},
+    {name:'Nyeri',rate:55.1,color:'#F59E0B'},
+    {name:'Nyandarua',rate:51.4,color:'#F59E0B'},
+  ];
 
-      <!-- Active Campaign -->
-      <div class="card-accent" style="padding:20px">
-        <div class="card-header" style="margin-bottom:12px">
-          <span style="font-weight:600;color:var(--text-primary)">Active Campaign</span>
-          <span class="badge-win" style="font-size:.7rem">RUNNING</span>
-        </div>
-        <div style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:4px">
-          Nakuru County Push — Hustler Fund Testimonials
-        </div>
-        <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:14px">Launched Sep 13 · 3 audio variants · Kiswahili + Kikuyu</div>
+  var RESPONSE_OPTS = [
+    {label:'POSITIVE',sublabel:'Opt 1',val:'12,134',color:'#10B981'},
+    {label:'NEUTRAL',sublabel:'Opt 2',val:'8,091',color:'#F59E0B'},
+    {label:'CONCERNS',sublabel:'Opt 3',val:'6,934',color:'#F97316'},
+    {label:'CALLBACK',sublabel:'Opt 4',val:'1,732',color:'#2DD4BF'},
+  ];
 
-        <div style="margin-bottom:10px">
-          <div class="flex-row" style="justify-content:space-between;margin-bottom:4px">
-            <span style="font-size:.8rem;color:var(--text-muted)">Attempted: 45,821</span>
-            <span style="font-size:.8rem;color:var(--text-muted)">Answered: 32,441 <strong style="color:var(--accent-green)">(70.8%)</strong></span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width:70.8%;background:var(--accent-green)"></div>
-          </div>
-        </div>
+  var statsHTML = STATS.map(function(s){
+    return '<div class="if-stat ' + s.cls + '"><div class="if-stat-label">' + s.label + '</div>'
+      + '<div class="if-stat-val" style="color:' + s.vc + '">' + s.val + '</div>'
+      + '<div class="if-stat-sub">' + s.sub + '</div></div>';
+  }).join('');
 
-        <div style="height:200px;margin-top:16px">
-          <canvas id="ivr-response-chart"></canvas>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;text-align:center">
-          <div style="font-size:.72rem;color:#10B981">Option 1<br><strong>12,134</strong><br>Positive</div>
-          <div style="font-size:.72rem;color:#F59E0B">Option 2<br><strong>8,091</strong><br>Neutral</div>
-          <div style="font-size:.72rem;color:#F97316">Option 3<br><strong>6,934</strong><br>Concerns</div>
-          <div style="font-size:.72rem;color:#3B82F6">Option 4<br><strong>1,732</strong><br>Callback</div>
-        </div>
-      </div>
+  var audioHTML = AUDIO.map(function(a){
+    return '<div class="kc-audio-row">'
+      + '<div style="flex:1;min-width:0"><div class="kc-audio-name">' + a.name + '</div>'
+      + '<div class="kc-audio-lang">' + a.lang + ' Â· ' + a.dur + ' Â· ' + a.uses + ' plays</div></div>'
+      + '<div class="kc-audio-perf" style="color:' + a.color + '">' + a.perf + '%</div>'
+      + '</div>';
+  }).join('');
 
-      <!-- Content Library + Targeting -->
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="card" style="padding:20px">
-          <div class="card-header" style="margin-bottom:12px">
-            <span style="font-weight:600;color:var(--text-primary)">Audio Content Library</span>
-            <button class="btn-ghost btn-sm" onclick="showToast('Upload audio...','info')">+ Upload</button>
-          </div>
-          <table class="data-table" style="font-size:.8rem">
-            <thead><tr><th>Asset</th><th>Language</th><th>Duration</th><th>Uses</th><th>Perf.</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><span style="color:var(--text-primary);font-weight:500">Hustler Fund — Agnes</span></td>
-                <td>Kikuyu</td><td>38s</td><td>18,421</td>
-                <td><span class="badge-win">73.1%</span></td>
-              </tr>
-              <tr>
-                <td><span style="color:var(--text-primary);font-weight:500">Hustler Fund — John</span></td>
-                <td>Kiswahili</td><td>42s</td><td>12,300</td>
-                <td><span class="badge-grow">68.4%</span></td>
-              </tr>
-              <tr>
-                <td><span style="color:var(--text-primary);font-weight:500">SGR Benefits</span></td>
-                <td>Kiswahili</td><td>35s</td><td>8,100</td>
-                <td><span class="badge-hold">61.2%</span></td>
-              </tr>
-              <tr>
-                <td><span style="color:var(--text-primary);font-weight:500">Food Subsidy</span></td>
-                <td>Luo</td><td>40s</td><td>5,240</td>
-                <td><span class="badge-hold">58.9%</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  var countiesHTML = COUNTIES_IVR.map(function(c){
+    return '<div class="kc-county-chip"><div class="kc-county-name">' + c.name + '</div>'
+      + '<div class="kc-county-rate" style="color:' + c.color + '">' + c.rate + '%</div>'
+      + '<div class="kc-county-sub">pickup rate</div></div>';
+  }).join('');
 
-        <div class="card" style="padding:20px">
-          <div class="card-header" style="margin-bottom:12px">
-            <span style="font-weight:600;color:var(--text-primary)">County Targeting</span>
-            <span style="font-size:.75rem;color:var(--text-muted)">5 active</span>
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
-            ${[
-              {name:'Nakuru',pct:70.8,color:'#10B981'},
-              {name:'Kiambu',pct:64.2,color:'#3B82F6'},
-              {name:'Muranga',pct:58.7,color:'#7C3AED'},
-              {name:'Nyeri',pct:55.1,color:'#F59E0B'},
-              {name:'Nyandarua',pct:51.4,color:'#F97316'},
-            ].map(c => `
-              <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border-default);border-radius:8px;padding:8px 12px;min-width:110px">
-                <div style="font-size:.75rem;color:var(--text-muted)">${c.name}</div>
-                <div style="font-size:1rem;font-weight:700;color:${c.color}">${c.pct}%</div>
-                <div style="font-size:.68rem;color:var(--text-subtle)">pickup rate</div>
-              </div>
-            `).join('')}
-          </div>
+  var responseHTML = RESPONSE_OPTS.map(function(r){
+    return '<div class="kc-response-opt">'
+      + '<div class="kc-response-val" style="color:' + r.color + '">' + r.val + '</div>'
+      + '<div class="kc-response-label">' + r.sublabel + ' Â· ' + r.label + '</div>'
+      + '</div>';
+  }).join('');
 
-          <div style="border-top:1px solid var(--border-default);padding-top:14px">
-            <div style="font-size:.8rem;font-weight:600;color:var(--text-primary);margin-bottom:10px">Launch New Campaign</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
-              <select style="background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:6px;color:var(--text-primary);padding:6px 8px;font-size:.8rem">
-                <option>Select county…</option>
-                ${COUNTIES.slice(0,10).map(c=>`<option>${c.name}</option>`).join('')}
-              </select>
-              <select style="background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:6px;color:var(--text-primary);padding:6px 8px;font-size:.8rem">
-                <option>Select audio asset…</option>
-                <option>Hustler Fund — Agnes</option>
-                <option>Hustler Fund — John</option>
-                <option>SGR Benefits</option>
-                <option>Food Subsidy</option>
-              </select>
-            </div>
-            <button class="btn-primary btn-sm" style="width:100%" onclick="showToast('Campaign queued for review','success')">Launch Campaign</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  var countyOptions = COUNTIES.slice(0,10).map(function(c){return '<option>' + c.name + '</option>';}).join('');
 
-  setTimeout(() => {
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<h1 style="background:linear-gradient(135deg,#10B981 0%,#A78BFA 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Kura Connect</h1>'
+    + '<span class="amp-live-dot"></span>'
+    + '</div>'
+    + '<div class="page-sub">IVR voter outreach Â· automated call campaigns Â· real-time response tracking</div>'
+    + '</div>'
+    + '<div class="if-stats-row">' + statsHTML + '</div>'
+    + '<div class="kc-layout">'
+
+    // LEFT
+    + '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:13px 14px;border-bottom:1px solid var(--border)">'
+    + '<div><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">ACTIVE CAMPAIGN</span>'
+    + '<div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-top:3px">Nakuru County Push â€” Hustler Fund Testimonials</div>'
+    + '<div style="font-size:10px;color:var(--text-muted);margin-top:1px">Launched Sep 13 Â· 3 audio variants Â· Kiswahili + Kikuyu</div></div>'
+    + '<span class="kc-live-badge"><span style="width:5px;height:5px;border-radius:50%;background:#10B981;display:inline-block"></span>RUNNING</span>'
+    + '</div>'
+    + '<div style="padding:14px">'
+    + '<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:4px"><span>Attempted: 45,821</span><span>Answered: 32,441 <strong style="color:#10B981">(70.8%)</strong></span></div>'
+    + '<div class="amp-tp-track" style="height:8px;border-radius:4px"><div class="amp-tp-fill" style="width:70.8%;background:linear-gradient(90deg,#10B981,#2DD4BF)"></div></div>'
+    + '<div class="kc-response-grid">' + responseHTML + '</div>'
+    + '<div style="height:180px;margin-top:14px"><canvas id="ivr-response-chart"></canvas></div>'
+    + '<div style="margin-top:12px;padding:10px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);border-radius:8px;display:flex;align-items:center;justify-content:space-between">'
+    + '<span style="font-size:11px;color:var(--text-muted)">Calls in progress right now</span>'
+    + '<span id="kc-live-count" style="font-size:16px;font-weight:800;color:#10B981;font-family:var(--font-mono)">247</span>'
+    + '</div>'
+    + '</div></div>'
+    + '<div class="card"><div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">DAILY CALL VOLUME</span><span style="font-size:10px;color:var(--text-muted)">last 7 days</span></div><div style="height:140px"><canvas id="ivr-daily-chart"></canvas></div></div>'
+    + '</div>'
+
+    // RIGHT
+    + '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card" style="padding:0;overflow:hidden"><div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">AUDIO LIBRARY</span><span style="font-size:9px;color:var(--text-muted)">by pickup %</span></div><div style="padding:4px 14px 10px">' + audioHTML + '</div></div>'
+    + '<div class="card"><div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">COUNTY TARGETING</span><span style="font-size:9px;color:#F59E0B;font-weight:700;font-family:var(--font-mono)">5 ACTIVE</span></div><div style="display:flex;flex-wrap:wrap;gap:6px">' + countiesHTML + '</div></div>'
+    + '<div class="card"><div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">LAUNCH CAMPAIGN</span></div>'
+    + '<div style="display:flex;flex-direction:column;gap:8px">'
+    + '<select style="width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);padding:8px;font-size:12px;outline:none;cursor:pointer"><option>Select countyâ€¦</option>' + countyOptions + '</select>'
+    + '<select style="width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);padding:8px;font-size:12px;outline:none;cursor:pointer"><option>Select audio assetâ€¦</option><option>Hustler Fund â€” Testimonial A</option><option>SHA Healthcare â€” Beneficiary</option><option>SGR Benefits â€” Jobs</option><option>Kazi Majuu â€” Youth Story</option></select>'
+    + '<button class="btn-primary" onclick="(function(){showToast(\'Campaign queued for review\',\'success\');addAudit(\'Current User\',\'National Ops Director\',\'kura.launch\',\'Selected county\',\'IVR campaign initiated\');})()">Launch Campaign â†’</button>'
+    + '</div></div>'
+    + '</div>'
+    + '</div>';
+
+  setTimeout(function(){
     mkChart('ivr-response-chart', {
       type: 'bar',
       data: {
-        labels: ['Option 1\nPositive','Option 2\nNeutral','Option 3\nConcerns','Option 4\nCallback'],
+        labels: ['Positive','Neutral','Concerns','Callback'],
         datasets: [{
-          label: 'Voters',
           data: [12134, 8091, 6934, 1732],
-          backgroundColor: ['rgba(16,185,129,0.8)','rgba(245,158,11,0.7)','rgba(249,115,22,0.8)','rgba(59,130,246,0.8)'],
-          borderColor: ['#10B981','#F59E0B','#F97316','#3B82F6'],
-          borderWidth: 1, borderRadius: 6,
+          backgroundColor: ['rgba(16,185,129,0.8)','rgba(245,158,11,0.7)','rgba(249,115,22,0.8)','rgba(45,212,191,0.8)'],
+          borderColor: ['#10B981','#F59E0B','#F97316','#2DD4BF'],
+          borderWidth: 1, borderRadius: 5
         }]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { backgroundColor: 'rgba(5,13,26,0.9)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, titleColor: '#F1F5F9', bodyColor: '#94A3B8',
-            callbacks: { label: ctx => ` ${fmt(ctx.parsed.y)} voters (${((ctx.parsed.y/28891)*100).toFixed(1)}%)` }
-          }
-        },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: '#94A3B8', font: { size: 10 } } },
-          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#475569', font: { size: 10 }, callback: v => fmt(v) } }
-        }
+        plugins: { legend: {display:false}, tooltip: {backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8',callbacks:{label:function(ctx){return ' '+fmt(ctx.parsed.y)+' voters ('+((ctx.parsed.y/28891)*100).toFixed(1)+'%)';}}}},
+        scales: { x:{grid:{display:false},ticks:{color:'#94A3B8',font:{size:10}}}, y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:10},callback:function(v){return fmt(v);}}} }
+      }
+    });
+
+    mkChart('ivr-daily-chart', {
+      type: 'line',
+      data: {
+        labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        datasets: [
+          {label:'Attempted',data:[4200,6800,8100,7400,9200,5800,4321],borderColor:'#A78BFA',backgroundColor:'rgba(167,139,250,0.1)',borderWidth:2,pointBackgroundColor:'#A78BFA',pointRadius:3,tension:0.4,fill:true},
+          {label:'Answered',data:[3100,4900,5800,5200,6600,4100,3100],borderColor:'#10B981',backgroundColor:'rgba(16,185,129,0.06)',borderWidth:2,pointBackgroundColor:'#10B981',pointRadius:3,tension:0.4,fill:true}
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend:{display:false}, tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'} },
+        scales: { x:{grid:{display:false},ticks:{color:'#94A3B8',font:{size:10}}}, y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9},callback:function(v){return fmt(v);}}} }
       }
     });
   }, 60);
+
+  var _kcLive = 247;
+  window._kcInterval = setInterval(function(){
+    var ctr = document.getElementById('kc-live-count');
+    if (!ctr) { clearInterval(window._kcInterval); return; }
+    _kcLive += Math.floor(Math.random()*5) - 2;
+    if (_kcLive < 210) _kcLive = 210;
+    if (_kcLive > 310) _kcLive = 310;
+    ctr.textContent = _kcLive;
+  }, 2000);
 }
 
 // ============================================================
