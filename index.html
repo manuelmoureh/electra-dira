@@ -4473,10 +4473,10 @@ function renderKuraConnect() {
   ];
 
   var AUDIO = [
-    {name:'Hustler Fund â€” Testimonial A',lang:'Kikuyu',   dur:'38s',perf:73.1},
-    {name:'SHA Healthcare â€” Beneficiary', lang:'Kiswahili',dur:'44s',perf:68.4},
-    {name:'SGR Benefits â€” Jobs Message',  lang:'Kiswahili',dur:'35s',perf:61.2},
-    {name:'Kazi Majuu â€” Youth Story',     lang:'Luo',      dur:'40s',perf:58.9},
+    {name:'Hustler Fund &mdash; Testimonial A',lang:'Kikuyu',   dur:'38s',perf:73.1},
+    {name:'SHA Healthcare &mdash; Beneficiary', lang:'Kiswahili',dur:'44s',perf:68.4},
+    {name:'SGR Benefits &mdash; Jobs Message',  lang:'Kiswahili',dur:'35s',perf:61.2},
+    {name:'Kazi Majuu &mdash; Youth Story',     lang:'Luo',      dur:'40s',perf:58.9},
   ];
 
   var SEED_LOG = [
@@ -4499,7 +4499,7 @@ function renderKuraConnect() {
   function makeCallEntry(e, isNew) {
     return '<div class="kc2-call-entry' + (isNew ? ' new' : '') + '">'
       + '<div class="kc2-call-icon" style="background:' + e.bg + '">' + phoneIcon(e.color) + '</div>'
-      + '<div><div class="kc2-call-county">' + e.county + '</div><div class="kc2-call-meta">' + e.dur + ' Â· answered</div></div>'
+      + '<div><div class="kc2-call-county">' + e.county + '</div><div class="kc2-call-meta">' + e.dur + ' &middot; answered</div></div>'
       + '<span class="kc2-call-badge" style="background:' + e.bg + ';color:' + e.color + '">' + e.opt + '</span>'
       + '</div>';
   }
@@ -4541,14 +4541,14 @@ function renderKuraConnect() {
     + '<h1 style="color:#10B981">Kura Connect</h1>'
     + '<span class="amp-live-dot"></span>'
     + '</div>'
-    + '<div class="page-sub">IVR voter outreach Â· automated call campaigns Â· real-time response tracking</div>'
+    + '<div class="page-sub">IVR voter outreach &middot; automated call campaigns &middot; real-time response tracking</div>'
     + '</div>'
 
     + '<div class="kc2-funnel">'
     + '<div class="kc2-stage"><div class="kc2-stage-num">45,821</div><div class="kc2-stage-label">Calls Attempted</div><div class="kc2-stage-sub">Nakuru County push</div></div>'
-    + '<div class="kc2-arrow"><div class="kc2-arrow-line"></div><div class="kc2-arrow-rate">70.8% â†’</div></div>'
+    + '<div class="kc2-arrow"><div class="kc2-arrow-line"></div><div class="kc2-arrow-rate">70.8% &rarr;</div></div>'
     + '<div class="kc2-stage"><div class="kc2-stage-num" style="color:#2DD4BF">32,441</div><div class="kc2-stage-label">Answered</div><div class="kc2-stage-sub">pickup rate</div></div>'
-    + '<div class="kc2-arrow"><div class="kc2-arrow-line" style="background:rgba(45,212,191,0.25)"></div><div class="kc2-arrow-rate" style="color:#2DD4BF">89.1% â†’</div></div>'
+    + '<div class="kc2-arrow"><div class="kc2-arrow-line" style="background:rgba(45,212,191,0.25)"></div><div class="kc2-arrow-rate" style="color:#2DD4BF">89.1% &rarr;</div></div>'
     + '<div class="kc2-stage"><div class="kc2-stage-num" style="color:#A78BFA">28,891</div><div class="kc2-stage-label">Completed</div><div class="kc2-stage-sub">completion rate</div></div>'
     + '</div>'
 
@@ -4558,8 +4558,8 @@ function renderKuraConnect() {
     + '<div class="card" style="padding:0;overflow:hidden">'
     + '<div class="card-header" style="padding:12px 14px;border-bottom:1px solid var(--border)">'
     + '<div><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">ACTIVE CAMPAIGN</span>'
-    + '<div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-top:2px">Nakuru County Push â€” Hustler Fund Testimonials</div>'
-    + '<div style="font-size:10px;color:var(--text-muted);margin-top:1px">Launched Sep 13 Â· 3 audio variants Â· Kiswahili + Kikuyu</div>'
+    + '<div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-top:2px">Nakuru County Push &mdash; Hustler Fund Testimonials</div>'
+    + '<div style="font-size:10px;color:var(--text-muted);margin-top:1px">Launched Sep 13 &middot; 3 audio variants &middot; Kiswahili + Kikuyu</div>'
     + '</div>'
     + '<span class="kc-live-badge"><span style="width:5px;height:5px;border-radius:50%;background:#10B981;display:inline-block"></span>RUNNING</span>'
     + '</div>'
@@ -4584,9 +4584,9 @@ function renderKuraConnect() {
     + '<div class="card" style="padding:0;overflow:hidden"><div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">AUDIO LIBRARY</span><span style="font-size:9px;color:var(--text-muted)">pickup %</span></div>' + audioHTML + '</div>'
     + '<div class="card"><div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">LAUNCH CAMPAIGN</span></div>'
     + '<div style="display:flex;flex-direction:column;gap:8px">'
-    + '<select style="width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);padding:8px;font-size:12px;outline:none;cursor:pointer"><option>Select countyâ€¦</option>' + countyOptions + '</select>'
-    + '<select style="width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);padding:8px;font-size:12px;outline:none;cursor:pointer"><option>Select audio assetâ€¦</option><option>Hustler Fund â€” Testimonial A</option><option>SHA Healthcare â€” Beneficiary</option><option>SGR Benefits â€” Jobs</option><option>Kazi Majuu â€” Youth Story</option></select>'
-    + '<button class="btn-primary" onclick="(function(){showToast(\'Campaign queued for review\',\'success\');addAudit(\'Current User\',\'National Ops Director\',\'kura.launch\',\'Selected county\',\'IVR campaign initiated\');})()">Launch Campaign â†’</button>'
+    + '<select style="width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);padding:8px;font-size:12px;outline:none;cursor:pointer"><option>Select county&hellip;</option>' + countyOptions + '</select>'
+    + '<select style="width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);padding:8px;font-size:12px;outline:none;cursor:pointer"><option>Select audio asset&hellip;</option><option>Hustler Fund &mdash; Testimonial A</option><option>SHA Healthcare &mdash; Beneficiary</option><option>SGR Benefits &mdash; Jobs</option><option>Kazi Majuu &mdash; Youth Story</option></select>'
+    + '<button class="btn-primary" onclick="(function(){showToast(\'Campaign queued for review\',\'success\');addAudit(\'Current User\',\'National Ops Director\',\'kura.launch\',\'Selected county\',\'IVR campaign initiated\');})()">Launch Campaign &rarr;</button>'
     + '</div></div>'
     + '</div>'
 
