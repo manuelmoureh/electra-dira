@@ -922,6 +922,90 @@ body {
 }
 .rh-action-text { font-size:11.5px; color:var(--text-secondary); flex:1; line-height:1.45; }
 .rh-urgency { font-size:8px; font-weight:700; letter-spacing:.06em; padding:2px 5px; border-radius:3px; font-family:var(--font-mono); flex-shrink:0; white-space:nowrap; }
+
+/* ── SIGNAL MODULE ───────────────────────────────────────────────────────── */
+.sig-live-dot { width:8px; height:8px; border-radius:50%; background:#EF4444; flex-shrink:0; animation:sig-pulse 1.8s infinite; }
+@keyframes sig-pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(239,68,68,0.5)} 60%{opacity:.8;box-shadow:0 0 0 5px rgba(239,68,68,0)} }
+.sig-count-pill { font-size:10px; font-weight:700; letter-spacing:.05em; padding:3px 9px; border-radius:12px; font-family:var(--font-mono); }
+.sig-crit-banner {
+  border-radius:10px; padding:14px 18px; margin-bottom:16px;
+  background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.18);
+  border-left:4px solid #EF4444; display:flex; align-items:flex-start; gap:14px;
+}
+.sig-crit-btn { font-size:10px; font-weight:600; padding:5px 12px; border-radius:6px; cursor:pointer; border:1px solid; letter-spacing:.03em; background:transparent; font-family:var(--font-mono); transition:background .12s; }
+.sig-crit-btn:hover { background:rgba(255,255,255,0.06); }
+.sig-layout { display:grid; grid-template-columns:1fr 290px; gap:14px; }
+.sig-filters { display:flex; gap:4px; flex-wrap:wrap; }
+.sig-filter { font-size:10px; font-weight:600; padding:4px 10px; border-radius:20px; cursor:pointer; border:1px solid transparent; color:var(--text-muted); transition:all .12s; font-family:var(--font-mono); letter-spacing:.04em; background:transparent; }
+.sig-filter.active { color:var(--text-primary); background:rgba(124,58,237,0.1); border-color:rgba(124,58,237,0.25); }
+.sig-filter:hover:not(.active) { color:var(--text-secondary); background:rgba(255,255,255,0.04); }
+.sig-feed { display:flex; flex-direction:column; }
+.sig-item { display:flex; align-items:flex-start; gap:10px; padding:11px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .12s; }
+.sig-item:last-child { border-bottom:none; }
+.sig-item:hover { background:rgba(255,255,255,0.03); }
+.sig-item.selected { background:rgba(124,58,237,0.07); border-left:2px solid rgba(124,58,237,0.5); padding-left:12px; }
+.sig-item.incoming { animation:sig-slide-in .5s ease-out; }
+@keyframes sig-slide-in { 0%{opacity:0;transform:translateY(-8px);background:rgba(124,58,237,0.14)} 100%{opacity:1;transform:translateY(0)} }
+.sig-sev-bar { width:3px; flex-shrink:0; align-self:stretch; border-radius:2px; min-height:40px; }
+.sig-item-tag { font-size:8px; font-weight:700; letter-spacing:.07em; padding:2px 5px; border-radius:3px; font-family:var(--font-mono); }
+.sig-status-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.sig-right { display:flex; flex-direction:column; gap:12px; }
+.sig-map-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:3px; padding:10px; }
+.sig-tile { aspect-ratio:1; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:6.5px; font-weight:700; letter-spacing:.02em; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.07); font-family:var(--font-mono); color:rgba(255,255,255,0.3); transition:transform .1s; cursor:default; }
+.sig-tile:hover { transform:scale(1.15); z-index:2; position:relative; }
+.sig-tile.crit { background:rgba(239,68,68,0.18); border-color:rgba(239,68,68,0.45); color:#FCA5A5; }
+.sig-tile.high { background:rgba(245,158,11,0.14); border-color:rgba(245,158,11,0.38); color:#FCD34D; }
+.sig-tile.medium { background:rgba(167,139,250,0.1); border-color:rgba(167,139,250,0.25); color:#C4B5FD; }
+.sig-tile.clear { background:rgba(16,185,129,0.06); border-color:rgba(16,185,129,0.16); color:#6EE7B7; }
+.sig-spark { display:flex; align-items:flex-end; gap:2px; height:44px; padding:0 12px 10px; }
+.sig-spark-bar { flex:1; border-radius:2px 2px 0 0; min-height:2px; }
+.sig-cat-row { display:flex; align-items:center; gap:8px; padding:7px 12px; border-bottom:1px solid var(--border); }
+.sig-cat-row:last-child { border-bottom:none; }
+.sig-cat-label { font-size:11px; color:var(--text-secondary); flex:1; }
+.sig-cat-bar { height:3px; border-radius:2px; }
+.sig-cat-count { font-size:12px; font-weight:700; font-family:var(--font-mono); color:var(--text-primary); min-width:14px; text-align:right; }
+/* Detail slide panel */
+.sig-detail-panel {
+  position:fixed; top:0; right:0; bottom:0; width:370px;
+  background:rgba(8,14,28,0.98); border-left:1px solid rgba(255,255,255,0.1);
+  z-index:300; transform:translateX(100%); transition:transform .22s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column; overflow:hidden;
+  backdrop-filter:blur(12px);
+}
+.sig-detail-panel.open { transform:translateX(0); }
+.sig-dp-header { padding:18px 20px 14px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.sig-dp-close { width:26px; height:26px; border-radius:6px; background:rgba(255,255,255,0.06); border:none; color:var(--text-muted); cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:all .12s; }
+.sig-dp-close:hover { background:rgba(255,255,255,0.1); color:var(--text-primary); }
+.sig-dp-body { flex:1; overflow-y:auto; }
+.sig-dp-section { padding:14px 20px; border-bottom:1px solid var(--border); }
+.sig-dp-label { font-size:9px; font-weight:700; letter-spacing:.08em; color:var(--text-muted); text-transform:uppercase; font-family:var(--font-mono); margin-bottom:6px; }
+.sig-dp-text { font-size:12.5px; color:var(--text-secondary); line-height:1.55; }
+.sig-dp-footer { padding:14px 20px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:7px; flex-shrink:0; }
+.sig-dp-btn { width:100%; padding:9px 14px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid; text-align:left; transition:background .12s; font-family:var(--font-sans); }
+.sig-dp-btn:hover { filter:brightness(1.2); }
+/* Signal layout extras */
+.sig-crit-banner { display:flex; gap:12px; padding:13px 16px; border-radius:10px; background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.22); border-left:3px solid #EF4444; margin-bottom:14px; }
+.sig-crit-btn { padding:6px 12px; border-radius:7px; font-size:11px; font-weight:600; cursor:pointer; background:transparent; transition:background .12s; font-family:var(--font-sans); }
+.sig-crit-btn:hover { filter:brightness(1.3); }
+.sig-count-pill { padding:4px 10px; border-radius:20px; font-size:9px; font-weight:800; letter-spacing:.07em; font-family:var(--font-mono); }
+.sig-filters { display:flex; gap:4px; flex-wrap:wrap; }
+.sig-filter { padding:4px 10px; border-radius:6px; font-size:9px; font-weight:700; letter-spacing:.06em; font-family:var(--font-mono); cursor:pointer; background:transparent; border:1px solid var(--border); color:var(--text-muted); transition:all .12s; }
+.sig-filter:hover { color:var(--text-primary); }
+.sig-filter.active { color:var(--text-primary); background:rgba(124,58,237,0.1); border-color:rgba(124,58,237,0.25); }
+.sig-feed { flex:1; overflow-y:auto; min-height:0; max-height:620px; }
+.sig-item { display:flex; align-items:flex-start; gap:10px; padding:11px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .1s; }
+.sig-item:hover { background:rgba(255,255,255,0.03); }
+.sig-item.selected { background:rgba(124,58,237,0.07); }
+.sig-sev-bar { width:3px; min-width:3px; border-radius:2px; align-self:stretch; margin-top:2px; }
+.sig-item-tag { padding:2px 6px; border-radius:4px; font-size:8px; font-weight:800; letter-spacing:.06em; font-family:var(--font-mono); }
+.sig-status-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.sig-right { display:flex; flex-direction:column; gap:14px; }
+.sig-map-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:2px; padding:8px 10px; }
+.sig-tile { border-radius:3px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); font-size:7px; font-weight:700; font-family:var(--font-mono); color:rgba(148,163,184,0.55); display:flex; align-items:center; justify-content:center; aspect-ratio:1; letter-spacing:.02em; }
+.sig-tile.crit { background:rgba(239,68,68,0.18); border-color:rgba(239,68,68,0.45); color:#FCA5A5; }
+.sig-tile.high { background:rgba(245,158,11,0.14); border-color:rgba(245,158,11,0.38); color:#FCD34D; }
+.sig-tile.medium { background:rgba(124,58,237,0.1); border-color:rgba(124,58,237,0.28); color:#C4B5FD; }
+.sig-tile.clear { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.25); color:#6EE7B7; }
 </style>
 </head>
 <body>
@@ -3140,6 +3224,422 @@ function renderDiraCounty(countyId) {
 // END V2 PART 2A
 
 function renderSignal() {
+  // ── Clear any running simulation
+  if (window._sigInterval) { clearInterval(window._sigInterval); window._sigInterval = null; }
+
+  const now = Date.now();
+  const rT = ts => { const m=Math.floor((now-ts)/60000); return m<1?'just now':m<60?m+'m ago':Math.floor(m/60)+'h ago'; };
+  const sevC = s => s==='CRITICAL'?DC.FLAG:s==='HIGH'?DC.WATCH:s==='MEDIUM'?DC.BRAND_LT:DC.MONITOR;
+  const catC = c => c==='OPP'?DC.OPP:c==='FIELD'?DC.WIN:c==='SENTIMENT'?DC.BRAND_LT:c==='MEDIA'?'#94A3B8':DC.FLAG;
+  const catLabel = c => ({OPP:'Opposition',FIELD:'Field',SENTIMENT:'Sentiment',MEDIA:'Media',SECURITY:'Security'}[c]||c);
+  const sevRank = s => ({CRITICAL:4,HIGH:3,MEDIUM:2,LOW:1}[s]||0);
+
+  // ── Signal intelligence data (Kenya 2027)
+  const SIGS = [
+    { id:'S001', sev:'CRITICAL', cat:'OPP', county:'Nakuru', ward:'Kiamunyi',
+      title:'SHA card misinformation — viral spread',
+      detail:'Opposition-linked accounts spreading false claims that SHA cards are being used to deny anti-UDA voters government services. 12,841 engagements across WhatsApp and TikTok in 3h. Three verified WhatsApp group clusters identified.',
+      source:'Social Monitor · Nakuru Ops', ts:now-20*60000, status:'active',
+      action:'Deploy SHA counter-narrative to Nakuru WhatsApp coordinators immediately. Activate Agnes Wambui testimonial IVR. Escalate to Amplifier module.' },
+    { id:'S002', sev:'CRITICAL', cat:'MEDIA', county:'Nairobi', ward:'National',
+      title:'Nation Media attack piece — healthcare funding',
+      detail:'Nation TV preparing segment questioning UDA healthcare budget allocation. Expected broadcast 19:00 EAT today. Journalist: David Mugo. Source confirmed by two independent contacts.',
+      source:'Media Monitor', ts:now-45*60000, status:'active',
+      action:'Brief communications team immediately. Prepare rapid response with CS Mutahi Kagwe data points. Push 3 positive SHA testimonials at 18:00 to pre-empt.' },
+    { id:'S003', sev:'HIGH', cat:'FIELD', county:'Nakuru', ward:'Multiple',
+      title:'4 silent agents — Nakuru County',
+      detail:'Agents in Menengai West, Rongai, Gilgil, and Naivasha have not filed field reports in 6+ hours. Auto-monitor flagged at 08:42 EAT. Coverage gap risk: ~18,400 voters uncontacted.',
+      source:'I-Force · Auto-Monitor', ts:now-3*3600000, status:'active',
+      action:'Regional coordinator: immediate contact via alternate number. Redeploy 2 backup agents from Molo if unreachable within 60 minutes.' },
+    { id:'S004', sev:'HIGH', cat:'FIELD', county:'Nakuru', ward:'Kiamunyi',
+      title:'2 polling stations uncovered — Kiamunyi',
+      detail:'St. Joseph Primary (3,400 registered) and Kiamunyi Market polling stations (4,800 registered) have no assigned GOTV agents. Coverage audit flagged at 11:20 EAT.',
+      source:'Kura Connect · Coverage Audit', ts:now-60*60000, status:'active',
+      action:'Deploy from overflow pool immediately. Priority: Kiamunyi Market (4,800 voters, WATCH ward).' },
+    { id:'S005', sev:'HIGH', cat:'OPP', county:'Mombasa', ward:'Mvita',
+      title:'Azimio rally announced — Mama Ngina Waterfront',
+      detail:'Azimio coalition announcing 15,000-person rally at Mama Ngina Waterfront, Saturday 22 September. Speakers: Raila, Wetangula. Potential narrative shift for Coast region.',
+      source:'Opposition Monitor', ts:now-2*3600000, status:'acknowledged',
+      action:'Activate Mombasa IVR batch 24h before rally. Brief Coast regional coordinator on counter-narrative points.' },
+    { id:'S006', sev:'HIGH', cat:'SECURITY', county:'Nairobi', ward:'Kibra',
+      title:'Voter intimidation reports — Kibra ward',
+      detail:'3 independent reports of residents being warned not to vote UDA in Kibra DC ward. Agent KBR-07 corroborating with field visit. Reports submitted: 09:14, 10:02, 10:47 EAT.',
+      source:'Agent Report · KBR-07', ts:now-90*60000, status:'active',
+      action:'Escalate to regional security coordinator. Document all reports. Submit formal notification to IEBC if agent KBR-07 confirms.' },
+    { id:'S007', sev:'MEDIUM', cat:'SENTIMENT', county:'Kisumu', ward:'Kisumu Central',
+      title:'Youth sentiment dip — Kisumu County',
+      detail:'Wasikie tracker records 8% sentiment drop among 18–35 demographic in Kisumu over 72h. Primary driver: cost-of-living social posts (boda boda fuel, unga prices). 2,340 social mentions analysed.',
+      source:'Wasikie · Sentiment Engine', ts:now-4*3600000, status:'active',
+      action:'Deploy targeted youth messaging via Kisumu WhatsApp coordinators. Consider Kisumu University influencer activation.' },
+    { id:'S008', sev:'MEDIUM', cat:'FIELD', county:'Kakamega', ward:'Kakamega Central',
+      title:'Coverage gap — Sheywe & Butsotso wards',
+      detail:'17% below coverage target in Kakamega Central. 2,400 voters in Sheywe and Butsotso sub-wards without agent contact in 5 days. Western region flagged.',
+      source:'I-Force · Coverage Audit', ts:now-5*3600000, status:'active',
+      action:'Request Western region coordinator dispatch 2 agents from Bungoma surplus pool.' },
+    { id:'S009', sev:'MEDIUM', cat:'SENTIMENT', county:'Nakuru', ward:'Njoro',
+      title:'Teacher WhatsApp group — negative tone',
+      detail:'Njoro Teachers WhatsApp group (47 members, high-influence peer network) showing sustained negativity regarding TSC pay grades and CBC implementation. 14 negative posts in 48h.',
+      source:'Social Monitor', ts:now-3*3600000, status:'acknowledged',
+      action:'Brief Njoro regional coordinator to engage group admin directly. Schedule teacher-focused IVR for Monday 23 September.' },
+    { id:'S010', sev:'LOW', cat:'SENTIMENT', county:'Uasin Gishu', ward:'Kapsabet',
+      title:'IVR batch complete — positive sentiment shift',
+      detail:'Uasin Gishu IVR batch completed: 8,441 answered of 11,200 deployed (75.4% pickup). Post-call sentiment tracker shows +8% shift vs previous cycle. Healthcare framing performing above benchmark.',
+      source:'Amplifier · IVR Engine', ts:now-2.5*3600000, status:'resolved',
+      action:null },
+    { id:'S011', sev:'LOW', cat:'FIELD', county:'Kiambu', ward:'Ruiru',
+      title:'Agent onboarding complete — Kiambu East',
+      detail:'12 new agents successfully onboarded and deployed in Thika and Ruiru wards. Kiambu County coverage now at 89% (up from 74%). Agents active as of 09:00 EAT.',
+      source:'I-Force Dashboard', ts:now-6*3600000, status:'resolved',
+      action:null },
+  ];
+
+  // ── Sim signals (auto-arrive during demo)
+  const SIM_POOL = [
+    { sev:'HIGH', cat:'OPP', county:'Kiambu', ward:'Thika',
+      title:'Opposition pamphlet distribution — Thika town',
+      detail:'Field agent reports opposition leaflets being distributed outside Thika market. Content: SHA card cancellation claims.',
+      source:'Agent Report · KBU-09', action:'Deploy field agent to document. Counter with SHA success story flyers via Kiambu coordinator.' },
+    { sev:'MEDIUM', cat:'SENTIMENT', county:'Machakos', ward:'Mavoko',
+      title:'Sentiment spike — cost of living trending',
+      detail:'#UngaGhali hashtag gaining traction in Machakos. 840 mentions in 2h. Linked to Nairobi wholesale price increase.',
+      source:'Social Monitor', action:'Activate Machakos cost-of-living response IVR batch. Push subsidy programme messaging.' },
+    { sev:'HIGH', cat:'SECURITY', county:'Mombasa', ward:'Changamwe',
+      title:'Agent harassment report — Changamwe',
+      detail:'Agent MBS-11 reports verbal intimidation while conducting voter registration check in Changamwe ward.',
+      source:'Agent Report · MBS-11', action:'Contact agent. Brief regional security coordinator. Pair agent with companion for remaining canvassing.' },
+  ];
+
+  let activeFilter = 'all';
+  let detailId = null;
+  let simIdx = 0;
+
+  const getFiltered = () => {
+    if (activeFilter==='active') return SIGS.filter(s=>s.status!=='resolved');
+    if (activeFilter==='critical') return SIGS.filter(s=>s.sev==='CRITICAL');
+    if (activeFilter==='high') return SIGS.filter(s=>s.sev==='HIGH'&&s.status!=='resolved');
+    return SIGS;
+  };
+
+  const critActive = SIGS.filter(s=>s.sev==='CRITICAL'&&s.status==='active');
+  const highActive = SIGS.filter(s=>s.sev==='HIGH'&&s.status!=='resolved');
+  const medActive  = SIGS.filter(s=>s.sev==='MEDIUM'&&s.status!=='resolved');
+  const resolved   = SIGS.filter(s=>s.status==='resolved');
+  const topCrit    = critActive[0];
+
+  // ── Category counts
+  const catCounts = {};
+  SIGS.filter(s=>s.status!=='resolved').forEach(s=>{ catCounts[s.cat]=(catCounts[s.cat]||0)+1; });
+  const maxCat = Math.max(...Object.values(catCounts),1);
+
+  // ── County signal status map
+  const countyStatus = {};
+  SIGS.forEach(s=>{
+    const cur = countyStatus[s.county];
+    const rank = s.status==='resolved'?0:sevRank(s.sev);
+    const curRank = cur==='CRITICAL'?4:cur==='HIGH'?3:cur==='MEDIUM'?2:cur==='RESOLVED'?1:0;
+    if (rank > curRank) countyStatus[s.county] = s.status==='resolved'?'RESOLVED':s.sev;
+  });
+
+  // ── County grid (47 counties, rough geographic order)
+  const GEO = [
+    'Turkana','West Pokot','Samburu','Marsabit','Mandera','','','',
+    'Trans Nzoia','Uasin Gishu','Elgeyo','Laikipia','Isiolo','Wajir','','',
+    'Bungoma','Nandi','Baringo','Nyeri','Meru','Tharaka','Garissa','',
+    'Kakamega','Vihiga','Nakuru','Murang\'a','Embu','Kitui','','',
+    'Siaya','Kisumu','Kericho','Kirinyaga','Machakos','Makueni','','',
+    'Homa Bay','Migori','Bomet','Narok','Kajiado','Nairobi','','',
+    'Kisii','Nyamira','','','','Kwale','Kilifi','Mombasa',
+    '','','','','Lamu','Tana River','','',
+  ];
+  // Counties in NATIONAL_COUNTIES not in GEO grid - add remainder
+  const remaining = NATIONAL_COUNTIES.map(c=>c.name).filter(n=>!GEO.includes(n));
+
+  const tileHTML = GEO.map(name=>{
+    if (!name) return `<div></div>`;
+    const st = countyStatus[name];
+    const cls = st==='CRITICAL'?'crit':st==='HIGH'?'high':st==='MEDIUM'?'medium':st==='RESOLVED'?'clear':'';
+    const abbr = name.replace(/['\s-]/g,'').slice(0,4).toUpperCase();
+    return `<div class="sig-tile ${cls}" title="${name}: ${st||'No signals'}">${abbr}</div>`;
+  }).join('');
+
+  // ── Velocity sparkline (last 24h simulated)
+  const vel = [1,0,2,1,1,0,1,2,1,3,2,4,3,5,4,5,4,6,5,4,7,6,5,4];
+  const maxV = Math.max(...vel,1);
+  const sparkHTML = vel.map((v,i)=>{
+    const pct = Math.max(4,(v/maxV)*100);
+    const isNow = i===vel.length-1;
+    const isHot = v>=5;
+    const bg = isNow?'rgba(239,68,68,0.8)':isHot?'rgba(245,158,11,0.5)':'rgba(124,58,237,0.28)';
+    return `<div class="sig-spark-bar" style="height:${pct}%;background:${bg}"></div>`;
+  }).join('');
+
+  // ── Feed item HTML
+  const feedItemHTML = s => `
+    <div class="sig-item${detailId===s.id?' selected':''}" data-sid="${s.id}">
+      <div class="sig-sev-bar" style="background:${sevC(s.sev)};opacity:${s.status==='resolved'?0.35:0.9}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;flex-wrap:wrap">
+          <span class="sig-item-tag" style="color:${sevC(s.sev)};background:${sevC(s.sev)}1A">${s.sev}</span>
+          <span class="sig-item-tag" style="color:${catC(s.cat)};background:${catC(s.cat)}15">${catLabel(s.cat).toUpperCase()}</span>
+          <span style="font-size:9px;color:rgba(148,163,184,0.55);font-family:var(--font-mono)">· ${s.county}</span>
+          ${s.status==='resolved'?`<span style="font-size:8px;color:${DC.WIN};font-family:var(--font-mono);margin-left:auto">RESOLVED</span>`:''}
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:${s.status==='resolved'?'var(--text-muted)':'var(--text-primary)'};line-height:1.3;margin-bottom:3px">${s.title}</div>
+        <div style="font-size:10px;color:var(--text-muted)">${s.source} · ${rT(s.ts)}</div>
+      </div>
+      <div class="sig-status-dot" style="background:${s.status==='resolved'?DC.WIN:s.status==='acknowledged'?DC.WATCH:DC.FLAG};opacity:${s.status==='resolved'?0.45:0.85}"></div>
+    </div>`;
+
+  // ── Full page HTML
+  document.getElementById('page-signal').innerHTML = `
+    <!-- Header -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+          <div class="sig-live-dot"></div>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.08em;color:rgba(239,68,68,0.85);font-family:var(--font-mono)">LIVE</span>
+          <span style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono)">· 47 counties · EAT Kenya</span>
+        </div>
+        <h2 style="margin:0 0 3px;font-size:22px;font-weight:700;letter-spacing:-.02em">Signal Intelligence</h2>
+        <div style="font-size:11.5px;color:var(--text-muted)">Campaign threat monitor &amp; field intelligence feed</div>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+        <div class="sig-count-pill" style="color:${DC.FLAG};background:${DC.FLAG}14;border:1px solid ${DC.FLAG}2A">${critActive.length} CRITICAL</div>
+        <div class="sig-count-pill" style="color:${DC.WATCH};background:${DC.WATCH}12;border:1px solid ${DC.WATCH}28">${highActive.length} HIGH</div>
+        <div class="sig-count-pill" style="color:${DC.BRAND_LT};background:${DC.BRAND_LT}12;border:1px solid ${DC.BRAND_LT}28">${medActive.length} MED</div>
+        <div class="sig-count-pill" style="color:${DC.WIN};background:${DC.WIN}0F;border:1px solid ${DC.WIN}22">${resolved.length} RESOLVED</div>
+      </div>
+    </div>
+
+    <!-- Priority banner -->
+    ${topCrit ? `
+    <div class="sig-crit-banner">
+      <div class="sig-live-dot" style="margin-top:3px;flex-shrink:0"></div>
+      <div style="flex:1">
+        <div style="font-size:9px;font-weight:800;letter-spacing:.09em;color:${DC.FLAG};font-family:var(--font-mono);margin-bottom:5px">PRIORITY · ${topCrit.cat} · ${topCrit.county.toUpperCase()}</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:5px;line-height:1.3">${topCrit.title}</div>
+        <div style="font-size:12px;color:rgba(203,213,225,0.75);line-height:1.45;margin-bottom:10px">${topCrit.action}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="sig-crit-btn" style="color:${DC.FLAG};border-color:${DC.FLAG}44" data-view="${topCrit.id}">View Full Intel</button>
+          <button class="sig-crit-btn" style="color:${DC.BRAND_LT};border-color:${DC.BRAND_LT}44" onclick="navigate('amplifier')">→ Escalate to Amplifier</button>
+        </div>
+      </div>
+    </div>` : `
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);margin-bottom:16px">
+      <div style="width:8px;height:8px;border-radius:50%;background:${DC.WIN}"></div>
+      <span style="font-size:13px;font-weight:600;color:${DC.WIN}">All critical alerts resolved</span>
+      <span style="font-size:11px;color:var(--text-muted)">· All monitored systems nominal</span>
+    </div>`}
+
+    <!-- Main 2-col layout -->
+    <div class="sig-layout">
+
+      <!-- ── LEFT: Feed -->
+      <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:11px 14px 9px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <h3 style="margin:0;font-size:13px">Intelligence Feed</h3>
+          <div class="sig-filters">
+            <button class="sig-filter active" data-filter="all">ALL (${SIGS.length})</button>
+            <button class="sig-filter" data-filter="active">ACTIVE (${SIGS.filter(s=>s.status!=='resolved').length})</button>
+            <button class="sig-filter" data-filter="critical">CRITICAL (${critActive.length})</button>
+            <button class="sig-filter" data-filter="high">HIGH (${highActive.length})</button>
+          </div>
+        </div>
+        <div id="sig-feed" class="sig-feed">${SIGS.map(feedItemHTML).join('')}</div>
+      </div>
+
+      <!-- ── RIGHT: Map + Velocity + Categories -->
+      <div class="sig-right">
+
+        <!-- County signal map -->
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:10px 12px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0;font-size:12px">Signal Geography</h3>
+            <span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">47 COUNTIES</span>
+          </div>
+          <div class="sig-map-grid">${tileHTML}</div>
+          <div style="display:flex;gap:10px;padding:2px 10px 10px;flex-wrap:wrap">
+            ${[['crit','Critical'],['high','High'],['medium','Medium'],['clear','Resolved']].map(([cls,lbl])=>`
+            <div style="display:flex;align-items:center;gap:4px">
+              <div class="sig-tile ${cls}" style="width:10px;height:10px;font-size:0;flex-shrink:0;aspect-ratio:auto;border-radius:2px"></div>
+              <span style="font-size:9px;color:var(--text-muted)">${lbl}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- Signal velocity -->
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:10px 12px 6px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0;font-size:12px">Signal Velocity</h3>
+            <span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">LAST 24H</span>
+          </div>
+          <div class="sig-spark" style="padding:8px 10px 0">${sparkHTML}</div>
+          <div style="display:flex;justify-content:space-between;padding:4px 12px 10px">
+            <span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">24H AGO</span>
+            <span style="font-size:9px;color:${DC.FLAG};font-family:var(--font-mono)">NOW ▲</span>
+          </div>
+        </div>
+
+        <!-- Category breakdown -->
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:10px 12px 8px;border-bottom:1px solid var(--border)">
+            <h3 style="margin:0;font-size:12px">By Category</h3>
+          </div>
+          ${Object.entries(catCounts).sort((a,b)=>b[1]-a[1]).map(([cat,cnt])=>`
+          <div class="sig-cat-row">
+            <div style="width:6px;height:6px;border-radius:50%;background:${catC(cat)};flex-shrink:0"></div>
+            <div class="sig-cat-label">${catLabel(cat)}</div>
+            <div style="width:60px;height:3px;background:rgba(255,255,255,0.07);border-radius:2px;flex-shrink:0">
+              <div class="sig-cat-bar" style="width:${Math.round((cnt/maxCat)*100)}%;background:${catC(cat)}66"></div>
+            </div>
+            <div class="sig-cat-count">${cnt}</div>
+          </div>`).join('')}
+        </div>
+
+      </div><!-- /.sig-right -->
+    </div><!-- /.sig-layout -->
+
+    <!-- Detail panel (hidden until signal clicked) -->
+    <div class="sig-detail-panel" id="sig-dp"></div>
+  `;
+
+  // ── Show detail panel
+  const showDetail = (sid) => {
+    detailId = sid;
+    const sig = SIGS.find(s=>s.id===sid);
+    if (!sig) return;
+    document.querySelectorAll('.sig-item').forEach(el=>el.classList.toggle('selected', el.dataset.sid===sid));
+    const dp = document.getElementById('sig-dp');
+    dp.innerHTML = `
+      <div class="sig-dp-header">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+          <div>
+            <div style="display:flex;gap:5px;margin-bottom:7px">
+              <span class="sig-item-tag" style="color:${sevC(sig.sev)};background:${sevC(sig.sev)}1A;font-size:9px;padding:2px 7px">${sig.sev}</span>
+              <span class="sig-item-tag" style="color:${catC(sig.cat)};background:${catC(sig.cat)}15;font-size:9px;padding:2px 7px">${catLabel(sig.cat).toUpperCase()}</span>
+            </div>
+            <div style="font-size:15px;font-weight:700;color:var(--text-primary);line-height:1.25;margin-bottom:5px">${sig.title}</div>
+            <div style="font-size:10px;color:var(--text-muted)">${sig.county}${sig.ward&&sig.ward!=='National'?' · '+sig.ward:''} · ${rT(sig.ts)}</div>
+          </div>
+          <button class="sig-dp-close" id="sig-dp-close">✕</button>
+        </div>
+      </div>
+      <div class="sig-dp-body">
+        <div class="sig-dp-section">
+          <div class="sig-dp-label">Intelligence Detail</div>
+          <div class="sig-dp-text">${sig.detail}</div>
+        </div>
+        <div class="sig-dp-section">
+          <div class="sig-dp-label">Source</div>
+          <div class="sig-dp-text">${sig.source}</div>
+        </div>
+        ${sig.action?`<div class="sig-dp-section">
+          <div class="sig-dp-label">Recommended Action</div>
+          <div class="sig-dp-text" style="color:rgba(203,213,225,0.9)">${sig.action}</div>
+        </div>`:''}
+        <div class="sig-dp-section" style="border-bottom:none">
+          <div class="sig-dp-label">Status</div>
+          <div style="display:flex;align-items:center;gap:7px;margin-top:2px">
+            <div style="width:7px;height:7px;border-radius:50%;background:${sig.status==='resolved'?DC.WIN:sig.status==='acknowledged'?DC.WATCH:DC.FLAG}"></div>
+            <span style="font-size:13px;font-weight:600;color:var(--text-primary);text-transform:capitalize">${sig.status}</span>
+          </div>
+        </div>
+      </div>
+      <div class="sig-dp-footer">
+        ${sig.status==='active'?`
+          <button class="sig-dp-btn" style="color:${DC.WATCH};border-color:${DC.WATCH}30;background:${DC.WATCH}0A" data-action="ack" data-sid="${sig.id}">Mark Acknowledged</button>
+          <button class="sig-dp-btn" style="color:${DC.WIN};border-color:${DC.WIN}30;background:${DC.WIN}0A" data-action="res" data-sid="${sig.id}">Mark Resolved</button>`:''}
+        ${sig.action?`<button class="sig-dp-btn" style="color:${DC.BRAND_LT};border-color:${DC.BRAND_LT}30;background:${DC.BRAND_LT}0A" onclick="navigate('amplifier')">→ Escalate to Amplifier</button>`:''}
+      </div>
+    `;
+    dp.classList.add('open');
+    document.getElementById('sig-dp-close').addEventListener('click',()=>{
+      dp.classList.remove('open');
+      detailId = null;
+      document.querySelectorAll('.sig-item').forEach(el=>el.classList.remove('selected'));
+    });
+    dp.querySelectorAll('[data-action]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const act = btn.dataset.action;
+        const s = SIGS.find(x=>x.id===btn.dataset.sid);
+        if (!s) return;
+        s.status = act==='ack'?'acknowledged':'resolved';
+        showToast(act==='ack'?`Signal acknowledged: ${s.title.slice(0,40)}…`:`Signal resolved: ${s.title.slice(0,40)}…`,'success');
+        dp.classList.remove('open');
+        detailId = null;
+        document.getElementById('sig-feed').innerHTML = getFiltered().map(feedItemHTML).join('');
+        attachFeedHandlers();
+      });
+    });
+  };
+
+  // ── Attach feed item click handlers
+  const attachFeedHandlers = () => {
+    document.querySelectorAll('#sig-feed .sig-item').forEach(el=>{
+      el.addEventListener('click',()=>showDetail(el.dataset.sid));
+    });
+  };
+
+  // ── Attach filter buttons
+  document.querySelectorAll('.sig-filter').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      activeFilter = btn.dataset.filter;
+      document.querySelectorAll('.sig-filter').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('sig-feed').innerHTML = getFiltered().map(feedItemHTML).join('');
+      attachFeedHandlers();
+    });
+  });
+
+  // ── Priority banner "View" button
+  document.querySelectorAll('[data-view]').forEach(btn=>{
+    btn.addEventListener('click',()=>showDetail(btn.dataset.view));
+  });
+
+  attachFeedHandlers();
+
+  // ── Auto-simulation: new signal arrives every 28s (demo "live" feel)
+  window._sigInterval = setInterval(()=>{
+    if (simIdx >= SIM_POOL.length) return;
+    const t = SIM_POOL[simIdx++];
+    const newSig = { ...t, id:`SIM${Date.now()}`, ts:Date.now(), status:'active' };
+    SIGS.unshift(newSig);
+    const feed = document.getElementById('sig-feed');
+    if (!feed) { clearInterval(window._sigInterval); return; }
+    const div = document.createElement('div');
+    div.className = 'sig-item incoming';
+    div.dataset.sid = newSig.id;
+    div.innerHTML = `
+      <div class="sig-sev-bar" style="background:${sevC(newSig.sev)};opacity:.9"></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;flex-wrap:wrap">
+          <span class="sig-item-tag" style="color:${sevC(newSig.sev)};background:${sevC(newSig.sev)}1A">${newSig.sev}</span>
+          <span class="sig-item-tag" style="color:${catC(newSig.cat)};background:${catC(newSig.cat)}15">${catLabel(newSig.cat).toUpperCase()}</span>
+          <span style="font-size:9px;color:rgba(148,163,184,0.55);font-family:var(--font-mono)">· ${newSig.county}</span>
+          <span style="font-size:8px;color:${DC.BRAND_LT};font-family:var(--font-mono);margin-left:auto;animation:sig-pulse .8s 3">NEW</span>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:var(--text-primary);line-height:1.3;margin-bottom:3px">${newSig.title}</div>
+        <div style="font-size:10px;color:var(--text-muted)">${newSig.source} · just now</div>
+      </div>
+      <div class="sig-status-dot" style="background:${DC.FLAG};opacity:.85"></div>
+    `;
+    div.addEventListener('click',()=>showDetail(newSig.id));
+    if (activeFilter==='all'||activeFilter==='active') feed.prepend(div);
+    showToast(`New signal: ${newSig.title.slice(0,45)}…`,'warning');
+  }, 28000);
+}
+
+function respondToSignal(signalId) {
+  const sig = SIGNALS.find(s=>s.id===signalId);
+  if(sig) {
+    addAudit('Current User','National Ops Director','signal.response.approved',signalId,`Approved AI response for signal: ${sig.content.slice(0,60)}...`);
+    showToast('Response approved and queued for deployment','success');
+    setTimeout(()=>showToast('✓ Response deployed via Amplifier to '+sig.location,'success'),2000);
+  }
+}
+
+function _OLD_renderSignal_UNUSED() {
+  return; // deprecated — replaced by new renderSignal()
   const sorted = [...SIGNALS].sort((a,b)=>{
     const order={CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3};
     return (order[a.threat]??4)-(order[b.threat]??4);
@@ -3276,15 +3776,6 @@ function renderSignal() {
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#94A3B8',font:{size:11},boxWidth:10}},tooltip:{mode:'index',intersect:false,backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:10}}}}}
     });
   },80);
-}
-
-function respondToSignal(signalId) {
-  const sig = SIGNALS.find(s=>s.id===signalId);
-  if(sig) {
-    addAudit('Current User','National Ops Director','signal.response.approved',signalId,`Approved AI response for signal: ${sig.content.slice(0,60)}...`);
-    showToast('Response approved and queued for deployment','success');
-    setTimeout(()=>showToast('✓ Response deployed via Amplifier to '+sig.location,'success'),2000);
-  }
 }
 
 function renderIForce() {
