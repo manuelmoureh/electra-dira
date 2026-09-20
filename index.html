@@ -1264,6 +1264,21 @@ body {
 .dir-county-name { font-size:11px; font-weight:600; color:var(--text-primary); }
 .dir-county-tier { font-size:8px; font-weight:800; padding:2px 5px; border-radius:3px; letter-spacing:.06em; flex-shrink:0; }
 .dir-station-row { display:flex; align-items:center; gap:10px; padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+
+/* Rungu — Command Dashboard */
+.rng-layout { display:grid; grid-template-columns:1fr 280px; gap:14px; align-items:start; }
+.rng-chart-pair { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.rng-health-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; }
+.rng-health-item { display:flex; align-items:center; gap:7px; padding:6px 8px; border-radius:6px; background:rgba(255,255,255,0.02); }
+.rng-health-name { font-size:10px; font-weight:600; color:var(--text-primary); }
+.rng-event-row { display:flex; align-items:flex-start; gap:8px; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.rng-event-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.rng-event-msg { font-size:10px; color:var(--text-secondary); flex:1; line-height:1.4; }
+.rng-event-time { font-size:9px; color:var(--text-muted); flex-shrink:0; font-family:var(--font-mono); }
+.rng-action-row { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.rng-action-num { width:18px; height:18px; border-radius:50%; background:rgba(124,58,237,0.15); color:#A78BFA; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.rng-action-text { font-size:11px; color:var(--text-primary); line-height:1.4; flex:1; }
+.rng-urg { font-size:8px; font-weight:800; padding:2px 5px; border-radius:3px; letter-spacing:.06em; flex-shrink:0; margin-top:1px; }
 </style>
 </head>
 <body>
@@ -3186,16 +3201,19 @@ function renderHome() {
 }
 
 function renderRungu() {
-  const openAlerts = STATE.alerts.filter(a=>a.status==='open');
-  const critAlerts = openAlerts.filter(a=>a.severity==='CRITICAL'||a.severity==='SYSTEM_FAILURE');
-  const totalVoters = COUNTIES.reduce((s,c)=>s+c.reg_voters,0);
-  const totalAgents = COUNTIES.reduce((s,c)=>s+c.agents,0);
-  const avgCoverage = (COUNTIES.reduce((s,c)=>s+c.coverage,0)/COUNTIES.length).toFixed(1);
-  const avgScore = (COUNTIES.reduce((s,c)=>s+c.score,0)/COUNTIES.length).toFixed(1);
-  const winCount = COUNTIES.filter(c=>c.tier==='WIN').length;
-  const growCount = COUNTIES.filter(c=>c.tier==='GROW').length;
+  destroyChart('coverage-trend-chart');
+  destroyChart('tier-donut-chart');
 
-  const moduleHealth = [
+  var openAlerts = STATE.alerts.filter(function(a){return a.status==='open';});
+  var critAlerts = openAlerts.filter(function(a){return a.severity==='CRITICAL'||a.severity==='SYSTEM_FAILURE';});
+  var totalVoters = COUNTIES.reduce(function(s,c){return s+c.reg_voters;},0);
+  var totalAgents = COUNTIES.reduce(function(s,c){return s+c.agents;},0);
+  var avgCoverage = (COUNTIES.reduce(function(s,c){return s+c.coverage;},0)/COUNTIES.length).toFixed(1);
+  var avgScore = (COUNTIES.reduce(function(s,c){return s+c.score;},0)/COUNTIES.length).toFixed(1);
+  var winCount = COUNTIES.filter(function(c){return c.tier==='WIN';}).length;
+  var growCount = COUNTIES.filter(function(c){return c.tier==='GROW';}).length;
+
+  var moduleHealth = [
     {name:'Rungu',sub:'Command',status:'healthy',uptime:'99.9%'},
     {name:'Signal',sub:'Intel',status:'healthy',uptime:'100%'},
     {name:'I-Force',sub:'Agents',status:'healthy',uptime:'99.7%'},
@@ -3210,160 +3228,175 @@ function renderRungu() {
     {name:'Audit',sub:'Trail',status:'healthy',uptime:'100%'}
   ];
 
-  const recentEvents = [
-    {color:'#EF4444',msg:'CRITICAL: SHA card spike in Nakuru — 12,841 engagements',time:'20m ago'},
-    {color:'#10B981',msg:'47 converts: James Mwangi, Kiamunyi ward',time:'35m ago'},
-    {color:'#F59E0B',msg:'WARNING: 2 polling stations uncovered in Kiamunyi',time:'1h ago'},
-    {color:'#3B82F6',msg:'IVR batch complete: Nakuru County 32,441 answered',time:'2h ago'},
-    {color:'#10B981',msg:'Uasin Gishu IVR: +8% sentiment shift',time:'2.5h ago'},
-    {color:'#F59E0B',msg:'4 silent agents flagged in Nakuru county',time:'3h ago'}
+  var recentEvents = [
+    {color:'#EF4444',msg:'CRITICAL: SHA card spike in Nakuru &mdash; 12,841 engagements',time:'20m'},
+    {color:'#10B981',msg:'47 converts: James Mwangi, Kiamunyi ward',time:'35m'},
+    {color:'#F59E0B',msg:'WARNING: 2 polling stations uncovered in Kiamunyi',time:'1h'},
+    {color:'#2DD4BF',msg:'IVR batch complete: Nakuru County 32,441 answered',time:'2h'},
+    {color:'#10B981',msg:'Uasin Gishu IVR: +8% sentiment shift',time:'2.5h'},
+    {color:'#F59E0B',msg:'4 silent agents flagged in Nakuru county',time:'3h'}
   ];
 
-  const actions = [
-    {text:'Deploy SHA counter-narrative to Nakuru WhatsApp groups',urgency:'critical'},
-    {text:'Redeploy 4 agents from Menengai West to Kiamunyi Ward',urgency:'high'},
-    {text:'Approve Agnes Wambui testimonial story for IVR deployment',urgency:'medium'},
-    {text:'Schedule Nakuru East follow-up IVR batch — healthcare focus',urgency:'medium'},
-    {text:'Review Njoro teacher WhatsApp group response plan',urgency:'high'}
+  var actions = [
+    {text:'Deploy SHA counter-narrative to Nakuru WhatsApp groups',urg:'CRITICAL',urgC:'#EF4444'},
+    {text:'Redeploy 4 agents from Menengai West to Kiamunyi Ward',urg:'HIGH',urgC:'#F97316'},
+    {text:'Approve Agnes Wambui testimonial story for IVR deployment',urg:'MEDIUM',urgC:'#F59E0B'},
+    {text:'Schedule Nakuru East follow-up IVR batch &mdash; healthcare focus',urg:'MEDIUM',urgC:'#F59E0B'},
+    {text:'Review Njoro teacher WhatsApp group response plan',urg:'HIGH',urgC:'#F97316'}
   ];
 
-  document.getElementById('page-rungu').innerHTML = `
-    <div class="page-header">
-      <h1>Rungu Command</h1>
-      <div class="page-sub">
-        <span class="live-indicator">LIVE</span>
-        <span>National Operations Dashboard · Kenya 2027</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${winCount} WIN · ${growCount} GROW counties</span>
-      </div>
-    </div>
+  var TIERS = ['WIN','GROW','HOLD','DEFEND','WATCH'];
 
-    <div class="kpi-grid">
-      <div class="kpi-card accent-violet">
-        <div class="kpi-icon" style="color:#8B5CF6">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <div class="kpi-label">National Coverage</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#8B5CF6,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${avgCoverage}%</div>
-        <div class="kpi-sub">${fmt(totalVoters)} registered voters</div>
-        <div class="kpi-trend up">↑ +2.1% this week</div>
-      </div>
-      <div class="kpi-card accent-blue">
-        <div class="kpi-icon" style="color:#3B82F6">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div class="kpi-label">Active Agents</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#3B82F6,#2DD4BF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(totalAgents)}</div>
-        <div class="kpi-sub">Across 47 counties</div>
-        <div class="kpi-trend up">↑ +89 deployed this week</div>
-      </div>
-      <div class="kpi-card accent-teal">
-        <div class="kpi-icon" style="color:#2DD4BF">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div class="kpi-label">Avg Support Score</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#2DD4BF,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${avgScore}</div>
-        <div class="kpi-sub">Target: 65.0 by election day</div>
-        <div class="kpi-trend up">↑ +1.4 this month</div>
-      </div>
-      <div class="kpi-card ${critAlerts.length>0?'accent-amber':''}">
-        <div class="kpi-icon" style="color:${openAlerts.length>0?'#EF4444':'#10B981'}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-        <div class="kpi-label">Active Alerts</div>
-        <div class="kpi-value" style="color:${openAlerts.length>0?'#EF4444':'#10B981'}">${openAlerts.length}</div>
-        <div class="kpi-sub">${critAlerts.length} critical · ${openAlerts.length-critAlerts.length} warnings</div>
-        <div class="kpi-trend ${openAlerts.length>0?'down':'up'}">${openAlerts.length>0?'⚠ Requires attention':'✓ All systems clear'}</div>
-      </div>
-    </div>
+  var statsHTML = '';
+  var STATS = [
+    {label:'National Coverage', val:avgCoverage+'%', sub:fmt(totalVoters)+' registered', cls:'is-brand', vc:'#A78BFA'},
+    {label:'Active Agents', val:fmt(totalAgents), sub:'across 47 counties', cls:'is-pool', vc:'#2DD4BF'},
+    {label:'Avg Support Score', val:avgScore, sub:'target 65.0 by election day', cls:'is-win', vc:'#10B981'},
+    {label:'Active Alerts', val:openAlerts.length, sub:critAlerts.length+' critical &middot; '+(openAlerts.length-critAlerts.length)+' warnings', cls:openAlerts.length>0?'is-flag':'is-win', vc:openAlerts.length>0?'#EF4444':'#10B981'}
+  ];
+  for (var si = 0; si < STATS.length; si++) {
+    var s = STATS[si];
+    statsHTML += '<div class="if-stat ' + s.cls + '"><div class="if-stat-label">' + s.label + '</div>'
+      + '<div class="if-stat-val" style="color:' + s.vc + '">' + s.val + '</div>'
+      + '<div class="if-stat-sub">' + s.sub + '</div></div>';
+  }
 
-    <div class="flex-row" style="margin-bottom:24px">
-      <div class="col-1-4 flex-col">
-        <div class="grid-2" style="margin-bottom:16px">
-          <div class="card">
-            <div class="card-header"><h3>Coverage Trend</h3><span style="font-size:11px;color:var(--text-muted)">10 weeks</span></div>
-            <div class="chart-container" style="height:160px"><canvas id="coverage-trend-chart"></canvas></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><h3>County Tiers</h3><span style="font-size:11px;color:var(--text-muted)">47 counties</span></div>
-            <div class="chart-container" style="height:160px"><canvas id="tier-donut-chart"></canvas></div>
-          </div>
-        </div>
+  var legendHTML = '';
+  for (var ti = 0; ti < TIERS.length; ti++) {
+    legendHTML += '<div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-muted)">'
+      + '<div style="width:7px;height:7px;border-radius:50%;background:' + tierColor(TIERS[ti]) + '"></div>'
+      + TIERS[ti] + '</div>';
+  }
 
-        <div class="card">
-          <div class="section-header">
-            <h2>47-County Intelligence Map</h2>
-            <div class="tier-legend">
-              ${['WIN','GROW','HOLD','DEFEND','WATCH'].map(t=>`<div class="legend-item"><div class="legend-dot" style="background:${tierColor(t)}"></div>${t}</div>`).join('')}
-            </div>
-          </div>
-          <div class="county-grid">
-            ${COUNTIES.map(c=>`<div class="county-tile" style="background:${tierBg(c.tier)};border-color:${tierColor(c.tier)}33" onclick="navigateToDira(${c.id})" title="${c.name}: ${c.tier} · Score ${c.score} · Coverage ${c.coverage}%">
-              <div class="county-tile-name">${c.name}</div>
-              <div class="county-tile-score" style="color:${tierColor(c.tier)}">${c.score}</div>
-              <div class="county-tile-tier" style="color:${tierColor(c.tier)}">${c.tier}</div>
-            </div>`).join('')}
-          </div>
-          <div class="sync-bar">Last sync: <span class="sync-time">Just now</span> · Next: 5 min</div>
-        </div>
-      </div>
+  var countyTilesHTML = '';
+  for (var ci = 0; ci < COUNTIES.length; ci++) {
+    var co = COUNTIES[ci];
+    countyTilesHTML += '<div class="county-tile" style="background:' + tierBg(co.tier) + ';border-color:' + tierColor(co.tier) + '33" onclick="navigateToDira(' + co.id + ')" title="' + co.name + ': ' + co.tier + ' &middot; Score ' + co.score + ' &middot; Coverage ' + co.coverage + '%">'
+      + '<div class="county-tile-name">' + co.name + '</div>'
+      + '<div class="county-tile-score" style="color:' + tierColor(co.tier) + '">' + co.score + '</div>'
+      + '<div class="county-tile-tier" style="color:' + tierColor(co.tier) + '">' + co.tier + '</div>'
+      + '</div>';
+  }
 
-      <div class="col-1 flex-col">
-        <div class="card">
-          <div class="card-header"><h3>Active Alerts</h3><span class="badge badge-red">${openAlerts.length}</span></div>
-          ${openAlerts.length===0?'<div class="empty-state">All clear — no active alerts</div>':openAlerts.slice(0,3).map(a=>`
-            <div class="alert-row" style="border-left-color:${severityColor(a.severity)}" onclick="openAlertModal('${a.id}')">
-              <span class="alert-row-sev" style="color:${severityColor(a.severity)}">${a.severity}</span>
-              <span class="alert-row-title">${a.title}</span>
-              <span class="alert-row-time">${relativeTime(a.created_at)}</span>
-            </div>`).join('')}
-        </div>
+  var alertsHTML = '';
+  if (openAlerts.length === 0) {
+    alertsHTML = '<div style="font-size:11px;color:var(--text-muted);padding:10px 0;text-align:center">All clear &mdash; no active alerts</div>';
+  } else {
+    for (var ai = 0; ai < Math.min(openAlerts.length, 3); ai++) {
+      var al = openAlerts[ai];
+      alertsHTML += '<div class="alert-row" style="border-left-color:' + severityColor(al.severity) + '" onclick="openAlertModal(\'' + al.id + '\')">'
+        + '<span class="alert-row-sev" style="color:' + severityColor(al.severity) + '">' + al.severity + '</span>'
+        + '<span class="alert-row-title">' + al.title + '</span>'
+        + '<span class="alert-row-time">' + relativeTime(al.created_at) + '</span>'
+        + '</div>';
+    }
+  }
 
-        <div class="card">
-          <div class="card-header"><h3>Module Health</h3><span style="font-size:11px;color:var(--green)">12/12 Online</span></div>
-          <div class="module-health-grid">
-            ${moduleHealth.map(m=>`<div class="health-item">
-              <div class="dot ${m.status==='healthy'?'dot-green':m.status==='warning'?'dot-amber':'dot-red'}"></div>
-              <div><div class="health-name">${m.name}</div><div style="font-size:10px;color:var(--text-muted)">${m.sub} · ${m.uptime}</div></div>
-            </div>`).join('')}
-          </div>
-        </div>
+  var healthHTML = '';
+  for (var mi = 0; mi < moduleHealth.length; mi++) {
+    var m = moduleHealth[mi];
+    var dotC = m.status==='healthy'?'#10B981':m.status==='warning'?'#F59E0B':'#EF4444';
+    healthHTML += '<div class="rng-health-item">'
+      + '<div style="width:6px;height:6px;border-radius:50%;background:' + dotC + ';flex-shrink:0"></div>'
+      + '<div><div class="rng-health-name">' + m.name + '</div>'
+      + '<div style="font-size:9px;color:var(--text-muted)">' + m.sub + ' &middot; ' + m.uptime + '</div></div>'
+      + '</div>';
+  }
 
-        <div class="card">
-          <div class="card-header"><h3>Recent Events</h3></div>
-          <div class="events-list" id="rungu-events">
-            ${recentEvents.map(e=>`<div class="event-row"><div class="event-dot" style="background:${e.color}"></div><div class="event-msg">${e.msg}</div><div class="event-time">${e.time}</div></div>`).join('')}
-          </div>
-        </div>
+  var eventsHTML = '';
+  for (var ei = 0; ei < recentEvents.length; ei++) {
+    var ev = recentEvents[ei];
+    eventsHTML += '<div class="rng-event-row">'
+      + '<div class="rng-event-dot" style="background:' + ev.color + '"></div>'
+      + '<div class="rng-event-msg">' + ev.msg + '</div>'
+      + '<div class="rng-event-time">' + ev.time + '</div>'
+      + '</div>';
+  }
 
-        <div class="card card-accent">
-          <div class="card-header"><h3>Actions Required</h3><span class="badge badge-red">${actions.length}</span></div>
-          ${actions.map((a,i)=>`<div class="action-item">
-            <div class="action-num">${i+1}</div>
-            <div>${a.text}</div>
-            <span class="badge badge-${a.urgency==='critical'?'critical':a.urgency==='high'?'alert':'warn'}">${a.urgency.toUpperCase()}</span>
-          </div>`).join('')}
-        </div>
-      </div>
-    </div>
-  `;
+  var actionsHTML = '';
+  for (var qi = 0; qi < actions.length; qi++) {
+    var ac = actions[qi];
+    actionsHTML += '<div class="rng-action-row">'
+      + '<div class="rng-action-num">' + (qi+1) + '</div>'
+      + '<div class="rng-action-text">' + ac.text + '</div>'
+      + '<span class="rng-urg" style="background:' + ac.urgC + '22;color:' + ac.urgC + '">' + ac.urg + '</span>'
+      + '</div>';
+  }
 
-  setTimeout(()=>{
+  var el = document.getElementById('page-rungu');
+  if (!el) return;
+
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<h1 style="color:#7C3AED">Rungu Command</h1>'
+    + '<span style="font-size:11px;color:var(--text-muted)">' + winCount + ' WIN &middot; ' + growCount + ' GROW counties</span>'
+    + '</div>'
+    + '<div class="page-sub"><span class="live-indicator">LIVE</span><span>National Operations Dashboard &middot; Kenya 2027</span></div>'
+    + '</div>'
+    + '<div class="if-stats-row">' + statsHTML + '</div>'
+    + '<div class="rng-layout">'
+
+    + '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="rng-chart-pair">'
+    + '<div class="card"><div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">COVERAGE TREND</span><span style="font-size:10px;color:var(--text-muted)">10 weeks</span></div><div style="height:160px"><canvas id="coverage-trend-chart"></canvas></div></div>'
+    + '<div class="card"><div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">COUNTY TIERS</span><span style="font-size:10px;color:var(--text-muted)">47 counties</span></div><div style="height:160px"><canvas id="tier-donut-chart"></canvas></div></div>'
+    + '</div>'
+    + '<div class="card">'
+    + '<div class="card-header">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">47-COUNTY INTELLIGENCE MAP</span>'
+    + '<div style="display:flex;align-items:center;gap:10px">' + legendHTML + '</div>'
+    + '</div>'
+    + '<div class="county-grid">' + countyTilesHTML + '</div>'
+    + '<div style="font-size:9px;color:var(--text-muted);padding:8px 0 2px">Last sync: <span style="color:var(--text-secondary)">Just now</span> &middot; Next: 5 min</div>'
+    + '</div>'
+    + '</div>'
+
+    + '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">ACTIVE ALERTS</span>'
+    + '<span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;background:rgba(239,68,68,0.12);color:#EF4444">' + openAlerts.length + '</span>'
+    + '</div>'
+    + '<div style="padding:4px 14px 10px">' + alertsHTML + '</div>'
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">MODULE HEALTH</span>'
+    + '<span style="font-size:9px;color:#10B981;font-weight:700">12/12 Online</span>'
+    + '</div>'
+    + '<div class="rng-health-grid" style="padding:8px 14px 10px">' + healthHTML + '</div>'
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">RECENT EVENTS</span>'
+    + '</div>'
+    + '<div style="padding:4px 14px 8px" id="rungu-events">' + eventsHTML + '</div>'
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden;border-color:rgba(124,58,237,0.25)">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid rgba(124,58,237,0.15);background:rgba(124,58,237,0.04)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:#A78BFA">ACTIONS REQUIRED</span>'
+    + '<span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;background:rgba(239,68,68,0.12);color:#EF4444">' + actions.length + '</span>'
+    + '</div>'
+    + '<div style="padding:4px 14px 8px">' + actionsHTML + '</div>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  setTimeout(function(){
     mkChart('coverage-trend-chart',{
       type:'line',
       data:{
         labels:['Jul 15','Jul 22','Jul 29','Aug 5','Aug 12','Aug 19','Aug 26','Sep 2','Sep 9','Sep 15'],
-        datasets:[{
-          label:'Coverage %',data:[38,41,44,47,49,51,53,55,57,59],
-          borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.15)',fill:true,tension:0.4,pointRadius:3,borderWidth:2.5
-        },{
-          label:'Agent Rate %',data:[72,74,75,77,78,80,81,82,83,83],
-          borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,0.08)',fill:true,tension:0.4,pointRadius:3,borderWidth:2
-        }]
+        datasets:[
+          {label:'Coverage %',data:[38,41,44,47,49,51,53,55,57,59],borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.12)',fill:true,tension:0.4,pointRadius:3,borderWidth:2.5},
+          {label:'Agent Rate %',data:[72,74,75,77,78,80,81,82,83,83],borderColor:'#2DD4BF',backgroundColor:'rgba(45,212,191,0.06)',fill:true,tension:0.4,pointRadius:3,borderWidth:2}
+        ]
       },
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#94A3B8',font:{size:10},boxWidth:10}},tooltip:{mode:'index',intersect:false,backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9},callback:v=>v+'%'},min:30,max:100}},interaction:{mode:'nearest',axis:'x',intersect:false}}
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#94A3B8',font:{size:10},boxWidth:10}},tooltip:{mode:'index',intersect:false,backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9},callback:function(v){return v+'%';}},min:30,max:100}},interaction:{mode:'nearest',axis:'x',intersect:false}}
     });
-    const tierCounts={WIN:0,GROW:0,HOLD:0,DEFEND:0,WATCH:0};
-    COUNTIES.forEach(c=>tierCounts[c.tier]++);
+    var tierCounts = {WIN:0,GROW:0,HOLD:0,DEFEND:0,WATCH:0};
+    for (var tc = 0; tc < COUNTIES.length; tc++) { tierCounts[COUNTIES[tc].tier]++; }
     mkChart('tier-donut-chart',{
       type:'doughnut',
       data:{
