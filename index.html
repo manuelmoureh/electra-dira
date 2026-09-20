@@ -931,7 +931,11 @@ body {
     <div class="sidebar-nav">
       <div class="nav-section-label">Campaign Modules</div>
 
-      <div class="nav-item active" data-page="rungu" onclick="navigateTo('rungu',this)">
+      <div class="nav-item active" data-page="home" onclick="navigateTo('home',this)">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </div>
+      <div class="nav-item" data-page="rungu" onclick="navigateTo('rungu',this)">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Rungu
       </div>
@@ -1057,8 +1061,11 @@ body {
     <!-- CONTENT AREA -->
     <main class="content-area">
 
+      <!-- ── PAGE: HOME ───────────────────────────────────── -->
+      <div class="page active" id="page-home"></div>
+
       <!-- ── PAGE: RUNGU ──────────────────────────────────── -->
-      <div class="page active" id="page-rungu">
+      <div class="page" id="page-rungu">
         <div class="page-header">
           <h1>Rungu — National Command</h1>
           <div class="page-sub">
@@ -1653,7 +1660,7 @@ const CONVERSATIONS = [
 ];
 
 const STATE = {
-  page:'rungu',
+  page:'home',
   role:'national',
   alerts:[],
   auditLog:[],
@@ -2431,7 +2438,7 @@ function renderMsingi() {
 
 }
 
-function renderRungu() {
+function renderHome() {
   // ── Clock & countdown
   const electionDate = new Date('2027-08-10');
   const now = new Date();
@@ -2557,7 +2564,7 @@ function renderRungu() {
     },
   ];
 
-  document.getElementById('page-rungu').innerHTML = `
+  document.getElementById('page-home').innerHTML = `
     <style>
       .rh-hero {
         background: linear-gradient(135deg, #3500A0 0%, #7C3AED 52%, #A804E0 100%);
@@ -2771,6 +2778,196 @@ function renderRungu() {
       </div>
     </div>
   `;
+}
+
+function renderRungu() {
+  const openAlerts = STATE.alerts.filter(a=>a.status==='open');
+  const critAlerts = openAlerts.filter(a=>a.severity==='CRITICAL'||a.severity==='SYSTEM_FAILURE');
+  const totalVoters = COUNTIES.reduce((s,c)=>s+c.reg_voters,0);
+  const totalAgents = COUNTIES.reduce((s,c)=>s+c.agents,0);
+  const avgCoverage = (COUNTIES.reduce((s,c)=>s+c.coverage,0)/COUNTIES.length).toFixed(1);
+  const avgScore = (COUNTIES.reduce((s,c)=>s+c.score,0)/COUNTIES.length).toFixed(1);
+  const winCount = COUNTIES.filter(c=>c.tier==='WIN').length;
+  const growCount = COUNTIES.filter(c=>c.tier==='GROW').length;
+
+  const moduleHealth = [
+    {name:'Rungu',sub:'Command',status:'healthy',uptime:'99.9%'},
+    {name:'Signal',sub:'Intel',status:'healthy',uptime:'100%'},
+    {name:'I-Force',sub:'Agents',status:'healthy',uptime:'99.7%'},
+    {name:'Amplifier',sub:'AI Calls',status:'warning',uptime:'97.2%'},
+    {name:'Kura',sub:'IVR',status:'healthy',uptime:'99.8%'},
+    {name:'The Story',sub:'Content',status:'healthy',uptime:'100%'},
+    {name:'Wasikie',sub:'Gen Z',status:'healthy',uptime:'99.5%'},
+    {name:'Sauti',sub:'Response',status:'healthy',uptime:'99.9%'},
+    {name:'The Lock',sub:'GOTV',status:'healthy',uptime:'99.6%'},
+    {name:'Health',sub:'System',status:'healthy',uptime:'99.8%'},
+    {name:'Dira',sub:'Counties',status:'healthy',uptime:'100%'},
+    {name:'Audit',sub:'Trail',status:'healthy',uptime:'100%'}
+  ];
+
+  const recentEvents = [
+    {color:'#EF4444',msg:'CRITICAL: SHA card spike in Nakuru — 12,841 engagements',time:'20m ago'},
+    {color:'#10B981',msg:'47 converts: James Mwangi, Kiamunyi ward',time:'35m ago'},
+    {color:'#F59E0B',msg:'WARNING: 2 polling stations uncovered in Kiamunyi',time:'1h ago'},
+    {color:'#3B82F6',msg:'IVR batch complete: Nakuru County 32,441 answered',time:'2h ago'},
+    {color:'#10B981',msg:'Uasin Gishu IVR: +8% sentiment shift',time:'2.5h ago'},
+    {color:'#F59E0B',msg:'4 silent agents flagged in Nakuru county',time:'3h ago'}
+  ];
+
+  const actions = [
+    {text:'Deploy SHA counter-narrative to Nakuru WhatsApp groups',urgency:'critical'},
+    {text:'Redeploy 4 agents from Menengai West to Kiamunyi Ward',urgency:'high'},
+    {text:'Approve Agnes Wambui testimonial story for IVR deployment',urgency:'medium'},
+    {text:'Schedule Nakuru East follow-up IVR batch — healthcare focus',urgency:'medium'},
+    {text:'Review Njoro teacher WhatsApp group response plan',urgency:'high'}
+  ];
+
+  document.getElementById('page-rungu').innerHTML = `
+    <div class="page-header">
+      <h1>Rungu Command</h1>
+      <div class="page-sub">
+        <span class="live-indicator">LIVE</span>
+        <span>National Operations Dashboard · Kenya 2027</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${winCount} WIN · ${growCount} GROW counties</span>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card accent-violet">
+        <div class="kpi-icon" style="color:#8B5CF6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="kpi-label">National Coverage</div>
+        <div class="kpi-value" style="background:linear-gradient(135deg,#8B5CF6,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${avgCoverage}%</div>
+        <div class="kpi-sub">${fmt(totalVoters)} registered voters</div>
+        <div class="kpi-trend up">↑ +2.1% this week</div>
+      </div>
+      <div class="kpi-card accent-blue">
+        <div class="kpi-icon" style="color:#3B82F6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="kpi-label">Active Agents</div>
+        <div class="kpi-value" style="background:linear-gradient(135deg,#3B82F6,#2DD4BF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(totalAgents)}</div>
+        <div class="kpi-sub">Across 47 counties</div>
+        <div class="kpi-trend up">↑ +89 deployed this week</div>
+      </div>
+      <div class="kpi-card accent-teal">
+        <div class="kpi-icon" style="color:#2DD4BF">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="kpi-label">Avg Support Score</div>
+        <div class="kpi-value" style="background:linear-gradient(135deg,#2DD4BF,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${avgScore}</div>
+        <div class="kpi-sub">Target: 65.0 by election day</div>
+        <div class="kpi-trend up">↑ +1.4 this month</div>
+      </div>
+      <div class="kpi-card ${critAlerts.length>0?'accent-amber':''}">
+        <div class="kpi-icon" style="color:${openAlerts.length>0?'#EF4444':'#10B981'}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="kpi-label">Active Alerts</div>
+        <div class="kpi-value" style="color:${openAlerts.length>0?'#EF4444':'#10B981'}">${openAlerts.length}</div>
+        <div class="kpi-sub">${critAlerts.length} critical · ${openAlerts.length-critAlerts.length} warnings</div>
+        <div class="kpi-trend ${openAlerts.length>0?'down':'up'}">${openAlerts.length>0?'⚠ Requires attention':'✓ All systems clear'}</div>
+      </div>
+    </div>
+
+    <div class="flex-row" style="margin-bottom:24px">
+      <div class="col-1-4 flex-col">
+        <div class="grid-2" style="margin-bottom:16px">
+          <div class="card">
+            <div class="card-header"><h3>Coverage Trend</h3><span style="font-size:11px;color:var(--text-muted)">10 weeks</span></div>
+            <div class="chart-container" style="height:160px"><canvas id="coverage-trend-chart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>County Tiers</h3><span style="font-size:11px;color:var(--text-muted)">47 counties</span></div>
+            <div class="chart-container" style="height:160px"><canvas id="tier-donut-chart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-header">
+            <h2>47-County Intelligence Map</h2>
+            <div class="tier-legend">
+              ${['WIN','GROW','HOLD','DEFEND','WATCH'].map(t=>`<div class="legend-item"><div class="legend-dot" style="background:${tierColor(t)}"></div>${t}</div>`).join('')}
+            </div>
+          </div>
+          <div class="county-grid">
+            ${COUNTIES.map(c=>`<div class="county-tile" style="background:${tierBg(c.tier)};border-color:${tierColor(c.tier)}33" onclick="navigateToDira(${c.id})" title="${c.name}: ${c.tier} · Score ${c.score} · Coverage ${c.coverage}%">
+              <div class="county-tile-name">${c.name}</div>
+              <div class="county-tile-score" style="color:${tierColor(c.tier)}">${c.score}</div>
+              <div class="county-tile-tier" style="color:${tierColor(c.tier)}">${c.tier}</div>
+            </div>`).join('')}
+          </div>
+          <div class="sync-bar">Last sync: <span class="sync-time">Just now</span> · Next: 5 min</div>
+        </div>
+      </div>
+
+      <div class="col-1 flex-col">
+        <div class="card">
+          <div class="card-header"><h3>Active Alerts</h3><span class="badge badge-red">${openAlerts.length}</span></div>
+          ${openAlerts.length===0?'<div class="empty-state">All clear — no active alerts</div>':openAlerts.slice(0,3).map(a=>`
+            <div class="alert-row" style="border-left-color:${severityColor(a.severity)}" onclick="openAlertModal('${a.id}')">
+              <span class="alert-row-sev" style="color:${severityColor(a.severity)}">${a.severity}</span>
+              <span class="alert-row-title">${a.title}</span>
+              <span class="alert-row-time">${relativeTime(a.created_at)}</span>
+            </div>`).join('')}
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Module Health</h3><span style="font-size:11px;color:var(--green)">12/12 Online</span></div>
+          <div class="module-health-grid">
+            ${moduleHealth.map(m=>`<div class="health-item">
+              <div class="dot ${m.status==='healthy'?'dot-green':m.status==='warning'?'dot-amber':'dot-red'}"></div>
+              <div><div class="health-name">${m.name}</div><div style="font-size:10px;color:var(--text-muted)">${m.sub} · ${m.uptime}</div></div>
+            </div>`).join('')}
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Recent Events</h3></div>
+          <div class="events-list" id="rungu-events">
+            ${recentEvents.map(e=>`<div class="event-row"><div class="event-dot" style="background:${e.color}"></div><div class="event-msg">${e.msg}</div><div class="event-time">${e.time}</div></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="card card-accent">
+          <div class="card-header"><h3>Actions Required</h3><span class="badge badge-red">${actions.length}</span></div>
+          ${actions.map((a,i)=>`<div class="action-item">
+            <div class="action-num">${i+1}</div>
+            <div>${a.text}</div>
+            <span class="badge badge-${a.urgency==='critical'?'critical':a.urgency==='high'?'alert':'warn'}">${a.urgency.toUpperCase()}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  setTimeout(()=>{
+    mkChart('coverage-trend-chart',{
+      type:'line',
+      data:{
+        labels:['Jul 15','Jul 22','Jul 29','Aug 5','Aug 12','Aug 19','Aug 26','Sep 2','Sep 9','Sep 15'],
+        datasets:[{
+          label:'Coverage %',data:[38,41,44,47,49,51,53,55,57,59],
+          borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.15)',fill:true,tension:0.4,pointRadius:3,borderWidth:2.5
+        },{
+          label:'Agent Rate %',data:[72,74,75,77,78,80,81,82,83,83],
+          borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,0.08)',fill:true,tension:0.4,pointRadius:3,borderWidth:2
+        }]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#94A3B8',font:{size:10},boxWidth:10}},tooltip:{mode:'index',intersect:false,backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9},callback:v=>v+'%'},min:30,max:100}},interaction:{mode:'nearest',axis:'x',intersect:false}}
+    });
+    const tierCounts={WIN:0,GROW:0,HOLD:0,DEFEND:0,WATCH:0};
+    COUNTIES.forEach(c=>tierCounts[c.tier]++);
+    mkChart('tier-donut-chart',{
+      type:'doughnut',
+      data:{
+        labels:['WIN','GROW','HOLD','DEFEND','WATCH'],
+        datasets:[{data:[tierCounts.WIN,tierCounts.GROW,tierCounts.HOLD,tierCounts.DEFEND,tierCounts.WATCH],backgroundColor:['rgba(16,185,129,0.85)','rgba(245,158,11,0.85)','rgba(249,115,22,0.85)','rgba(239,68,68,0.85)','rgba(100,116,139,0.85)'],borderColor:['#10B981','#F59E0B','#F97316','#EF4444','#64748B'],borderWidth:2,hoverOffset:6}]
+      },
+      options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{color:'#94A3B8',font:{size:10},padding:8,boxWidth:8}},tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}}}
+    });
+  },80);
 }
 
 function renderDira() {
@@ -4458,6 +4655,7 @@ function navigate(page) {
     item.classList.toggle('active', item.dataset.page === page);
   });
   const renders = {
+    home: renderHome,
     msingi: renderMsingi,
     rungu: renderRungu,
     dira: renderDira,
@@ -4607,22 +4805,22 @@ function applyRole(roleId) {
   const roleConfig = {
     'national-ops': {
       label: 'National Ops Director',
-      pages: ['rungu','msingi','dira','signal','iforce','amplifier','kura','story','wasikie','sauti','lock','health','audit'],
+      pages: ['home','rungu','msingi','dira','signal','iforce','amplifier','kura','story','wasikie','sauti','lock','health','audit'],
       readOnly: false
     },
     'county-coord': {
       label: 'County Coordinator',
-      pages: ['rungu','msingi','dira','signal','iforce','kura','story','lock'],
+      pages: ['home','rungu','msingi','dira','signal','iforce','kura','story','lock'],
       readOnly: false
     },
     'analyst': {
       label: 'Data Analyst',
-      pages: ['rungu','msingi','signal','wasikie','health','audit'],
+      pages: ['home','rungu','msingi','signal','wasikie','health','audit'],
       readOnly: true
     },
     'comms': {
       label: 'Comms Director',
-      pages: ['rungu','amplifier','story','wasikie','sauti'],
+      pages: ['home','rungu','amplifier','story','wasikie','sauti'],
       readOnly: false
     }
   };
@@ -4644,7 +4842,7 @@ function applyRole(roleId) {
   });
 
   // If current page not in role, redirect to rungu
-  if (!cfg.pages.includes(STATE.page)) navigate('rungu');
+  if (!cfg.pages.includes(STATE.page)) navigate('home');
 
   addAudit('Current User', cfg.label, 'role.switched', `Role: ${cfg.label}`, `Switched to ${cfg.label} role`);
   showToast(`Role applied: ${cfg.label}`, 'success');
@@ -4663,7 +4861,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyRole('national-ops');
   startClock();
   simulateRealTime();
-  navigate(STATE.page || 'rungu');
+  navigate(STATE.page || 'home');
   addAudit('System', 'System', 'session.started', 'Dira Command V3', 'Dashboard session initialized');
   addAudit('Current User', 'National Ops Director', 'auth.login', 'Dashboard', 'Authenticated via SSO · 2FA confirmed');
 
