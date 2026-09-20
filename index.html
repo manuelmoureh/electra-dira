@@ -703,6 +703,8 @@ body {
 @keyframes pulse-green { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.6; transform:scale(1.4); } }
 @keyframes slideDown { from { transform:translateY(-100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
 @keyframes modalIn { from { opacity:0; transform:scale(0.9) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+@keyframes countdown-pulse { 0%,100% { text-shadow:0 0 0px rgba(124,58,237,0); } 50% { text-shadow:0 0 28px rgba(124,58,237,0.5); } }
+@keyframes float-up { 0%,100% { transform:translateY(0px); } 50% { transform:translateY(-3px); } }
 
 /* ── RESPONSIVE ────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
@@ -1900,7 +1902,7 @@ function renderCountyRow(c) {
     <td style="padding:10px 14px"><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
   </tr>${isExp ? `<tr>
     <td colspan="5" style="padding:0;border-bottom:1px solid var(--border)">
-      <div style="background:var(--bg-surface-2);padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;border-top:1px solid var(--border);border-left:3px solid ${udaCol}">
+      <div style="background:linear-gradient(180deg,${udaCol}0A 0%,var(--bg-surface-2) 60%);padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;border-top:2px solid ${udaCol}33">
         <div>
           <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px">2022 Vote Breakdown (est.)</div>
           <div style="font-size:13px;font-weight:600;color:#10B981">Ruto: ${fmt(udaV)}</div>
@@ -1980,46 +1982,63 @@ function renderMsingi() {
   }).join('');
 
   document.getElementById('page-msingi').innerHTML = `
-    <div class="page-header" style="margin-bottom:20px">
-      <h1 style="font-size:22px;font-weight:700;letter-spacing:-0.02em">Msingi</h1>
-      <div class="page-sub" style="margin-top:4px">
-        <span style="font-size:12px">Electoral Situation Analysis</span>
-        <span>·</span>
-        <span style="font-size:12px">Kenya 2027</span>
-        <span>·</span>
-        <span style="font-family:var(--font-mono);font-weight:600;color:var(--text-primary)">${daysLeft}</span>
-        <span style="font-size:12px">days to election</span>
-        <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">${winC.length} WIN · ${watC.length} WATCH · ${monC.length} MONITOR · Aug 10, 2027</span>
+    <div style="margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:28px">
+      <div style="flex:1">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--violet-light);margin-bottom:8px">Kenya 2027 · Presidential Election Intelligence</div>
+        <h1 style="font-size:28px;font-weight:700;letter-spacing:-0.025em;margin:0;line-height:1.1;color:var(--text-primary)">Msingi</h1>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:7px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span>Battlefield Brief</span>
+          <span style="opacity:.35">·</span>
+          <span style="color:#10B981">${winC.length} WIN</span>
+          <span style="opacity:.35">·</span>
+          <span style="color:#F59E0B">${watC.length} WATCH</span>
+          <span style="opacity:.35">·</span>
+          <span>${monC.length} MONITOR</span>
+          <span style="opacity:.35">·</span>
+          <span>Situation as of Sep 20, 2026 · National Campaign Ops</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;padding:14px 20px 16px;background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.22);border-radius:var(--radius-md)">
+        <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--violet-light);margin-bottom:3px">Days to Election</div>
+        <div style="font-size:56px;font-weight:700;font-family:var(--font-mono);letter-spacing:-0.04em;line-height:1;color:var(--text-primary);animation:countdown-pulse 4s ease-in-out infinite">${daysLeft}</div>
+        <div style="font-size:9px;color:var(--text-muted);margin-top:4px;letter-spacing:.04em">Aug 10, 2027</div>
       </div>
     </div>
 
     <!-- § THE SCALE -->
     <div style="display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px">
-      <div style="padding:16px 18px;border-right:1px solid var(--border)">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Registered '26</div>
-        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.02em;line-height:1.1">25.0M</div>
-        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">Post-CVR est. · IEBC <span style="opacity:.6">· County table = 2022 base</span></div>
+      <div style="padding:22px 18px;border-right:1px solid var(--border)">
+        <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:10px">Registered '26</div>
+        <div style="font-size:40px;font-weight:700;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.03em;line-height:1">25.0M</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:8px">Post-CVR est. · IEBC <span style="opacity:.55">· County table = 2022 base</span></div>
       </div>
-      <div style="padding:16px 18px;border-right:1px solid var(--border)">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">IEBC 2027 Target</div>
-        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:#2DD4BF;letter-spacing:-0.02em;line-height:1.1">28.5M</div>
-        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">CVR Phase II active · Sep 2026</div>
+      <div style="padding:22px 18px;border-right:1px solid var(--border)">
+        <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:10px">IEBC 2027 Target</div>
+        <div style="font-size:40px;font-weight:700;font-family:var(--font-mono);color:#2DD4BF;letter-spacing:-0.03em;line-height:1">28.5M</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:8px">CVR Phase II active · Sep 2026</div>
       </div>
-      <div style="padding:16px 18px;border-right:1px solid var(--border)">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">New Since 2022</div>
-        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:#10B981;letter-spacing:-0.02em;line-height:1.1">+2.93M</div>
-        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">ECVR Phase I + routine CVR</div>
+      <div style="padding:22px 18px;border-right:1px solid var(--border)">
+        <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:10px">New Since 2022</div>
+        <div style="font-size:40px;font-weight:700;font-family:var(--font-mono);color:#10B981;letter-spacing:-0.03em;line-height:1">+2.93M</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:8px">ECVR Phase I + routine CVR</div>
       </div>
-      <div style="padding:16px 18px;border-right:1px solid var(--border)">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Est. Votes Cast '27</div>
-        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:var(--text-secondary);letter-spacing:-0.02em;line-height:1.1">~16.3M</div>
-        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">at 65% turnout · 25M base</div>
+      <div style="padding:22px 18px;border-right:1px solid var(--border)">
+        <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:10px">Est. Votes Cast '27</div>
+        <div style="font-size:40px;font-weight:700;font-family:var(--font-mono);color:var(--text-secondary);letter-spacing:-0.03em;line-height:1">~16.3M</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:8px">at 65% turnout · 25M base</div>
       </div>
-      <div style="padding:16px 18px">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Round 1 Threshold</div>
-        <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:#8B5CF6;letter-spacing:-0.02em;line-height:1.1">50%+1</div>
-        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">+ 25% in ≥24 of 47 counties</div>
+      <div style="padding:22px 18px">
+        <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:10px">Round 1 Threshold</div>
+        <div style="font-size:40px;font-weight:700;font-family:var(--font-mono);color:#8B5CF6;letter-spacing:-0.03em;line-height:1">50%+1</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:8px">+ 25% in ≥24 of 47 counties</div>
       </div>
+    </div>
+
+    <!-- § ALTITUDE DIVIDER -->
+    <div style="display:flex;align-items:center;gap:14px;margin:24px 0 20px">
+      <div style="height:1px;flex:1;background:var(--border)"></div>
+      <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--text-muted);padding:3px 10px;border:1px solid var(--border);border-radius:20px">Field Analysis</div>
+      <div style="height:1px;flex:1;background:var(--border)"></div>
     </div>
 
     <!-- § THE CONTEST -->
@@ -2079,26 +2098,26 @@ function renderMsingi() {
     </div>
 
     <!-- § THE GATE -->
-    <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px">
-      <div style="padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02)">
-        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-secondary)">The Gate — Constitutional Threshold</span>
+    <div style="border:1px solid rgba(124,58,237,0.3);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px;background:linear-gradient(135deg,rgba(124,58,237,0.09) 0%,rgba(160,4,223,0.05) 60%,rgba(59,130,246,0.04) 100%);box-shadow:0 0 0 1px rgba(124,58,237,0.08),0 8px 32px rgba(124,58,237,0.1)">
+      <div style="padding:11px 18px;border-bottom:1px solid rgba(124,58,237,0.18);display:flex;align-items:center;gap:10px;background:rgba(124,58,237,0.05)">
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#A78BFA">The Gate — Constitutional Threshold</span>
         <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">Article 138 · Constitution of Kenya 2010</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr">
-        <div style="padding:20px 22px;border-right:1px solid var(--border)">
-          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8B5CF6;margin-bottom:10px">Condition 1 · National Majority</div>
-          <div style="font-size:36px;font-weight:700;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.03em;line-height:1">50% + 1</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:7px">of all valid votes cast nationally</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:8px;line-height:1.5">At 65% turnout on 28.5M target → <span style="font-family:var(--font-mono);color:var(--text-primary);font-weight:600">~9.3M votes</span> needed in Round 1</div>
+        <div style="padding:28px 26px;border-right:1px solid rgba(124,58,237,0.15)">
+          <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#8B5CF6;margin-bottom:12px">Condition 1 · National Majority</div>
+          <div style="font-size:52px;font-weight:700;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.04em;line-height:1;animation:float-up 5s ease-in-out infinite">50% + 1</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:10px">of all valid votes cast nationally</div>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:8px;line-height:1.5">At 65% turnout on 28.5M target → <span style="font-family:var(--font-mono);color:#A78BFA;font-weight:600">~9.3M votes</span> needed in Round 1</div>
         </div>
-        <div style="padding:20px 22px">
-          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8B5CF6;margin-bottom:10px">Condition 2 · County Floor</div>
-          <div style="font-size:36px;font-weight:700;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.03em;line-height:1">24 / 47</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:7px">counties with ≥25% of votes cast</div>
+        <div style="padding:28px 26px">
+          <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#8B5CF6;margin-bottom:12px">Condition 2 · County Floor</div>
+          <div style="font-size:52px;font-weight:700;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.04em;line-height:1;animation:float-up 5s ease-in-out infinite;animation-delay:.8s">24 / 47</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:10px">counties with ≥25% of votes cast</div>
           <div style="font-size:11px;color:var(--text-secondary);margin-top:8px;line-height:1.5">Both conditions must be met simultaneously. Either alone is insufficient for a Round 1 win.</div>
         </div>
       </div>
-      <div style="padding:13px 22px;background:rgba(239,68,68,0.04);border-top:1px solid rgba(239,68,68,0.1)">
+      <div style="padding:13px 22px;background:rgba(239,68,68,0.05);border-top:1px solid rgba(239,68,68,0.12)">
         <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#F87171">If Either Fails → Runoff</span>
         <span style="font-size:11px;color:var(--text-muted);margin-left:10px">Top 2 candidates only · Simple majority wins · No county threshold · A fragmented opposition that cannot beat 50% in Round 1 consolidates all votes in the runoff.</span>
       </div>
