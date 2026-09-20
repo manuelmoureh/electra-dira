@@ -2490,14 +2490,14 @@ function renderHome() {
     {
       id:'msingi', name:'Msingi', sub:'Battlefield Brief',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`,
-      metric:`<span style="color:${DC.WIN}">${winC.length} WIN</span> &middot; <span style="color:${DC.WATCH}">${watchC.length} WATCH</span> &middot; <span style="color:${DC.MONITOR}">${monC.length} MONITOR</span>`,
-      status:'LIVE', sc:DC.WIN,
+      metric:`<span style="color:${DC.WIN}">${winC.length} WIN</span> &middot; <span style="color:${DC.WATCH}">${watchC.length} WATCH</span> &middot; <span style="color:${DC.MONITOR}">${monC.length} MON</span>`,
+      accent: DC.BRAND_LT,
     },
     {
       id:'dira', name:'Dira', sub:'County Intelligence',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
       metric:`47 counties &middot; ward-level drill-down`,
-      status:'LIVE', sc:DC.WIN,
+      accent: DC.BRAND_LT,
     },
     {
       id:'signal', name:'Signal', sub:'Intelligence Alerts',
@@ -2505,162 +2505,247 @@ function renderHome() {
       metric: openAlerts.length > 0
         ? `<span style="color:${DC.FLAG}">${critAlerts.length} critical</span> &middot; ${openAlerts.length} open`
         : `<span style="color:${DC.WIN}">All clear</span> &middot; 0 alerts`,
-      status: critAlerts.length > 0 ? 'ALERT' : openAlerts.length > 0 ? 'WATCH' : 'CLEAR',
-      sc: critAlerts.length > 0 ? DC.FLAG : openAlerts.length > 0 ? DC.WATCH : DC.WIN,
+      accent: critAlerts.length > 0 ? DC.FLAG : openAlerts.length > 0 ? DC.WATCH : DC.WIN,
     },
     {
       id:'iforce', name:'I-Force', sub:'Field Operations',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
       metric:`${totalAgents.toLocaleString()} agents &middot; ${avgCoverage}% coverage`,
-      status:'ACTIVE', sc:DC.WIN,
+      accent: DC.WIN,
     },
     {
       id:'amplifier', name:'Amplifier', sub:'Messaging & IVR',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
       metric:`IVR campaigns &middot; AI content engine`,
-      status:'ACTIVE', sc:DC.WIN,
+      accent: DC.BRAND,
     },
     {
       id:'kura', name:'Kura Connect', sub:'Voter Mobilization',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
       metric:`Registration gaps &middot; GOTV targeting`,
-      status:'ACTIVE', sc:DC.WIN,
+      accent: DC.POOL,
     },
     {
       id:'story', name:'The Story', sub:'Narrative Strategy',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
       metric:`Message architecture &middot; media`,
-      status:'ACTIVE', sc:DC.WIN,
+      accent: DC.BRAND_LT,
     },
     {
       id:'wasikie', name:'Wasikie', sub:'Youth Intelligence',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
       metric:`Gen Z pulse &middot; sentiment tracker`,
-      status:'ACTIVE', sc:DC.WIN,
+      accent: DC.WATCH,
     },
     {
       id:'sauti', name:'Sauti', sub:'Voter Response',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`,
       metric:`Field feedback &middot; response rate`,
-      status:'ACTIVE', sc:DC.WIN,
+      accent: DC.BRAND,
     },
     {
       id:'lock', name:'The Lock', sub:'Get Out The Vote',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
       metric:`GOTV milestones &middot; ${daysLeft}d out`,
-      status:'ACTIVE', sc:DC.WIN,
+      accent: DC.WIN,
     },
     {
       id:'health', name:'Health', sub:'System Status',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
       metric:`12/12 modules &middot; 99.8% uptime`,
-      status:'HEALTHY', sc:DC.WIN,
+      accent: DC.MONITOR,
     },
     {
       id:'audit', name:'Audit', sub:'Activity Trail',
       icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
       metric:`Full activity log &middot; tamper-proof`,
-      status:'LOG', sc:DC.MONITOR,
+      accent: DC.MONITOR,
     },
   ];
 
   document.getElementById('page-home').innerHTML = `
     <style>
+      /* ── Home module scoped styles ── */
       .rh-hero {
-        background: linear-gradient(135deg, #3500A0 0%, #7C3AED 52%, #A804E0 100%);
-        border-radius: 16px; padding: 34px 40px 28px; margin-bottom: 20px;
-        position: relative; overflow: hidden;
+        position:relative; border-radius:var(--radius-lg); overflow:hidden; margin-bottom:20px;
       }
-      .rh-hero::before {
-        content:''; position:absolute; inset:0;
-        background: radial-gradient(ellipse at 78% 10%, rgba(255,255,255,0.12) 0%, transparent 55%);
+      .rh-hero-bg {
+        position:absolute; inset:0;
+        background:linear-gradient(140deg,#0A001E 0%,#15003C 45%,#08001A 100%);
+      }
+      .rh-hero-grid {
+        position:absolute; inset:0; opacity:.04;
+        background-image:
+          repeating-linear-gradient(0deg,rgba(167,139,250,1) 0,transparent 1px,transparent 44px),
+          repeating-linear-gradient(90deg,rgba(167,139,250,1) 0,transparent 1px,transparent 44px);
         pointer-events:none;
       }
-      .rh-greeting { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.52); margin-bottom:5px; font-family:var(--font-mono); }
-      .rh-title { font-size:26px; font-weight:700; color:#fff; margin:0 0 5px; line-height:1.15; }
-      .rh-daterow { font-size:13px; color:rgba(255,255,255,0.62); margin-bottom:20px; }
-      .rh-stats { display:flex; gap:0; flex-wrap:wrap; }
-      .rh-stat { display:flex; flex-direction:column; gap:1px; padding:0 24px 0 0; }
-      .rh-stat:first-child { padding-left:0; }
-      .rh-stat-label { font-size:9px; text-transform:uppercase; letter-spacing:0.09em; color:rgba(255,255,255,0.45); font-family:var(--font-mono); }
-      .rh-stat-val { font-size:22px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; font-family:var(--font-mono); line-height:1.1; }
-      .rh-stat-sub { font-size:10px; color:rgba(255,255,255,0.38); }
-      .rh-divider { width:1px; background:rgba(255,255,255,0.14); align-self:stretch; margin:2px 24px 2px 0; }
-      .rh-sec { font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); margin:0 0 10px; font-family:var(--font-mono); }
-      .rh-alerts { display:flex; flex-direction:column; gap:5px; margin-bottom:18px; }
+      .rh-hero-glow1 {
+        position:absolute; width:560px; height:560px; border-radius:50%;
+        background:radial-gradient(ellipse at center,rgba(124,58,237,0.22) 0%,transparent 65%);
+        top:-180px; left:-60px; pointer-events:none;
+      }
+      .rh-hero-glow2 {
+        position:absolute; width:380px; height:380px; border-radius:50%;
+        background:radial-gradient(ellipse at center,rgba(160,4,223,0.14) 0%,transparent 60%);
+        bottom:-140px; right:40px; pointer-events:none;
+      }
+      .rh-hero-inner {
+        position:relative; z-index:2; padding:32px 36px 30px;
+        display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
+      }
+      .rh-eyebrow {
+        display:flex; align-items:center; gap:8px;
+        font-size:10px; font-weight:600; letter-spacing:.07em;
+        color:rgba(167,139,250,0.7); margin-bottom:12px; font-family:var(--font-mono);
+      }
+      .rh-eyebrow-line { display:inline-block; width:16px; height:1px; background:rgba(167,139,250,0.4); }
+      .rh-title {
+        font-size:42px; font-weight:700; letter-spacing:-0.03em; margin:0 0 5px; line-height:1;
+        background:linear-gradient(135deg,#DDD6FE 0%,#A78BFA 55%,#8B5CF6 100%);
+        -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      }
+      .rh-subtitle { font-size:14px; font-weight:500; color:rgba(203,213,225,0.65); margin-bottom:16px; letter-spacing:-.005em; }
+      .rh-meta { display:flex; align-items:center; gap:8px; }
+      .rh-meta-dot { width:3px; height:3px; border-radius:50%; background:rgba(255,255,255,0.18); display:inline-block; }
+      .rh-meta-item { font-size:10px; color:rgba(148,163,184,0.55); }
+      .rh-stat-cards { display:flex; gap:10px; flex-wrap:wrap; }
+      .rh-stat-card {
+        padding:13px 17px; border-radius:11px; min-width:118px;
+        background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09);
+      }
+      .rh-stat-card.accent { background:rgba(124,58,237,0.07); border-color:rgba(124,58,237,0.2); }
+      .rh-stat-card-label { font-size:11px; font-weight:600; color:rgba(167,139,250,0.8); margin-bottom:8px; }
+      .rh-stat-card-val {
+        font-size:24px; font-weight:700; font-variant-numeric:tabular-nums;
+        font-family:var(--font-sans); line-height:1; letter-spacing:-.015em;
+      }
+      .rh-stat-card-sub { font-size:10px; color:rgba(148,163,184,0.48); margin-top:6px; }
+
+      .rh-sec {
+        display:flex; align-items:center; gap:8px; margin:0 0 11px;
+        font-size:10px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+        color:rgba(100,116,139,0.8); font-family:var(--font-mono);
+      }
+      .rh-sec::after { content:''; flex:1; height:1px; background:var(--border); }
+
+      .rh-alerts { display:flex; flex-direction:column; gap:5px; margin-bottom:20px; }
       .rh-alert-row {
         display:flex; align-items:center; gap:10px;
-        background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.14);
+        background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.12);
         border-left:3px solid #EF4444; border-radius:8px; padding:9px 12px;
-        cursor:pointer; transition:background 0.15s;
+        cursor:pointer; transition:background .15s;
       }
-      .rh-alert-row:hover { background:rgba(239,68,68,0.13); }
-      .rh-alert-sev { font-size:9px; font-weight:700; letter-spacing:0.07em; color:#EF4444; font-family:var(--font-mono); min-width:56px; }
+      .rh-alert-row:hover { background:rgba(239,68,68,0.11); }
+      .rh-alert-sev { font-size:9px; font-weight:700; letter-spacing:.07em; color:#EF4444; font-family:var(--font-mono); min-width:60px; }
       .rh-alert-title { font-size:12.5px; color:var(--text-primary); flex:1; }
       .rh-alert-time { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); white-space:nowrap; }
-      .rh-mods-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
+
+      /* ── Module grid ── */
+      .rh-mods-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:22px; }
       .rh-mod {
-        background:var(--bg-surface); border:1px solid var(--border); border-radius:10px;
-        padding:14px 14px 12px; cursor:pointer; position:relative; overflow:hidden;
-        display:flex; flex-direction:column; gap:4px; min-height:118px;
-        transition:border-color 0.13s, background 0.13s, transform 0.1s;
+        background:var(--bg-surface); border:1px solid var(--border); border-radius:11px;
+        padding:16px 15px 14px; cursor:pointer; position:relative; overflow:hidden;
+        display:flex; flex-direction:column; gap:3px; min-height:122px;
+        transition:border-color .15s, transform .1s;
       }
-      .rh-mod:hover { border-color:rgba(167,139,250,0.5); background:var(--bg-surface-2); transform:translateY(-1px); }
-      .rh-mod-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
-      .rh-mod-icon { width:30px; height:30px; border-radius:7px; background:rgba(124,58,237,0.1); display:flex; align-items:center; justify-content:center; color:#A78BFA; flex-shrink:0; }
-      .rh-mod-badge { font-size:8px; font-weight:700; letter-spacing:0.07em; padding:2px 5px; border-radius:3px; font-family:var(--font-mono); }
-      .rh-mod-name { font-size:13px; font-weight:600; color:var(--text-primary); line-height:1.2; }
+      .rh-mod::before {
+        content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+        background:var(--rh-mod-accent, var(--border)); border-radius:11px 0 0 11px;
+        transition:opacity .15s;
+      }
+      .rh-mod:hover { border-color:rgba(167,139,250,0.35); transform:translateY(-1px); }
+      .rh-mod-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+      .rh-mod-icon {
+        width:28px; height:28px; border-radius:6px;
+        background:var(--rh-mod-icon-bg, rgba(100,116,139,0.1));
+        display:flex; align-items:center; justify-content:center;
+        color:var(--rh-mod-icon-color, #64748B); flex-shrink:0;
+      }
+      .rh-mod-dot {
+        width:6px; height:6px; border-radius:50%;
+        background:var(--rh-mod-accent, #64748B); opacity:.7;
+        flex-shrink:0;
+      }
+      .rh-mod-name { font-size:12.5px; font-weight:600; color:var(--text-primary); line-height:1.2; }
       .rh-mod-sub { font-size:10px; color:var(--text-muted); line-height:1.3; }
-      .rh-mod-metric { font-size:11px; color:var(--text-secondary); font-family:var(--font-mono); line-height:1.4; margin-top:auto; font-variant-numeric:tabular-nums; }
-      .rh-mod-arrow { position:absolute; right:10px; bottom:10px; font-size:13px; color:var(--text-muted); opacity:0; transition:opacity 0.12s, transform 0.12s; }
-      .rh-mod:hover .rh-mod-arrow { opacity:1; transform:translateX(2px); }
-      .rh-pulse-grid { display:grid; grid-template-columns:1fr 334px; gap:14px; }
+      .rh-mod-metric {
+        font-size:10.5px; color:rgba(148,163,184,0.65);
+        font-family:var(--font-mono); line-height:1.4; margin-top:auto;
+        font-variant-numeric:tabular-nums;
+      }
+      .rh-mod-arrow {
+        position:absolute; right:9px; bottom:9px; font-size:11px;
+        color:var(--text-muted); opacity:0; transition:opacity .12s, transform .12s;
+      }
+      .rh-mod:hover .rh-mod-arrow { opacity:.6; transform:translateX(2px); }
+
+      /* ── Pulse section ── */
+      .rh-pulse-grid { display:grid; grid-template-columns:1fr 330px; gap:14px; }
       .rh-event-row { display:flex; align-items:flex-start; gap:9px; padding:8px 16px; border-bottom:1px solid var(--border); }
       .rh-event-row:last-child { border-bottom:none; }
-      .rh-event-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:4px; }
-      .rh-event-msg { font-size:12px; color:var(--text-primary); flex:1; line-height:1.4; }
+      .rh-event-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+      .rh-event-msg { font-size:11.5px; color:var(--text-secondary); flex:1; line-height:1.45; }
       .rh-event-time { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); white-space:nowrap; flex-shrink:0; }
-      .rh-action-item { display:flex; align-items:flex-start; gap:10px; padding:8px 14px; border-bottom:1px solid var(--border); }
+      .rh-action-item { display:flex; align-items:flex-start; gap:9px; padding:8px 14px; border-bottom:1px solid var(--border); }
       .rh-action-item:last-child { border-bottom:none; }
-      .rh-action-num { width:18px; height:18px; border-radius:50%; background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.2); color:#A78BFA; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
-      .rh-action-text { font-size:12px; color:var(--text-primary); flex:1; line-height:1.4; }
-      .rh-urgency { font-size:8px; font-weight:700; letter-spacing:0.06em; padding:2px 5px; border-radius:3px; font-family:var(--font-mono); flex-shrink:0; white-space:nowrap; }
+      .rh-action-num {
+        width:17px; height:17px; border-radius:50%;
+        background:rgba(124,58,237,0.08); border:1px solid rgba(124,58,237,0.18);
+        color:rgba(167,139,250,0.8); font-size:9px; font-weight:700;
+        display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;
+      }
+      .rh-action-text { font-size:11.5px; color:var(--text-secondary); flex:1; line-height:1.45; }
+      .rh-urgency {
+        font-size:8px; font-weight:700; letter-spacing:.06em; padding:2px 5px;
+        border-radius:3px; font-family:var(--font-mono); flex-shrink:0; white-space:nowrap;
+      }
     </style>
 
     <!-- ── HERO ── -->
     <div class="rh-hero">
-      <div class="rh-greeting">${greeting}</div>
-      <h1 class="rh-title">Dira Command Centre</h1>
-      <div class="rh-daterow">${briefDate} &nbsp;·&nbsp; <strong style="color:rgba(255,255,255,0.88)">${daysLeft.toLocaleString()}</strong> days to General Election</div>
-      <div class="rh-stats">
-        <div class="rh-stat">
-          <div class="rh-stat-label">24-County Gate</div>
-          <div class="rh-stat-val" style="color:${gateAt>=24?'#6EE7B7':gateAt>=18?'#FCD34D':'#FCA5A5'}">${gateAt}<span style="font-size:13px;color:rgba(255,255,255,0.42)">/24</span></div>
-          <div class="rh-stat-sub">${gateLabel}</div>
+      <div class="rh-hero-bg"></div>
+      <div class="rh-hero-grid"></div>
+      <div class="rh-hero-glow1"></div>
+      <div class="rh-hero-glow2"></div>
+      <div class="rh-hero-inner">
+        <div>
+          <div class="rh-eyebrow"><span class="rh-eyebrow-line"></span>Kenya 2027 · Presidential Campaign</div>
+          <h1 class="rh-title">Dira Command</h1>
+          <div class="rh-subtitle">Campaign Intelligence Platform</div>
+          <div class="rh-meta">
+            <span class="rh-meta-item">${briefDate}</span>
+            <span class="rh-meta-dot"></span>
+            <span class="rh-meta-item" style="color:#A78BFA;font-weight:500">${daysLeft.toLocaleString()} days to election</span>
+            <span class="rh-meta-dot"></span>
+            <span class="rh-meta-item" style="color:rgba(16,185,129,0.8)">${winC.length} Win</span>
+            <span class="rh-meta-dot"></span>
+            <span class="rh-meta-item" style="color:rgba(245,158,11,0.8)">${watchC.length} Watch</span>
+            <span class="rh-meta-dot"></span>
+            <span class="rh-meta-item" style="color:rgba(100,116,139,0.7)">${monC.length} Monitor</span>
+          </div>
         </div>
-        <div class="rh-divider"></div>
-        <div class="rh-stat">
-          <div class="rh-stat-label">Proj. Vote Share</div>
-          <div class="rh-stat-val" style="color:${parseFloat(projShare)>=50?'#6EE7B7':'#FCD34D'}">${projShare}<span style="font-size:13px;color:rgba(255,255,255,0.42)">%</span></div>
-          <div class="rh-stat-sub">national 2027 model</div>
-        </div>
-        <div class="rh-divider"></div>
-        <div class="rh-stat">
-          <div class="rh-stat-label">WATCH Counties</div>
-          <div class="rh-stat-val" style="color:#FCD34D">${watchC.length}</div>
-          <div class="rh-stat-sub">battleground · swing</div>
-        </div>
-        <div class="rh-divider"></div>
-        <div class="rh-stat">
-          <div class="rh-stat-label">Field Force</div>
-          <div class="rh-stat-val">${totalAgents.toLocaleString()}</div>
-          <div class="rh-stat-sub">${avgCoverage}% avg. coverage</div>
-        </div>
-        <div class="rh-divider"></div>
-        <div class="rh-stat">
-          <div class="rh-stat-label">Open Alerts</div>
-          <div class="rh-stat-val" style="color:${openAlerts.length>0?'#FCA5A5':'#6EE7B7'}">${openAlerts.length}</div>
-          <div class="rh-stat-sub">${critAlerts.length} critical</div>
+        <div class="rh-stat-cards">
+          <div class="rh-stat-card accent">
+            <div class="rh-stat-card-label">24-County Gate</div>
+            <div class="rh-stat-card-val" style="color:${gateAt>=24?'#6EE7B7':gateAt>=18?'#FCD34D':'#FCA5A5'}">${gateAt}<span style="font-size:14px;color:rgba(255,255,255,0.35)">/24</span></div>
+            <div class="rh-stat-card-sub">${gateLabel}</div>
+          </div>
+          <div class="rh-stat-card">
+            <div class="rh-stat-card-label">Proj. Vote Share</div>
+            <div class="rh-stat-card-val" style="color:${parseFloat(projShare)>=50?'#6EE7B7':'#FCD34D'}">${projShare}<span style="font-size:14px;color:rgba(255,255,255,0.35)">%</span></div>
+            <div class="rh-stat-card-sub">national 2027 model</div>
+          </div>
+          <div class="rh-stat-card">
+            <div class="rh-stat-card-label">Field Force</div>
+            <div class="rh-stat-card-val" style="color:#E2E8F0">${totalAgents.toLocaleString()}</div>
+            <div class="rh-stat-card-sub">${avgCoverage}% avg. coverage</div>
+          </div>
+          <div class="rh-stat-card" style="${openAlerts.length>0?'background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.18)':''}">
+            <div class="rh-stat-card-label">Open Alerts</div>
+            <div class="rh-stat-card-val" style="color:${openAlerts.length>0?'#FCA5A5':'#6EE7B7'}">${openAlerts.length}</div>
+            <div class="rh-stat-card-sub">${critAlerts.length} critical</div>
+          </div>
         </div>
       </div>
     </div>
@@ -2682,10 +2767,10 @@ function renderHome() {
     <div class="rh-sec">Module Command</div>
     <div class="rh-mods-grid">
       ${MODULES.map(m=>`
-        <div class="rh-mod" onclick="navigate('${m.id}')">
+        <div class="rh-mod" style="--rh-mod-accent:${m.accent};--rh-mod-icon-bg:${m.accent}18;--rh-mod-icon-color:${m.accent}" onclick="navigate('${m.id}')">
           <div class="rh-mod-top">
             <div class="rh-mod-icon">${m.icon}</div>
-            <div class="rh-mod-badge" style="color:${m.sc};background:${m.sc}1A;border:1px solid ${m.sc}33">${m.status}</div>
+            <div class="rh-mod-dot"></div>
           </div>
           <div class="rh-mod-name">${m.name}</div>
           <div class="rh-mod-sub">${m.sub}</div>
