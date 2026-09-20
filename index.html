@@ -763,9 +763,10 @@ body {
   border-bottom: 2px solid var(--border);
 }
 .msingi-ftab.active {
-  color: var(--text-primary) !important;
-  background: var(--bg-surface-3) !important;
-  border-color: var(--border-strong) !important;
+  background: var(--bg-surface-3);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14);
+  font-weight: 700;
+  opacity: 1 !important;
 }
 .delta-badge { font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px; }
 .delta-neg { color:#EF4444;background:rgba(239,68,68,0.1); }
@@ -1969,8 +1970,8 @@ function renderCountyRow(c) {
   const p        = c.proj27 ?? c.uda;
   const st27     = c.status27 ?? c.status;
   const pCol     = p >= 50 ? '#10B981' : p >= 35 ? '#F59E0B' : '#64748B';
-  const udaCol   = c.uda >= 50 ? '#10B981' : c.uda >= 35 ? '#F59E0B' : '#EF4444';
-  const dCol     = (c.delta27 ?? 0) >= 0 ? '#10B981' : '#EF4444';
+  const udaCol   = c.uda >= 50 ? '#10B981' : c.uda >= 35 ? '#F59E0B' : '#64748B';
+  const dCol     = (c.delta27 ?? 0) >= 0 ? '#10B981' : '#F59E0B';
   const conf     = c.confidence ?? 'Low';
   const confBg   = conf === 'High' ? 'rgba(16,185,129,0.1)' : conf === 'Medium' ? 'rgba(245,158,11,0.1)' : 'rgba(100,116,139,0.1)';
   const confCol  = conf === 'High' ? '#10B981' : conf === 'Medium' ? '#F59E0B' : '#64748B';
@@ -1981,7 +1982,7 @@ function renderCountyRow(c) {
   const nonV     = Math.round(c.reg * (1 - c.turnout / 100));
   const covPct   = Math.round(c.reg / c.elig26 * 100);
   const prior    = c.priority ?? 1;
-  const priorCol = prior >= 8 ? '#EF4444' : prior >= 6 ? '#F59E0B' : prior >= 4 ? '#8B5CF6' : '#64748B';
+  const priorCol = prior >= 8 ? '#EF4444' : prior >= 6 ? '#F59E0B' : prior >= 4 ? '#F59E0B' : '#64748B';
   const isExp    = _msingiExpanded === c.code;
   const strat = st27 === 'WIN'
     ? `Projected stronghold at ${p}%. Priority: mobilization, not persuasion. Every 1pp turnout gain ≈ ${fmt(Math.round(c.reg * 0.01 * p / 100))} net votes for Ruto.`
@@ -2012,7 +2013,7 @@ function renderCountyRow(c) {
         <div style="height:100%;width:${p}%;background:${pCol};border-radius:2px;opacity:0.75"></div>
       </div>
     </td>
-    <td style="padding:10px 14px;font-size:13px;font-weight:700;color:${dCol};white-space:nowrap;font-variant-numeric:tabular-nums">${delta >= 0 ? '+' : ''}${delta}pp</td>
+    <td style="padding:10px 14px;font-size:13px;font-weight:700;color:${delta === 0 ? 'var(--text-muted)' : dCol};white-space:nowrap;font-variant-numeric:tabular-nums">${delta > 0 ? '+' : ''}${delta}pp</td>
     <td style="padding:10px 14px">
       <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start">
         <span class="signal-chip ${msingiStatusStyle(st27)}">${st27}</span>
@@ -2021,7 +2022,7 @@ function renderCountyRow(c) {
     </td>
   </tr>${isExp ? `<tr>
     <td colspan="5" style="padding:0;border-bottom:1px solid var(--border)">
-      <div style="background:linear-gradient(180deg,${pCol}0D 0%,var(--bg-surface-2) 50%);padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;border-top:2px solid ${pCol}2A">
+      <div style="overflow-x:auto"><div style="background:linear-gradient(180deg,${pCol}0D 0%,var(--bg-surface-2) 50%);padding:14px 18px;display:grid;grid-template-columns:repeat(4,minmax(160px,1fr));gap:16px;border-top:2px solid ${pCol}2A;min-width:640px">
         <div>
           <div style="font-size:9px;font-weight:600;color:var(--text-muted);margin-bottom:8px">2022 IEBC Baseline</div>
           <div style="font-size:12px;font-weight:600;color:#10B981">Ruto: ${fmt(udaV)}</div>
@@ -2032,7 +2033,7 @@ function renderCountyRow(c) {
         <div>
           <div style="font-size:9px;font-weight:600;color:var(--text-muted);margin-bottom:6px">2027 Projection</div>
           <div style="font-size:26px;font-weight:700;color:${pCol};letter-spacing:-0.02em;line-height:1;font-variant-numeric:tabular-nums">${p}%</div>
-          <div style="font-size:11px;color:${dCol};margin-top:5px;font-weight:600">${delta >= 0 ? '+' : ''}${delta}pp vs 2022</div>
+          <div style="font-size:11px;color:${delta === 0 ? 'var(--text-muted)' : dCol};margin-top:5px;font-weight:600">${delta > 0 ? '+' : ''}${delta}pp vs 2022</div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Opp. ceiling: ~${oppCeil}%</div>
           <div style="font-size:10px;color:${confCol};margin-top:4px;font-weight:600">${conf} confidence</div>
         </div>
@@ -2050,7 +2051,7 @@ function renderCountyRow(c) {
             <span style="font-size:9px;font-weight:700;color:${priorCol}">${prior}/10</span>
           </div>
         </div>
-      </div>
+      </div></div>
     </td>
   </tr>` : ''}`;
 }
@@ -2073,6 +2074,7 @@ function msingiStatusStyle(s) {
   if(s==='WIN')     return 'signal-hold';
   if(s==='WATCH')   return 'signal-watch';
   if(s==='FLAGGED') return 'signal-flag';
+  if(s==='MONITOR') return 'signal-monitor';
   return 'signal-monitor';
 }
 
@@ -2087,16 +2089,8 @@ function renderMsingi() {
   const watC  = NATIONAL_COUNTIES.filter(c => c.status27 === 'WATCH');
   const monC  = NATIONAL_COUNTIES.filter(c => c.status27 === 'MONITOR');
   const secureWin = winC.filter(c => c.confidence === 'High').length;
-  const gateAt    = winC.length;  // counties currently projected to clear 50%+1
-  const winReg = winC.reduce((s, c) => s + c.reg, 0);
-  const watReg = watC.reduce((s, c) => s + c.reg, 0);
-  const monReg = monC.reduce((s, c) => s + c.reg, 0);
-  const winUplift  = winC.reduce((s, c) => s + Math.round(c.reg * 0.01 * c.uda / 100), 0);
-  const totalElig  = NATIONAL_COUNTIES.reduce((s, c) => s + c.elig26, 0);
-  const totalReg   = NATIONAL_COUNTIES.reduce((s, c) => s + c.reg, 0);
-  const totalUnreg = totalElig - totalReg;
-  const regRate    = Math.round(totalReg / totalElig * 100);
-  const daysLeft   = Math.max(0, Math.ceil((new Date('2027-08-10') - new Date()) / 86400000));
+  const gateAt    = winC.length;
+  const briefDate = new Date().toLocaleDateString('en-KE', {day:'numeric', month:'short', year:'numeric'});
 
 
   const filterTabs = ['ALL','WIN','WATCH','MONITOR'].map(f => {
@@ -2135,7 +2129,7 @@ function renderMsingi() {
           <h1 style="font-size:48px;font-weight:700;letter-spacing:-0.04em;margin:0 0 6px;line-height:.95;background:linear-gradient(135deg,#DDD6FE 0%,#A78BFA 50%,#8B5CF6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Msingi</h1>
           <div style="font-size:15px;font-weight:500;color:rgba(203,213,225,0.75);letter-spacing:-.005em;margin-bottom:18px">The Battlefield 2027</div>
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-            <span style="font-size:10px;color:rgba(148,163,184,0.55)">Sep 20, 2026</span>
+            <span style="font-size:10px;color:rgba(148,163,184,0.55)">${briefDate}</span>
             <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.18);display:inline-block"></span>
             <span style="font-size:10px;font-weight:500;color:#10B981">${winC.length} Win</span>
             <span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.18);display:inline-block"></span>
@@ -2162,15 +2156,15 @@ function renderMsingi() {
             <div style="display:flex;flex-direction:column;gap:5px">
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(203,213,225,0.6)"><span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block"></span>Win</span>
-                <span style="font-size:17px;font-weight:700;font-family:var(--font-mono);color:#10B981;line-height:1">${winC.length}</span>
+                <span style="font-size:17px;font-weight:700;font-family:var(--font-sans);color:#10B981;line-height:1">${winC.length}</span>
               </div>
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(203,213,225,0.6)"><span style="width:6px;height:6px;border-radius:50%;background:#F59E0B;display:inline-block"></span>Watch</span>
-                <span style="font-size:17px;font-weight:700;font-family:var(--font-mono);color:#F59E0B;line-height:1">${watC.length}</span>
+                <span style="font-size:17px;font-weight:700;font-family:var(--font-sans);color:#F59E0B;line-height:1">${watC.length}</span>
               </div>
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(203,213,225,0.6)"><span style="width:6px;height:6px;border-radius:50%;background:#64748B;display:inline-block"></span>Monitor</span>
-                <span style="font-size:17px;font-weight:700;font-family:var(--font-mono);color:#94A3B8;line-height:1">${monC.length}</span>
+                <span style="font-size:17px;font-weight:700;font-family:var(--font-sans);color:#64748B;line-height:1">${monC.length}</span>
               </div>
             </div>
           </div>
@@ -2320,7 +2314,7 @@ function renderMsingi() {
         <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
           <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:8px">Top priority counties (Watch)</div>
           <div style="display:flex;flex-direction:column;gap:3px">
-            ${watC.sort((a,b)=>(b.priority??1)-(a.priority??1)).slice(0,5).map(c=>`
+            ${[...watC].sort((a,b)=>((b.priority??1)-(a.priority??1)) || (b.reg-a.reg)).slice(0,5).map(c=>`
             <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;padding:5px 0;border-bottom:1px solid var(--divider);gap:8px">
               <span style="font-size:12px;font-weight:500;color:var(--text-primary)">${c.name}</span>
               <span style="font-size:11px;color:#F59E0B;font-weight:600">${c.proj27}%</span>
