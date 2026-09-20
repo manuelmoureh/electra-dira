@@ -1176,6 +1176,44 @@ body {
 .sty-platforms { display:flex; gap:4px; flex-wrap:wrap; }
 .sty-platform { font-size:8px; font-weight:700; padding:2px 6px; border-radius:4px; font-family:var(--font-mono); letter-spacing:.04em; }
 .sty-rejection { font-size:9px; color:#EF4444; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.15); padding:5px 7px; border-radius:6px; line-height:1.4; }
+/* The Story v2 — Production Center */
+.sty2-stats-bar { display:flex; align-items:stretch; gap:0; background:rgba(245,158,11,0.04); border:1px solid rgba(245,158,11,0.15); border-radius:12px; padding:0; margin-bottom:14px; overflow:hidden; }
+.sty2-stat-block { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:12px 18px; flex:1; }
+.sty2-stat-block + .sty2-stat-block { border-left:1px solid rgba(245,158,11,0.12); }
+.sty2-stat-val { font-size:20px; font-weight:800; font-family:var(--font-mono); line-height:1.1; }
+.sty2-stat-lbl { font-size:8px; font-weight:700; letter-spacing:.1em; color:var(--text-muted); margin-top:2px; text-transform:uppercase; }
+.sty2-main { display:grid; grid-template-columns:1fr 260px; gap:14px; align-items:start; }
+.sty2-section-hdr { font-size:9px; font-weight:800; letter-spacing:.1em; color:var(--text-muted); margin:0 0 8px; text-transform:uppercase; display:flex; align-items:center; gap:6px; }
+.sty2-media-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+.sty2-media-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.sty2-media-card { border-radius:10px; overflow:hidden; background:rgba(255,255,255,0.03); border:1px solid var(--border); }
+.sty2-thumb { position:relative; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.sty2-thumb-init { font-size:24px; font-weight:900; opacity:0.85; position:relative; z-index:1; color:#fff; letter-spacing:.02em; }
+.sty2-thumb-overlay { position:absolute; bottom:0; left:0; right:0; height:55%; background:linear-gradient(0deg,rgba(0,0,0,0.65),transparent); z-index:0; }
+.sty2-onair-badge { position:absolute; top:7px; left:7px; display:flex; align-items:center; gap:4px; background:rgba(220,38,38,0.92); border-radius:4px; padding:3px 7px; font-size:8px; font-weight:800; color:#fff; letter-spacing:.08em; z-index:2; }
+.sty2-status-badge { position:absolute; top:7px; left:7px; border-radius:4px; padding:3px 7px; font-size:8px; font-weight:800; letter-spacing:.06em; z-index:2; }
+.sty2-card-body { padding:9px 11px; }
+.sty2-card-name { font-size:12px; font-weight:700; color:var(--text-primary); }
+.sty2-card-county { font-size:9px; color:var(--text-muted); margin-top:1px; }
+.sty2-card-topic { font-size:10px; color:var(--text-secondary); font-style:italic; margin-top:4px; line-height:1.4; }
+.sty2-card-metrics { display:flex; gap:8px; margin-top:7px; }
+.sty2-metric { display:flex; flex-direction:column; }
+.sty2-metric-val { font-size:11px; font-weight:700; font-family:var(--font-mono); color:#10B981; }
+.sty2-metric-lbl { font-size:8px; color:var(--text-muted); }
+.sty2-platforms { display:flex; gap:3px; margin-top:6px; flex-wrap:wrap; }
+.sty2-platform { font-size:8px; font-weight:700; padding:2px 5px; border-radius:3px; font-family:var(--font-mono); }
+.sty2-score-tag { font-size:9px; font-weight:800; padding:2px 6px; border-radius:4px; font-family:var(--font-mono); flex-shrink:0; }
+.sty2-queue-item { display:flex; align-items:center; gap:9px; padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.sty2-thumb-xs { width:36px; height:25px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; flex-shrink:0; color:#fff; overflow:hidden; }
+.sty2-queue-name { font-size:11px; font-weight:600; color:var(--text-primary); }
+.sty2-queue-meta { font-size:9px; color:var(--text-muted); margin-top:1px; }
+.sty2-platform-bar { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.sty2-platform-track { flex:1; height:5px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
+.sty2-platform-fill { height:100%; border-radius:3px; }
+@keyframes sty2-pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.sty2-onair-dot { width:5px; height:5px; border-radius:50%; background:#fff; flex-shrink:0; animation:sty2-pulse 1.5s ease-in-out infinite; }
+.sty2-cleared-row { display:flex; gap:0; overflow:hidden; }
+.sty2-cleared-thumb { width:130px; flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
 .sty-eta { font-size:9px; color:#F59E0B; font-family:var(--font-mono); }
 </style>
 </head>
@@ -4670,150 +4708,234 @@ function renderKuraConnect() {
 }
 
 // ============================================================
-// renderStory() — Testimonial Pipeline Kanban
+// renderStory() — Production Center
 // ============================================================
 function renderStory() {
   var el = document.getElementById('page-story');
   if (!el) return;
 
-  var COLS = [
-    {
-      id:'nominated', label:'NOMINATED', color:'#A78BFA',
-      cards:[
-        {id:'STY-009',name:'Mary Wanjiku',  county:'Kiambu', topic:'Road construction impact on local trade',   score:72},
-        {id:'STY-010',name:'Peter Ochieng', county:'Kisumu', topic:'Fishing subsidy impact on household income', score:68},
-      ]
-    },
-    {
-      id:'production', label:'IN PRODUCTION', color:'#F59E0B',
-      cards:[
-        {id:'STY-006',name:'Grace Atieno', county:'Siaya',   topic:'Healthcare facility upgrade beneficiary',score:81,eta:'Ready Sep 16'},
-        {id:'STY-007',name:'Hassan Omar',  county:'Mombasa', topic:'Port jobs expansion &mdash; dock worker', score:77,eta:'Ready Sep 17'},
-      ]
-    },
-    {
-      id:'approved', label:'APPROVED', color:'#7C3AED',
-      cards:[
-        {id:'STY-004',name:'Agnes Wambui',county:'Nakuru',topic:'Hustler Fund beneficiary &mdash; hardware shop',score:91,approved:true},
-      ]
-    },
-    {
-      id:'deployed', label:'DEPLOYED', color:'#10B981',
-      cards:[
-        {id:'STY-001',name:'James Kamau', county:'Nyeri',     topic:'SGR impact on farmers &mdash; lower transport costs',score:88,reach:28400,eng:'74%',platforms:['IVR','WA','SMS']},
-        {id:'STY-002',name:'Faith Njeri', county:"Murang'a",  topic:'School feeding programme &mdash; beneficiary family', score:83,reach:19200,eng:'68%',platforms:['WA','FB']},
-        {id:'STY-003',name:'Samuel Gitau',county:'Nyandarua', topic:'Fertiliser subsidy impact on maize yield',            score:79,reach:14100,eng:'62%',platforms:['IVR','SMS']},
-      ]
-    },
-    {
-      id:'rejected', label:'REJECTED', color:'#EF4444',
-      cards:[
-        {id:'STY-005',name:'Daniel Kipchoge',county:'Uasin Gishu',topic:'Land dispute narrative',        score:34,reason:'Off-message / divisive framing'},
-        {id:'STY-008',name:'Ruth Achieng',   county:'Homa Bay',   topic:'Opposition comparison framing', score:28,reason:'Contains unverified claims'},
-      ]
-    }
+  var THUMBS = {
+    'STY-001': 'linear-gradient(135deg,#065f46,#10B981)',
+    'STY-002': 'linear-gradient(135deg,#4C1D95,#7C3AED)',
+    'STY-003': 'linear-gradient(135deg,#0D5F50,#2DD4BF)',
+    'STY-004': 'linear-gradient(135deg,#78350F,#F59E0B)',
+    'STY-005': 'linear-gradient(135deg,#3F1010,#EF4444)',
+    'STY-006': 'linear-gradient(135deg,#1E3A5F,#A78BFA)',
+    'STY-007': 'linear-gradient(135deg,#0F2F3A,#2DD4BF)',
+    'STY-008': 'linear-gradient(135deg,#2D0A0A,#EF4444)',
+    'STY-009': 'linear-gradient(135deg,#3A1F00,#F97316)',
+    'STY-010': 'linear-gradient(135deg,#0A2A3F,#2DD4BF)',
+  };
+
+  function ini(name) {
+    var p = name.split(' ');
+    return (p[0][0] + (p[1] ? p[1][0] : '')).toUpperCase();
+  }
+
+  function ptag(p) {
+    var m = {
+      IVR: {bg:'rgba(124,58,237,0.2)',  c:'#A78BFA'},
+      WA:  {bg:'rgba(16,185,129,0.15)', c:'#10B981'},
+      SMS: {bg:'rgba(245,158,11,0.15)', c:'#F59E0B'},
+      FB:  {bg:'rgba(45,212,191,0.15)', c:'#2DD4BF'}
+    };
+    var s = m[p] || {bg:'rgba(255,255,255,0.08)', c:'var(--text-muted)'};
+    return '<span class="sty2-platform" style="background:' + s.bg + ';color:' + s.c + '">' + p + '</span>';
+  }
+
+  function pbar(label, val, total, color) {
+    var pct = Math.round((val / total) * 100);
+    return '<div class="sty2-platform-bar">'
+      + '<span style="font-size:9px;font-weight:700;color:var(--text-muted);width:60px;flex-shrink:0">' + label + '</span>'
+      + '<div class="sty2-platform-track"><div class="sty2-platform-fill" style="width:' + pct + '%;background:' + color + '"></div></div>'
+      + '<span style="font-size:9px;font-weight:700;font-family:var(--font-mono);color:' + color + ';width:38px;text-align:right;flex-shrink:0">' + fmt(val) + '</span>'
+      + '</div>';
+  }
+
+  var DEPLOYED = [
+    {id:'STY-001',name:'James Kamau',  county:'Nyeri',    topic:'SGR impact on farmers &mdash; lower transport costs',    score:88, reach:28400, eng:'74%', platforms:['IVR','WA','SMS']},
+    {id:'STY-002',name:'Faith Njeri',  county:"Murang'a", topic:'School feeding programme &mdash; beneficiary family',    score:83, reach:19200, eng:'68%', platforms:['WA','FB']},
+    {id:'STY-003',name:'Samuel Gitau', county:'Nyandarua',topic:'Fertiliser subsidy impact on maize yield',               score:79, reach:14100, eng:'62%', platforms:['IVR','SMS']},
   ];
 
-  function initials(name) {
-    var parts = name.split(' ');
-    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
-  }
-
-  function scoreColor(s) { return s >= 80 ? '#10B981' : s >= 60 ? '#F59E0B' : '#EF4444'; }
-
-  function platformTag(p) {
-    var m = {IVR:{bg:'rgba(124,58,237,0.15)',c:'#A78BFA'},WA:{bg:'rgba(16,185,129,0.12)',c:'#10B981'},SMS:{bg:'rgba(245,158,11,0.1)',c:'#F59E0B'},FB:{bg:'rgba(45,212,191,0.1)',c:'#2DD4BF'}};
-    var s = m[p] || {bg:'rgba(255,255,255,0.07)',c:'var(--text-muted)'};
-    return '<span class="sty-platform" style="background:' + s.bg + ';color:' + s.c + '">' + p + '</span>';
-  }
-
-  function buildCard(card, colId, colColor) {
-    var isDeployed = STATE.deployedStories && STATE.deployedStories.includes(card.id);
-    var sc = scoreColor(card.score);
-    var html = '<div class="sty-card">'
-      + '<div style="display:flex;align-items:center;gap:8px">'
-      + '<div class="sty-thumb" style="background:' + colColor + '22;color:' + colColor + '">' + initials(card.name) + '</div>'
-      + '<div style="flex:1;min-width:0">'
-      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">'
-      + '<span class="sty-id">' + card.id + '</span>'
-      + '<span class="sty-score" style="background:' + sc + '22;color:' + sc + '">' + card.score + ' pts</span>'
+  var deployedHTML = '<div class="sty2-media-grid-3">';
+  DEPLOYED.forEach(function(s) {
+    deployedHTML += '<div class="sty2-media-card">'
+      + '<div class="sty2-thumb" style="background:' + THUMBS[s.id] + '">'
+      + '<div class="sty2-thumb-overlay"></div>'
+      + '<span class="sty2-thumb-init">' + ini(s.name) + '</span>'
+      + '<div class="sty2-onair-badge"><span class="sty2-onair-dot"></span>ON AIR</div>'
       + '</div>'
-      + '<div class="sty-name">' + card.name + '</div>'
-      + '<div class="sty-county">' + card.county + ' County</div>'
-      + '</div></div>'
-      + '<div class="sty-topic">&ldquo;' + card.topic + '&rdquo;</div>';
-
-    if (card.eta) html += '<div class="sty-eta">&#9200; ' + card.eta + '</div>';
-
-    if (card.reach) {
-      html += '<div class="sty-reach">'
-        + '<div class="sty-reach-box"><div class="sty-reach-val">' + fmt(card.reach) + '</div><div class="sty-reach-lbl">Reach</div></div>'
-        + '<div class="sty-reach-box"><div class="sty-reach-val">' + card.eng + '</div><div class="sty-reach-lbl">Engage</div></div>'
-        + '</div>';
-      if (card.platforms) html += '<div class="sty-platforms">' + card.platforms.map(platformTag).join('') + '</div>';
-    }
-
-    if (card.reason) html += '<div class="sty-rejection">&#10007; ' + card.reason + '</div>';
-
-    if (card.approved) {
-      html += isDeployed
-        ? '<div style="font-size:10px;color:#10B981;text-align:center;padding:5px;background:rgba(16,185,129,0.08);border-radius:6px">&#10003; Deployed &mdash; IVR blast at 18:00</div>'
-        : '<button class="btn-primary" style="width:100%;padding:7px;font-size:11px" onclick="deployStory(\'' + card.id + '\')">Deploy via IVR &rarr;</button>';
-    }
-
-    if (colId === 'nominated') {
-      html += '<div style="display:flex;gap:6px">'
-        + '<button class="btn-secondary" style="flex:1;padding:5px;font-size:10px" onclick="showToast(\'Moving to production...\',\'info\')">Approve</button>'
-        + '<button style="flex:1;padding:5px;font-size:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#EF4444;border-radius:6px;cursor:pointer" onclick="showToast(\'Story rejected\',\'info\')">Reject</button>'
-        + '</div>';
-    }
-
-    return html + '</div>';
-  }
-
-  var boardHTML = '<div class="sty-board">';
-  COLS.forEach(function(col) {
-    boardHTML += '<div class="sty-col">'
-      + '<div class="sty-col-hdr" style="border-top-color:' + col.color + ';background:' + col.color + '0d">'
-      + '<span class="sty-col-hdr-label" style="color:' + col.color + '">' + col.label + '</span>'
-      + '<span class="sty-col-count">' + col.cards.length + '</span>'
+      + '<div class="sty2-card-body">'
+      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px">'
+      + '<div><div class="sty2-card-name">' + s.name + '</div><div class="sty2-card-county">' + s.county + ' County</div></div>'
+      + '<span class="sty2-score-tag" style="background:rgba(16,185,129,0.12);color:#10B981">' + s.score + '</span>'
+      + '</div>'
+      + '<div class="sty2-card-topic">&ldquo;' + s.topic + '&rdquo;</div>'
+      + '<div class="sty2-card-metrics">'
+      + '<div class="sty2-metric"><div class="sty2-metric-val">' + fmt(s.reach) + '</div><div class="sty2-metric-lbl">reach</div></div>'
+      + '<div class="sty2-metric"><div class="sty2-metric-val" style="color:#F59E0B">' + s.eng + '</div><div class="sty2-metric-lbl">engage</div></div>'
+      + '</div>'
+      + '<div class="sty2-platforms">' + s.platforms.map(ptag).join('') + '</div>'
+      + '</div>'
       + '</div>';
-    col.cards.forEach(function(card) { boardHTML += buildCard(card, col.id, col.color); });
-    boardHTML += '</div>';
   });
-  boardHTML += '</div>';
+  deployedHTML += '</div>';
+
+  var agnesDeployed = STATE.deployedStories && STATE.deployedStories.includes('STY-004');
+  var clearedHTML = '<div class="sty2-media-card" style="margin-bottom:14px">'
+    + '<div class="sty2-cleared-row">'
+    + '<div class="sty2-cleared-thumb" style="background:' + THUMBS['STY-004'] + '">'
+    + '<div class="sty2-thumb-overlay"></div>'
+    + '<span style="font-size:20px;font-weight:900;color:#fff;position:relative;z-index:1">AW</span>'
+    + '<div class="sty2-status-badge" style="background:rgba(124,58,237,0.88);color:#fff">CLEARED</div>'
+    + '</div>'
+    + '<div class="sty2-card-body" style="flex:1;border-left:1px solid var(--border)">'
+    + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px">'
+    + '<div><div class="sty2-card-name">Agnes Wambui</div><div class="sty2-card-county">Nakuru County</div></div>'
+    + '<span class="sty2-score-tag" style="background:rgba(124,58,237,0.12);color:#7C3AED">91</span>'
+    + '</div>'
+    + '<div class="sty2-card-topic">&ldquo;Hustler Fund beneficiary &mdash; hardware shop owner&rdquo;</div>'
+    + '<div style="margin-top:8px">'
+    + (agnesDeployed
+        ? '<div style="font-size:10px;color:#10B981;text-align:center;padding:6px;background:rgba(16,185,129,0.08);border-radius:6px">&#10003; Deployed &mdash; IVR blast scheduled 18:00</div>'
+        : '<button class="btn-primary" style="width:100%;font-size:11px;padding:7px" onclick="deployStory(\'STY-004\')">&#9654; Deploy via IVR &rarr;</button>')
+    + '</div>'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  var SUBMITTED = [
+    {id:'STY-009', name:'Mary Wanjiku',  county:'Kiambu', topic:'Road construction impact on local trade',         score:72},
+    {id:'STY-010', name:'Peter Ochieng', county:'Kisumu', topic:'Fishing subsidy &mdash; household income story',  score:68},
+  ];
+
+  var submittedHTML = '<div class="sty2-media-grid-2">';
+  SUBMITTED.forEach(function(s) {
+    submittedHTML += '<div class="sty2-media-card">'
+      + '<div class="sty2-thumb" style="background:' + THUMBS[s.id] + '">'
+      + '<div class="sty2-thumb-overlay"></div>'
+      + '<span class="sty2-thumb-init">' + ini(s.name) + '</span>'
+      + '<div class="sty2-status-badge" style="background:rgba(167,139,250,0.85);color:#fff">SUBMITTED</div>'
+      + '</div>'
+      + '<div class="sty2-card-body">'
+      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px">'
+      + '<div><div class="sty2-card-name">' + s.name + '</div><div class="sty2-card-county">' + s.county + ' County</div></div>'
+      + '<span class="sty2-score-tag" style="background:rgba(245,158,11,0.12);color:#F59E0B">' + s.score + '</span>'
+      + '</div>'
+      + '<div class="sty2-card-topic">&ldquo;' + s.topic + '&rdquo;</div>'
+      + '<div style="display:flex;gap:5px;margin-top:8px">'
+      + '<button class="btn-secondary" style="flex:1;padding:5px;font-size:10px" onclick="showToast(\'Moving to production...\',\'info\')">Approve</button>'
+      + '<button style="flex:1;padding:5px;font-size:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#EF4444;border-radius:6px;cursor:pointer" onclick="showToast(\'Story rejected.\',\'info\')">Reject</button>'
+      + '</div>'
+      + '</div>'
+      + '</div>';
+  });
+  submittedHTML += '</div>';
+
+  var IN_EDIT = [
+    {id:'STY-006', name:'Grace Atieno', county:'Siaya',   topic:'Healthcare facility upgrade', score:81, eta:'Sep 16'},
+    {id:'STY-007', name:'Hassan Omar',  county:'Mombasa', topic:'Port jobs expansion',         score:77, eta:'Sep 17'},
+  ];
+
+  var editHTML = IN_EDIT.map(function(s) {
+    return '<div class="sty2-queue-item">'
+      + '<div class="sty2-thumb-xs" style="background:' + THUMBS[s.id] + '">' + ini(s.name) + '</div>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div class="sty2-queue-name">' + s.name + '</div>'
+      + '<div class="sty2-queue-meta">' + s.county + ' &middot; ' + s.topic + '</div>'
+      + '</div>'
+      + '<div style="text-align:right;flex-shrink:0">'
+      + '<div style="font-size:8px;font-weight:800;color:#F59E0B;font-family:var(--font-mono)">ETA ' + s.eta + '</div>'
+      + '<div style="font-size:8px;color:var(--text-muted)">' + s.score + ' pts</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+
+  var REJECTED = [
+    {id:'STY-005', name:'Daniel Kipchoge', county:'Uasin Gishu', reason:'Off-message &mdash; divisive framing'},
+    {id:'STY-008', name:'Ruth Achieng',    county:'Homa Bay',    reason:'Unverified claims'},
+  ];
+
+  var rejectedHTML = REJECTED.map(function(s) {
+    return '<div class="sty2-queue-item">'
+      + '<div class="sty2-thumb-xs" style="background:' + THUMBS[s.id] + ';opacity:0.55">' + ini(s.name) + '</div>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div class="sty2-queue-name" style="color:var(--text-secondary)">' + s.name + '</div>'
+      + '<div style="font-size:9px;color:#EF4444;margin-top:1px">&#10007; ' + s.reason + '</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+
+  var rightPanel = '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">IN EDIT</span>'
+    + '<span style="font-size:9px;font-weight:800;color:#F59E0B;font-family:var(--font-mono)">2 STORIES</span>'
+    + '</div>'
+    + editHTML
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">REJECTED</span>'
+    + '<span style="font-size:9px;font-weight:800;color:#EF4444;font-family:var(--font-mono)">2 STORIES</span>'
+    + '</div>'
+    + rejectedHTML
+    + '</div>'
+    + '<div class="card">'
+    + '<div class="card-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">PLATFORM REACH</span>'
+    + '<span style="font-size:9px;color:var(--text-muted)">61,700 total</span>'
+    + '</div>'
+    + pbar('IVR',       42500, 61700, '#A78BFA')
+    + pbar('WhatsApp',  27300, 61700, '#10B981')
+    + pbar('SMS',       19100, 61700, '#F59E0B')
+    + pbar('Facebook',  11200, 61700, '#2DD4BF')
+    + '</div>'
+    + '</div>';
 
   el.innerHTML = ''
     + '<div class="page-header">'
     + '<div style="display:flex;align-items:center;justify-content:space-between">'
-    + '<div style="display:flex;align-items:center;gap:10px"><h1 style="color:#F59E0B">The Story</h1></div>'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<h1 style="color:#F59E0B">The Story</h1>'
+    + '<span class="amp-live-dot"></span>'
+    + '</div>'
     + '<div style="display:flex;gap:8px">'
     + '<button class="btn-secondary" style="font-size:12px;padding:7px 14px" onclick="showToast(\'Opening submission portal...\',\'info\')">Submit Story</button>'
     + '<button class="btn-primary" style="font-size:12px;padding:7px 14px" onclick="showToast(\'Opening batch upload...\',\'info\')">+ Bulk Upload</button>'
-    + '</div></div>'
-    + '<div class="page-sub">Testimonial pipeline &mdash; nomination through deployment</div>'
-    + '</div>'
-    + '<div class="sty-pipeline">'
-    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#A78BFA">2</div><div class="sty-stage-lbl">Nominated</div></div>'
-    + '<div class="sty-pipe-sep">&rarr;</div>'
-    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#F59E0B">2</div><div class="sty-stage-lbl">Production</div></div>'
-    + '<div class="sty-pipe-sep">&rarr;</div>'
-    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#7C3AED">1</div><div class="sty-stage-lbl">Approved</div></div>'
-    + '<div class="sty-pipe-sep">&rarr;</div>'
-    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#10B981">3</div><div class="sty-stage-lbl">Deployed</div></div>'
-    + '<div class="sty-pipe-sep" style="color:rgba(239,68,68,0.5)">&mdash;</div>'
-    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#EF4444">2</div><div class="sty-stage-lbl">Rejected</div></div>'
-    + '<div style="flex:1"></div>'
-    + '<div style="text-align:right;padding-right:16px;border-right:1px solid var(--border)">'
-    + '<div style="font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--text-muted)">TOTAL REACH</div>'
-    + '<div style="font-size:22px;font-weight:800;color:#10B981;font-family:var(--font-mono);line-height:1.2">61,700</div>'
-    + '</div>'
-    + '<div style="text-align:right;padding-left:16px">'
-    + '<div style="font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--text-muted)">AVG ENGAGEMENT</div>'
-    + '<div style="font-size:22px;font-weight:800;color:#F59E0B;font-family:var(--font-mono);line-height:1.2">68%</div>'
     + '</div>'
     + '</div>'
-    + boardHTML;
+    + '<div class="page-sub">Multimedia testimonial production &mdash; nomination through broadcast</div>'
+    + '</div>'
+    + '<div class="sty2-stats-bar">'
+    + '<div class="sty2-stat-block"><div class="sty2-stat-val" style="color:#10B981">3</div><div class="sty2-stat-lbl">On Air</div></div>'
+    + '<div class="sty2-stat-block"><div class="sty2-stat-val" style="color:#10B981">61,700</div><div class="sty2-stat-lbl">Total Reach</div></div>'
+    + '<div class="sty2-stat-block"><div class="sty2-stat-val" style="color:#F59E0B">68%</div><div class="sty2-stat-lbl">Avg Engage</div></div>'
+    + '<div class="sty2-stat-block"><div class="sty2-stat-val" style="color:#F59E0B">2</div><div class="sty2-stat-lbl">In Edit</div></div>'
+    + '<div class="sty2-stat-block"><div class="sty2-stat-val" style="color:#7C3AED">1</div><div class="sty2-stat-lbl">Cleared</div></div>'
+    + '<div class="sty2-stat-block"><div class="sty2-stat-val" style="color:#A78BFA">2</div><div class="sty2-stat-lbl">Submitted</div></div>'
+    + '</div>'
+    + '<div class="sty2-main">'
+    + '<div style="display:flex;flex-direction:column">'
+    + '<div class="sty2-section-hdr" style="margin-bottom:8px">'
+    + '<span class="sty2-onair-dot" style="background:#EF4444"></span>'
+    + 'ON AIR &mdash; 3 STORIES DEPLOYED'
+    + '</div>'
+    + deployedHTML
+    + '<div class="sty2-section-hdr" style="margin-top:4px;margin-bottom:8px">'
+    + '<span style="width:6px;height:6px;border-radius:50%;background:#7C3AED;display:inline-block;flex-shrink:0"></span>'
+    + 'CLEARED FOR AIR &mdash; READY TO DEPLOY'
+    + '</div>'
+    + clearedHTML
+    + '<div class="sty2-section-hdr" style="margin-bottom:8px">'
+    + '<span style="width:6px;height:6px;border-radius:50%;background:#A78BFA;display:inline-block;flex-shrink:0"></span>'
+    + 'SUBMISSIONS &mdash; AWAITING REVIEW'
+    + '</div>'
+    + submittedHTML
+    + '</div>'
+    + rightPanel
+    + '</div>';
 }
 
 // ============================================================
