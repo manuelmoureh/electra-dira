@@ -1287,6 +1287,47 @@ body {
 .rng-action-num { width:18px; height:18px; border-radius:50%; background:rgba(124,58,237,0.15); color:#A78BFA; font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
 .rng-action-text { font-size:11px; color:var(--text-primary); line-height:1.4; flex:1; }
 .rng-urg { font-size:8px; font-weight:800; padding:2px 5px; border-radius:3px; letter-spacing:.06em; flex-shrink:0; margin-top:1px; }
+
+/* Competition Watch */
+.cw-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.cw-card { background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; }
+.cw-card-head { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.cw-cand-name { font-size:14px; font-weight:700; color:var(--text-primary); }
+.cw-cand-vehicle { font-size:10px; color:var(--text-muted); margin-top:2px; }
+.cw-poll-badge { font-family:var(--font-mono); font-size:11px; font-weight:700; padding:3px 10px; border-radius:4px; }
+.cw-body { padding:14px 16px; }
+.cw-section-lbl { font-size:9px; font-weight:700; letter-spacing:.10em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; }
+.cw-event-row { display:flex; align-items:flex-start; gap:8px; padding:7px 0; border-bottom:1px solid var(--divider); }
+.cw-event-county { font-size:9px; font-weight:700; color:#F97316; font-family:var(--font-mono); min-width:80px; flex-shrink:0; margin-top:1px; }
+.cw-event-desc { font-size:11px; color:var(--text-secondary); flex:1; line-height:1.4; }
+.cw-event-date { font-size:9px; color:var(--text-muted); flex-shrink:0; font-family:var(--font-mono); }
+.cw-theme-row { display:flex; align-items:center; gap:8px; padding:5px 0; }
+.cw-theme-tag { font-size:10px; font-weight:600; padding:3px 8px; border-radius:4px; background:rgba(249,115,22,0.12); color:#F97316; border:1px solid rgba(249,115,22,0.25); }
+.cw-threat-bar { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--divider); }
+.cw-threat-label { font-size:11px; color:var(--text-secondary); flex:1; }
+.cw-threat-track { width:80px; height:4px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; flex-shrink:0; }
+.cw-threat-fill { height:100%; border-radius:3px; }
+.cw-alert-strip { margin:10px -16px -14px; padding:9px 16px; background:rgba(239,68,68,0.05); border-top:1px solid rgba(239,68,68,0.12); font-size:10px; color:#FCA5A5; }
+.cw-drift-banner { border:1px solid rgba(245,158,11,0.3); background:rgba(245,158,11,0.06); border-radius:8px; padding:12px 16px; margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+.cw-drift-dot { width:8px; height:8px; border-radius:50%; background:#F59E0B; flex-shrink:0; }
+.cw-overview-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+.cw-overview-cell { background:var(--bg-surface); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+.cw-overview-num { font-family:var(--font-mono); font-size:22px; font-weight:700; line-height:1; margin-bottom:4px; }
+.cw-overview-lbl { font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); }
+/* Turnout vs Persuasion split */
+.score-split { display:flex; gap:6px; align-items:center; }
+.score-t { font-size:10px; font-weight:700; font-family:var(--font-mono); padding:2px 6px; border-radius:3px; background:rgba(16,185,129,0.12); color:#10B981; }
+.score-p { font-size:10px; font-weight:700; font-family:var(--font-mono); padding:2px 6px; border-radius:3px; background:rgba(167,139,250,0.12); color:#A78BFA; }
+/* Field signal modal */
+.fs-modal { position:fixed; inset:0; background:var(--bg-overlay); z-index:200; display:flex; align-items:center; justify-content:center; padding:16px; }
+.fs-modal-box { background:var(--bg-modal); border:1px solid var(--border-strong); border-radius:var(--radius-lg); padding:24px; width:100%; max-width:440px; }
+.fs-form-row { margin-bottom:14px; }
+.fs-label { font-size:11px; font-weight:700; color:var(--text-secondary); margin-bottom:5px; display:block; letter-spacing:.04em; }
+.fs-input, .fs-select, .fs-textarea { width:100%; background:var(--bg-surface-2); border:1px solid var(--border); border-radius:8px; color:var(--text-primary); font-family:var(--font-sans); font-size:13px; padding:8px 12px; outline:none; box-sizing:border-box; }
+.fs-textarea { resize:vertical; min-height:72px; }
+.fs-input:focus, .fs-select:focus, .fs-textarea:focus { border-color:var(--border-accent); }
+.fs-signal-btn { display:flex; align-items:center; gap:6px; background:rgba(249,115,22,0.12); border:1px solid rgba(249,115,22,0.3); color:#F97316; border-radius:8px; padding:7px 13px; font-size:11px; font-weight:700; letter-spacing:.04em; cursor:pointer; }
+.fs-signal-btn:hover { background:rgba(249,115,22,0.18); }
 </style>
 </head>
 <body>
@@ -1386,6 +1427,49 @@ body {
   </div>
 </div>
 
+<!-- Field Signal Modal -->
+<div id="field-signal-modal" class="modal-overlay hidden">
+  <div class="modal-box" style="position:relative;max-width:440px">
+    <button class="modal-close" onclick="document.getElementById('field-signal-modal').classList.add('hidden')">&#215;</button>
+    <div class="modal-header" style="margin-bottom:16px">
+      <h2 style="font-size:15px;margin:0 0 4px">Report Field Signal</h2>
+      <div style="font-size:11px;color:var(--text-muted)">Ground truth from field agents — updates the intelligence model</div>
+    </div>
+    <div class="fs-form-row">
+      <label class="fs-label">County / Ward</label>
+      <input class="fs-input" id="fs-location" type="text" placeholder="e.g. Nakuru — Kiamunyi Ward">
+    </div>
+    <div class="fs-form-row">
+      <label class="fs-label">Signal Type</label>
+      <select class="fs-select" id="fs-type">
+        <option value="coalition_drift">Coalition Drift / Defection Risk</option>
+        <option value="crowd_turnout">Unexpected Crowd / Low Turnout</option>
+        <option value="opposition_activity">Opposition Activity Spotted</option>
+        <option value="voter_sentiment">Voter Sentiment Shift</option>
+        <option value="infrastructure">Polling Station / Logistics Issue</option>
+        <option value="security">Security / Intimidation Concern</option>
+        <option value="positive">Positive Surge / Supporter Enthusiasm</option>
+      </select>
+    </div>
+    <div class="fs-form-row">
+      <label class="fs-label">Observation</label>
+      <textarea class="fs-textarea" id="fs-observation" placeholder="Describe exactly what you observed — names, numbers, locations, timing…"></textarea>
+    </div>
+    <div class="fs-form-row">
+      <label class="fs-label">Urgency</label>
+      <select class="fs-select" id="fs-urgency">
+        <option value="CRITICAL">Critical — requires immediate action</option>
+        <option value="WARNING" selected>Warning — monitor closely</option>
+        <option value="INFORMATIONAL">Informational — for model update</option>
+      </select>
+    </div>
+    <div class="modal-actions" style="gap:8px;margin-top:4px">
+      <button class="btn-primary btn-sm" onclick="submitFieldSignal()">Submit to Intelligence Model</button>
+      <button class="btn-ghost btn-sm" onclick="document.getElementById('field-signal-modal').classList.add('hidden')">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════════════════════════════════════════════════
      TOAST CONTAINER
 ══════════════════════════════════════════════════════════ -->
@@ -1458,6 +1542,11 @@ body {
       <div class="nav-item" data-page="rungu" onclick="navigate('rungu')">
         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Rungu
+      </div>
+
+      <div class="nav-item" data-page="compwatch" onclick="navigate('compwatch')">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Competition Watch
       </div>
 
       <div class="nav-section-label">System</div>
@@ -1730,8 +1819,16 @@ body {
       <!-- ── PAGE: I-FORCE ────────────────────────────────── -->
       <div class="page" id="page-iforce">
         <div class="page-header">
-          <h1>I-Force — Agent Network</h1>
-          <div class="page-sub">Ground agent deployment and performance tracking</div>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+            <div>
+              <h1>I-Force — Agent Network</h1>
+              <div class="page-sub">Ground agent deployment and performance tracking</div>
+            </div>
+            <button class="fs-signal-btn" onclick="document.getElementById('field-signal-modal').classList.remove('hidden')" style="flex-shrink:0;margin-top:4px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16a2 2 0 0 0 .27.92z"/></svg>
+              Report Field Signal
+            </button>
+          </div>
         </div>
         <div class="kpi-grid">
           <div class="kpi-card"><div class="kpi-label">Total Agents</div><div class="kpi-value">4,720</div><div class="kpi-trend up">↑ 340 this week</div></div>
@@ -1882,6 +1979,9 @@ body {
           </table>
         </div>
       </div>
+
+      <!-- ── PAGE: COMPETITION WATCH ──────────────────────── -->
+      <div class="page" id="page-compwatch"></div>
 
     </main><!-- /content-area -->
   </div><!-- /main-wrapper -->
@@ -2140,6 +2240,65 @@ const CONVERSATIONS = [
   }
 ];
 
+// ── Competition Watch — Opposition Intelligence
+var COMPETITORS = [
+  {
+    id:'kalonzo', name:'Kalonzo Musyoka', vehicle:'Wiper Democratic Movement', poll:18, col:'#F97316',
+    threat:'medium',
+    counties_targeted:['Ukambani (Makueni, Kitui, Machakos)','Nairobi Diaspora','Coast'],
+    planned_events:[
+      {county:'Makueni',    desc:'Maize subsidy handout — 14 wards, 28,000 farmers targeted',          date:'Sep 30'},
+      {county:'Nairobi',    desc:'Youth jobs town hall — Eastleigh &amp; South B, estimated 4,000 youth', date:'Oct 5'},
+      {county:'Mombasa',    desc:'Coast Unity Summit — Mwambao platform launch',                         date:'Oct 12'},
+    ],
+    messaging_themes:['UhuRuto betrayal narrative','Maize/subsidy failure','Senior statesman gravitas'],
+    strength:'50+ years in government — institutional name recognition in Ukambani',
+    weakness:'No youth base, no Gen Z digital presence, 2022 pre-election defection baggage',
+    drift_risk:false
+  },
+  {
+    id:'sifuna', name:'Edwin Sifuna (Solo/Coalition)', vehicle:'Orange Democratic Movement', poll:15, col:'#F59E0B',
+    threat:'high',
+    counties_targeted:['Nairobi','Kisumu','Siaya','Homa Bay','Migori','Bungoma'],
+    planned_events:[
+      {county:'Nairobi',    desc:'Gen Z Tech Forum — KICC, coded as &ldquo;jobs not handouts&rdquo; rally', date:'Oct 3'},
+      {county:'Kisumu',     desc:'Lake Region Economic Bloc launch — 7 Nyanza governors + traders',         date:'Oct 8'},
+      {county:'Bungoma',    desc:'Luhya bloc consolidation meeting — Bukusu/Tachoni elders',                date:'Oct 15'},
+    ],
+    messaging_themes:['Finance Act corruption','Gen Z mobilization','Anti-Ruto economic record','Azimio II rebuild'],
+    strength:'Highest Gen Z organic reach of any candidate. Nyanza bloc anchor.',
+    weakness:'No Rift Valley/Mt. Kenya access. Potential split: solo vs. coalition',
+    drift_risk:true
+  },
+  {
+    id:'gachagua', name:'Rigathi Gachagua (Pending court)', vehicle:'Mt. Kenya bloc (independent)', poll:11, col:'#A78BFA',
+    threat:'critical',
+    counties_targeted:['Nyeri','Kirinyaga','Murang\'a','Embu','Tharaka-Nithi'],
+    planned_events:[
+      {county:'Nyeri',      desc:'Appeal ruling support rally — if ballot access confirmed', date:'TBD'},
+      {county:'Kirinyaga',  desc:'Tea farmer briefing — Sh 60/kg minimum floor promise',    date:'Oct 9'},
+      {county:'Murang\'a',  desc:'Murang\'a Youth CDF audit — anti-Ruto economic brief',   date:'Oct 14'},
+    ],
+    messaging_themes:['Mt. Kenya region neglected','Two-thirds rule constitutional breach','Tea/coffee farmer grievances'],
+    strength:'DIRECT bloc overlap with Ruto\'s 2022 Mt. Kenya coalition. Highest bleed risk.',
+    weakness:'Court outcome uncertain. Legal challenge = uncertain ballot access.',
+    drift_risk:true
+  },
+  {
+    id:'wamalwa', name:'Eugene Wamalwa / Luhya consolidation', vehicle:'Ford Kenya / Unity Pact', poll:8, col:'#2DD4BF',
+    threat:'low',
+    counties_targeted:['Bungoma','Kakamega','Vihiga','Trans Nzoia'],
+    planned_events:[
+      {county:'Kakamega',   desc:'Luhya nation summit — 18 sub-tribal leaders, kingmaker positioning', date:'Oct 6'},
+      {county:'Trans Nzoia',desc:'Maize/sugarcane farmers forum — subsidized input demand',            date:'Oct 11'},
+    ],
+    messaging_themes:['Western Kenya neglect','Devolution funds diverted','Luhya unity above party'],
+    strength:'If Luhya vote consolidates under one ticket, changes Rift Valley math',
+    weakness:'Historically fractured Luhya vote. Multiple personalities competing for bloc.',
+    drift_risk:false
+  },
+];
+
 const STATE = {
   page:'home',
   role:'national',
@@ -2162,7 +2321,8 @@ function getInitialAlerts() {
   return [
     {id:'ALT-4421',type:'sha_rejection_spike',severity:'CRITICAL',title:'SHA Card Rejection Spike — Nakuru County Hospital',description:'47 SHA card rejections reported at Nakuru County Hospital in the last 6 hours. Social media amplification active with 12,841 engagements on top tweet. Recommended: immediate SHA ministerial response and system check.',county:'Nakuru',county_id:32,source:'Signal Intelligence',ai_response:'Escalate to SHA Cabinet Secretary. Deploy "SHA is being fixed" message via Amplifier to Nakuru WhatsApp groups. Counter-narrative already drafted.',status:'open',created_at:new Date(Date.now()-7200000)},
     {id:'ALT-4422',type:'agent_coverage_gap',severity:'WARNING',title:'Agent Coverage Gap — Kiamunyi Ward (2 Polling Stations)',description:'KW-003 (Rhonda Social Hall) and KW-006 (Kiamunyi High School) are unassigned. Combined voter count: 3,728. 14 days to election.',county:'Nakuru',county_id:32,source:'I-Force Module',ai_response:'Recommend immediate redeployment of 4 agents from Menengai West (surplus). Kiamunyi ward coordinator notified.',status:'open',created_at:new Date(Date.now()-14400000)},
-    {id:'ALT-4423',type:'positive_feedback',severity:'INFORMATIONAL',title:'Uasin Gishu IVR: +8% Sentiment Shift on Economic Messaging',description:'Uasin Gishu respondents showing a statistically significant 8% positive swing on Hustler Fund and SHA messaging vs last week.',county:'Uasin Gishu',county_id:27,source:'Kura Connect IVR',ai_response:null,status:'open',created_at:new Date(Date.now()-21600000)}
+    {id:'ALT-4423',type:'positive_feedback',severity:'INFORMATIONAL',title:'Uasin Gishu IVR: +8% Sentiment Shift on Economic Messaging',description:'Uasin Gishu respondents showing a statistically significant 8% positive swing on Hustler Fund and SHA messaging vs last week.',county:'Uasin Gishu',county_id:27,source:'Kura Connect IVR',ai_response:null,status:'open',created_at:new Date(Date.now()-21600000)},
+    {id:'ALT-4425',type:'coalition_drift',severity:'WARNING',title:'Coalition Drift — Mt. Kenya Bloc (Nyeri, Kirinyaga)',description:'TIFA Jun 2026 shows 12% drop in UDA support in Nyeri and Kirinyaga vs Q1 2026 baseline. Historical Gachagua strongholds showing uncommitted movement aligned with his court appeal. 3 ward coordinators in Nyeri reporting unusual inactivity from previously reliable community leaders.',county:'Nyeri',county_id:15,source:'Signal Intelligence + Field Reports',ai_response:'Deploy Gachagua bridge-building messaging to Nyeri and Kirinyaga WhatsApp networks immediately. Identify and brief 8 key opinion leaders in Nyeri town and Othaya. Increase IVR contact frequency in both counties from weekly to 3x/week. Monitor Gachagua court ruling timeline closely.',status:'open',created_at:new Date(Date.now()-28800000)}
   ];
 }
 
@@ -3042,6 +3202,12 @@ function renderHome() {
       metric:`Full activity log &middot; tamper-proof`,
       accent: DC.MONITOR,
     },
+    {
+      id:'compwatch', name:'Competition Watch', sub:'Opposition Intelligence',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+      metric:`<span style="color:${DC.FLAG}">${COMPETITORS.filter(function(c){return c.threat==='critical';}).length} critical</span> &middot; ${COMPETITORS.length} candidates &middot; ${COMPETITORS.filter(function(c){return c.drift_risk;}).length} drift risk`,
+      accent: DC.OPP,
+    },
   ];
 
   document.getElementById('page-home').innerHTML = `
@@ -3089,6 +3255,11 @@ function renderHome() {
             <div class="rh-stat-card-label">Open Alerts</div>
             <div class="rh-stat-card-val" style="color:${openAlerts.length>0?'#FCA5A5':'#6EE7B7'}">${openAlerts.length}</div>
             <div class="rh-stat-card-sub">${critAlerts.length} critical</div>
+          </div>
+          <div class="rh-stat-card">
+            <div class="rh-stat-card-label">Booth Coverage</div>
+            <div class="rh-stat-card-val" style="color:${parseFloat(avgCoverage)>=70?'#6EE7B7':parseFloat(avgCoverage)>=55?'#FCD34D':'#FCA5A5'}">${avgCoverage}<span style="font-size:14px;color:rgba(255,255,255,0.35)">%</span></div>
+            <div class="rh-stat-card-sub">of 46K polling stations</div>
           </div>
         </div>
       </div>
@@ -3549,13 +3720,28 @@ function renderDira() {
     + '</div>'
     + constHTML
     + '</div>'
-    + '<div class="card" style="padding:0;overflow:hidden">'
-    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
-    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">POLLING STATIONS &mdash; KIAMUNYI</span>'
-    + '<span style="font-size:9px;color:#F59E0B;font-weight:700">' + uncoveredCount + ' uncovered</span>'
-    + '</div>'
-    + stationHTML
-    + '</div>'
+    + (function(){
+        var totalStations = kw.polling_stations.length;
+        var coveredCount = totalStations - uncoveredCount;
+        var covPct = Math.round((coveredCount/totalStations)*100);
+        var covBarColor = covPct >= 70 ? '#10B981' : covPct >= 55 ? '#F59E0B' : '#EF4444';
+        return '<div class="card" style="padding:0;overflow:hidden">'
+          + '<div style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+          + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+          + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">POLLING STATIONS &mdash; KIAMUNYI</span>'
+          + '<span style="font-size:9px;color:' + covBarColor + ';font-weight:700;font-family:var(--font-mono)">' + coveredCount + '/' + totalStations + ' covered</span>'
+          + '</div>'
+          + '<div style="display:flex;align-items:center;gap:10px">'
+          + '<div style="flex:1;height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden">'
+          + '<div style="height:100%;width:' + covPct + '%;background:' + covBarColor + ';border-radius:3px;transition:width .4s"></div>'
+          + '</div>'
+          + '<span style="font-size:11px;font-weight:800;color:' + covBarColor + ';font-family:var(--font-mono);flex-shrink:0">' + covPct + '%</span>'
+          + '<span style="font-size:9px;color:var(--text-muted);flex-shrink:0">booth coverage</span>'
+          + '</div>'
+          + '</div>'
+          + stationHTML
+          + '</div>';
+      })()
     + '</div>'
     + '</div>';
 
@@ -5441,16 +5627,16 @@ function renderLock() {
   var isElectionDay = STATE.lockMode === 'election';
 
   var WARDS = [
-    {ward:'Kiamunyi',      county:'Nakuru',  reg:28400, comm:16820, rate:59.2, prio:'CRITICAL', color:'#EF4444'},
-    {ward:'Menengai West', county:'Nakuru',  reg:22100, comm:14800, rate:67.0, prio:'HIGH',     color:'#F97316'},
-    {ward:'Flamingo',      county:'Nakuru',  reg:19800, comm:13640, rate:68.9, prio:'HIGH',     color:'#F97316'},
-    {ward:'Rhonda',        county:'Nakuru',  reg:18200, comm:13200, rate:72.5, prio:'MEDIUM',   color:'#F59E0B'},
-    {ward:'Lanet/Umoja',   county:'Nakuru',  reg:17400, comm:12850, rate:73.9, prio:'MEDIUM',   color:'#F59E0B'},
-    {ward:'Dagoretti N.',  county:'Nairobi', reg:31200, comm:23400, rate:75.0, prio:'MEDIUM',   color:'#F59E0B'},
-    {ward:'Kangemi',       county:'Nairobi', reg:24100, comm:18200, rate:75.5, prio:'HOLD',     color:'#A78BFA'},
-    {ward:'Westlands',     county:'Nairobi', reg:19800, comm:15200, rate:76.8, prio:'HOLD',     color:'#A78BFA'},
-    {ward:'Limuru',        county:'Kiambu',  reg:16800, comm:13200, rate:78.6, prio:'HOLD',     color:'#A78BFA'},
-    {ward:'Thika Township',county:'Kiambu',  reg:22400, comm:18100, rate:80.8, prio:'LOCKED',   color:'#10B981'},
+    {ward:'Kiamunyi',      county:'Nakuru',  reg:28400, comm:16820, rate:59.2, prio:'CRITICAL', color:'#EF4444', turnout:54, persuasion:12},
+    {ward:'Menengai West', county:'Nakuru',  reg:22100, comm:14800, rate:67.0, prio:'HIGH',     color:'#F97316', turnout:62, persuasion:15},
+    {ward:'Flamingo',      county:'Nakuru',  reg:19800, comm:13640, rate:68.9, prio:'HIGH',     color:'#F97316', turnout:64, persuasion:11},
+    {ward:'Rhonda',        county:'Nakuru',  reg:18200, comm:13200, rate:72.5, prio:'MEDIUM',   color:'#F59E0B', turnout:70, persuasion:8},
+    {ward:'Lanet/Umoja',   county:'Nakuru',  reg:17400, comm:12850, rate:73.9, prio:'MEDIUM',   color:'#F59E0B', turnout:71, persuasion:6},
+    {ward:'Dagoretti N.',  county:'Nairobi', reg:31200, comm:23400, rate:75.0, prio:'MEDIUM',   color:'#F59E0B', turnout:74, persuasion:5},
+    {ward:'Kangemi',       county:'Nairobi', reg:24100, comm:18200, rate:75.5, prio:'HOLD',     color:'#A78BFA', turnout:75, persuasion:4},
+    {ward:'Westlands',     county:'Nairobi', reg:19800, comm:15200, rate:76.8, prio:'HOLD',     color:'#A78BFA', turnout:77, persuasion:3},
+    {ward:'Limuru',        county:'Kiambu',  reg:16800, comm:13200, rate:78.6, prio:'HOLD',     color:'#A78BFA', turnout:79, persuasion:2},
+    {ward:'Thika Township',county:'Kiambu',  reg:22400, comm:18100, rate:80.8, prio:'LOCKED',   color:'#10B981', turnout:82, persuasion:1},
   ];
 
   var STATIONS = [
@@ -5488,6 +5674,10 @@ function renderLock() {
         + '</div>'
         + '<div class="lck-bar-wrap"><div class="lck-bar" style="width:' + w.rate + '%;background:' + w.color + '"></div></div>'
         + '<span style="font-size:11px;font-weight:800;color:' + w.color + ';font-family:var(--font-mono);width:40px;text-align:right;flex-shrink:0">' + w.rate + '%</span>'
+        + '<div class="score-split">'
+        + '<span class="score-t" title="Turnout propensity score">T ' + w.turnout + '</span>'
+        + '<span class="score-p" title="Persuasion score (Kalla-Broockman: ~0 in general elections)">P ' + w.persuasion + '</span>'
+        + '</div>'
         + '<span class="lck-prio" style="background:' + w.color + '18;color:' + w.color + ';width:60px;text-align:center">' + w.prio + '</span>'
         + '</div>';
     }
@@ -5845,6 +6035,145 @@ function renderAudit() {
     + '</div>';
 }
 
+// ============================================================
+// submitFieldSignal() — upward field signal flow
+// ============================================================
+function submitFieldSignal() {
+  var loc = (document.getElementById('fs-location') || {}).value || 'Unknown';
+  var type = (document.getElementById('fs-type') || {}).value || 'voter_sentiment';
+  var obs = (document.getElementById('fs-observation') || {}).value || '';
+  var urg = (document.getElementById('fs-urgency') || {}).value || 'WARNING';
+  if (!obs.trim()) { showToast('Please add an observation before submitting', 'warn'); return; }
+  addAlert({
+    id: 'ALT-FS-' + Date.now(),
+    type: type,
+    severity: urg,
+    title: 'Field Signal: ' + loc + ' (' + type.replace('_', ' ').toUpperCase() + ')',
+    description: obs,
+    county: loc.split('—')[0].trim() || 'Field Report',
+    county_id: 0,
+    source: 'Field Agent (Direct Report)',
+    ai_response: 'Field intelligence received. Cross-referencing with county model. Notifying ward coordinator.',
+    status: 'open',
+    created_at: new Date()
+  });
+  addAudit('Current User', 'Field Operator', 'signal.reported', loc, obs.slice(0, 80));
+  document.getElementById('field-signal-modal').classList.add('hidden');
+  showToast('Field signal submitted — intelligence model updated', 'success');
+  if (STATE.page === 'signal') renderSignal();
+}
+
+// ============================================================
+// renderCompWatch() — Competition Watch Module
+// ============================================================
+function renderCompWatch() {
+  var el = document.getElementById('page-compwatch');
+  if (!el) return;
+
+  var highThreats = COMPETITORS.filter(function(c) { return c.threat === 'high' || c.threat === 'critical'; });
+  var driftCandidates = COMPETITORS.filter(function(c) { return c.drift_risk; });
+  var totalEvents = COMPETITORS.reduce(function(s, c) { return s + c.planned_events.length; }, 0);
+  var totalPoll = COMPETITORS.reduce(function(s, c) { return s + c.poll; }, 0);
+
+  var overviewHTML = '<div class="cw-overview-grid">'
+    + '<div class="cw-overview-cell"><div class="cw-overview-num" style="color:#F97316">' + COMPETITORS.length + '</div><div class="cw-overview-lbl">Candidates Tracked</div></div>'
+    + '<div class="cw-overview-cell"><div class="cw-overview-num" style="color:#EF4444">' + highThreats.length + '</div><div class="cw-overview-lbl">High / Critical Threat</div></div>'
+    + '<div class="cw-overview-cell"><div class="cw-overview-num" style="color:#A78BFA">' + totalEvents + '</div><div class="cw-overview-lbl">Planned Events (30d)</div></div>'
+    + '<div class="cw-overview-cell"><div class="cw-overview-num" style="color:#F59E0B">' + totalPoll + '%</div><div class="cw-overview-lbl">Opposition Aggregate Poll</div></div>'
+    + '</div>';
+
+  var driftHTML = '';
+  if (driftCandidates.length > 0) {
+    driftHTML = '<div class="cw-drift-banner">'
+      + '<div class="cw-drift-dot"></div>'
+      + '<div>'
+      + '<div style="font-size:11px;font-weight:700;color:#F59E0B;margin-bottom:3px">COALITION DRIFT WATCH &mdash; ' + driftCandidates.length + ' candidates with bloc overlap risk</div>'
+      + '<div style="font-size:11px;color:var(--text-muted)">'
+      + driftCandidates.map(function(c) { return '<strong style="color:var(--text-secondary)">' + c.name.split(' ')[1] + '</strong> (' + c.vehicle + ')'; }).join(' &middot; ')
+      + ' — actively targeting your base counties. Cross-reference with Msingi for bloc overlap.</div>'
+      + '</div>'
+      + '</div>';
+  }
+
+  var cardsHTML = '<div class="cw-grid">';
+  for (var i = 0; i < COMPETITORS.length; i++) {
+    var c = COMPETITORS[i];
+    var threatCol = c.threat === 'critical' ? '#EF4444' : c.threat === 'high' ? '#F97316' : c.threat === 'medium' ? '#F59E0B' : '#A78BFA';
+    var threatLbl = c.threat.toUpperCase();
+    var eventsHTML = c.planned_events.map(function(ev) {
+      return '<div class="cw-event-row">'
+        + '<span class="cw-event-county">' + ev.county + '</span>'
+        + '<span class="cw-event-desc">' + ev.desc + '</span>'
+        + '<span class="cw-event-date">' + ev.date + '</span>'
+        + '</div>';
+    }).join('');
+    var themesHTML = c.messaging_themes.map(function(t) {
+      return '<span class="cw-theme-tag">' + t + '</span>';
+    }).join('');
+    var countiesHTML = c.counties_targeted.map(function(ct) {
+      return '<div style="font-size:10px;color:var(--text-secondary);padding:2px 0">&bull; ' + ct + '</div>';
+    }).join('');
+    cardsHTML += '<div class="cw-card">'
+      + '<div class="cw-card-head">'
+      + '<div><div class="cw-cand-name">' + c.name + '</div><div class="cw-cand-vehicle">' + c.vehicle + '</div></div>'
+      + '<div style="display:flex;align-items:center;gap:8px">'
+      + '<span class="cw-poll-badge" style="background:' + c.col + '18;color:' + c.col + ';border:1px solid ' + c.col + '33">' + c.poll + '%</span>'
+      + '<span style="font-size:9px;font-weight:800;padding:3px 7px;border-radius:3px;background:' + threatCol + '18;color:' + threatCol + ';border:1px solid ' + threatCol + '33;letter-spacing:.08em">' + threatLbl + '</span>'
+      + '</div>'
+      + '</div>'
+      + '<div class="cw-body">'
+      + '<div class="cw-section-lbl">Target Counties</div>'
+      + '<div style="margin-bottom:14px">' + countiesHTML + '</div>'
+      + '<div class="cw-section-lbl">Planned Events (30 days)</div>'
+      + '<div style="margin-bottom:14px">' + eventsHTML + '</div>'
+      + '<div class="cw-section-lbl">Messaging Themes</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px">' + themesHTML + '</div>'
+      + '<div class="cw-section-lbl">Threat Assessment</div>'
+      + '<div style="font-size:11px;color:#10B981;line-height:1.5;margin-bottom:4px"><strong>Strength:</strong> ' + c.strength + '</div>'
+      + '<div style="font-size:11px;color:var(--text-muted);line-height:1.5">' + c.weakness + '</div>'
+      + (c.drift_risk ? '<div class="cw-alert-strip">&triangle; COALITION DRIFT RISK &mdash; monitoring Mt. Kenya &amp; allied bloc overlap</div>' : '')
+      + '</div>'
+      + '</div>';
+  }
+  cardsHTML += '</div>';
+
+  var pollChartHTML = '<div class="card" style="margin-bottom:14px">'
+    + '<div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">OPPOSITION POLL SHARE &mdash; COMPOSITE</span>'
+    + '<span style="font-size:10px;color:var(--text-muted)">TIFA Jun 2026 &middot; Infotrak Q2 2026</span></div>'
+    + '<div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">';
+  for (var j = 0; j < COMPETITORS.length; j++) {
+    var comp = COMPETITORS[j];
+    pollChartHTML += '<div style="display:flex;align-items:center;gap:10px">'
+      + '<div style="min-width:140px;font-size:12px;font-weight:500;color:var(--text-secondary)">' + comp.name.split(' ').slice(0,2).join(' ') + '</div>'
+      + '<div style="flex:1;height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden">'
+      + '<div style="height:100%;width:' + (comp.poll * 3) + '%;background:' + comp.col + ';border-radius:3px"></div>'
+      + '</div>'
+      + '<div style="font-size:12px;font-weight:700;font-family:var(--font-mono);color:' + comp.col + ';min-width:36px;text-align:right">' + comp.poll + '%</div>'
+      + '<span style="font-size:9px;font-weight:800;color:' + (comp.threat==='critical'?'#EF4444':comp.threat==='high'?'#F97316':comp.threat==='medium'?'#F59E0B':'#A78BFA') + ';min-width:50px">'
+      + comp.threat.toUpperCase() + '</span>'
+      + '</div>';
+  }
+  pollChartHTML += '<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:10px;color:var(--text-muted)">Ruto (incumbent) tracking 51-55% in same composites &middot; Opposition aggregate 52% if consolidated &mdash; hence Round 2 risk is the primary scenario to model.</div>'
+    + '</div></div>';
+
+  el.innerHTML = '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<h1 style="background:linear-gradient(135deg,#F97316 0%,#F59E0B 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Competition Watch</h1>'
+    + '</div>'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<div class="page-sub">' + COMPETITORS.length + ' candidates tracked &middot; opposition movement intelligence &middot; coalition drift monitoring</div>'
+    + '<button class="fs-signal-btn" onclick="document.getElementById(\'field-signal-modal\').classList.remove(\'hidden\')">'
+    + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+    + 'Report Field Intel'
+    + '</button>'
+    + '</div>'
+    + '</div>'
+    + overviewHTML
+    + driftHTML
+    + pollChartHTML
+    + cardsHTML;
+}
+
 function navigate(page) {
   STATE.page = page;
   if (window.location.hash.replace(/^#/,'') !== page) history.replaceState(null,'','#'+page);
@@ -5874,7 +6203,8 @@ function navigate(page) {
     sauti: renderSauti,
     lock: renderLock,
     health: renderHealth,
-    audit: renderAudit
+    audit: renderAudit,
+    compwatch: renderCompWatch
   };
   if (renders[page]) renders[page]();
   document.querySelector('.content-area').scrollTop = 0;
@@ -5908,8 +6238,9 @@ var DEMO_STEPS = [
   { page: 'wasikie',  delay: 28000, toast: 'Wasikie: Gen Z intelligence · sentiment -0.12 vs national +0.24', type: 'warn' },
   { page: 'sauti',    delay: 32000, toast: 'Sauti: CRITICAL — SGR corruption narrative escalating', type: 'error' },
   { page: 'lock',     delay: 36000, toast: 'Lock: GOTV operations · 159,410 committed voters', type: 'info' },
-  { page: 'health',   delay: 40000, toast: 'System Health: 99.97% uptime · 2.4M API calls/day', type: 'info' },
-  { page: 'audit',    delay: 44000, toast: 'Audit Trail: Every action immutably logged', type: 'info' },
+  { page: 'compwatch',delay: 40000, toast: 'Competition Watch: 4 opposition candidates · coalition drift detected', type: 'warn' },
+  { page: 'health',   delay: 44000, toast: 'System Health: 99.97% uptime · 2.4M API calls/day', type: 'info' },
+  { page: 'audit',    delay: 48000, toast: 'Audit Trail: Every action immutably logged', type: 'info' },
 ];
 
 let _demoTimers = [];
@@ -6011,7 +6342,7 @@ function applyRole(roleId) {
   const roleConfig = {
     'national-ops': {
       label: 'National Ops Director',
-      pages: ['home','rungu','msingi','dira','signal','iforce','amplifier','kura','story','wasikie','sauti','lock','health','audit'],
+      pages: ['home','rungu','msingi','dira','signal','iforce','amplifier','kura','story','wasikie','sauti','lock','compwatch','health','audit'],
       readOnly: false
     },
     'county-coord': {
@@ -6021,7 +6352,7 @@ function applyRole(roleId) {
     },
     'analyst': {
       label: 'Data Analyst',
-      pages: ['home','rungu','msingi','signal','wasikie','health','audit'],
+      pages: ['home','rungu','msingi','signal','wasikie','compwatch','health','audit'],
       readOnly: true
     },
     'comms': {
@@ -6117,7 +6448,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const shortcuts = {
         '1': 'rungu', '2': 'dira', '3': 'signal', '4': 'iforce',
         '5': 'amplifier', '6': 'kura', '7': 'story', '8': 'wasikie',
-        '9': 'sauti', '0': 'lock', 'h': 'health', 'a': 'audit'
+        '9': 'sauti', '0': 'lock', 'h': 'health', 'a': 'audit', 'c': 'compwatch'
       };
       const page = shortcuts[e.key];
       if (page) { e.preventDefault(); navigate(page); }
