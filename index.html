@@ -1151,6 +1151,32 @@ body {
 .kc2-call-badge { font-size:8px; font-weight:700; padding:2px 6px; border-radius:4px; font-family:var(--font-mono); white-space:nowrap; letter-spacing:.04em; }
 .kc2-wave { display:flex; align-items:flex-end; gap:2px; height:18px; flex-shrink:0; }
 .kc2-wave-bar { width:3px; border-radius:2px 2px 0 0; background:#10B981; }
+/* The Story — Testimonial Pipeline */
+.sty-pipeline { display:flex; align-items:center; gap:8px; background:rgba(245,158,11,0.04); border:1px solid rgba(245,158,11,0.15); border-radius:12px; padding:14px 20px; margin-bottom:14px; }
+.sty-stage-chip { display:flex; flex-direction:column; align-items:center; padding:6px 14px; border-radius:8px; min-width:70px; }
+.sty-stage-num { font-size:20px; font-weight:800; font-family:var(--font-mono); line-height:1.1; }
+.sty-stage-lbl { font-size:8px; font-weight:700; letter-spacing:.1em; color:var(--text-muted); margin-top:3px; text-transform:uppercase; }
+.sty-pipe-sep { font-size:12px; color:var(--text-subtle); padding:0 2px; }
+.sty-board { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; align-items:start; }
+.sty-col { display:flex; flex-direction:column; gap:8px; }
+.sty-col-hdr { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; border-radius:8px 8px 0 0; border-top:3px solid; }
+.sty-col-hdr-label { font-size:9px; font-weight:800; letter-spacing:.1em; }
+.sty-col-count { font-size:10px; font-weight:700; background:rgba(255,255,255,0.08); padding:1px 7px; border-radius:10px; color:var(--text-muted); font-family:var(--font-mono); }
+.sty-card { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:11px 12px; display:flex; flex-direction:column; gap:7px; }
+.sty-thumb { width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; letter-spacing:.03em; }
+.sty-id { font-size:8px; color:var(--text-muted); font-family:var(--font-mono); }
+.sty-name { font-size:12px; font-weight:700; color:var(--text-primary); }
+.sty-county { font-size:9px; color:var(--text-muted); }
+.sty-topic { font-size:10px; color:var(--text-secondary); font-style:italic; line-height:1.4; }
+.sty-score { font-size:10px; font-weight:800; font-family:var(--font-mono); padding:2px 6px; border-radius:5px; }
+.sty-reach { display:grid; grid-template-columns:1fr 1fr; gap:4px; }
+.sty-reach-box { background:rgba(16,185,129,0.07); border-radius:5px; padding:4px 6px; text-align:center; }
+.sty-reach-val { font-size:11px; font-weight:800; color:#10B981; font-family:var(--font-mono); }
+.sty-reach-lbl { font-size:8px; color:var(--text-muted); }
+.sty-platforms { display:flex; gap:4px; flex-wrap:wrap; }
+.sty-platform { font-size:8px; font-weight:700; padding:2px 6px; border-radius:4px; font-family:var(--font-mono); letter-spacing:.04em; }
+.sty-rejection { font-size:9px; color:#EF4444; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.15); padding:5px 7px; border-radius:6px; line-height:1.4; }
+.sty-eta { font-size:9px; color:#F59E0B; font-family:var(--font-mono); }
 </style>
 </head>
 <body>
@@ -4647,119 +4673,147 @@ function renderKuraConnect() {
 // renderStory() — Testimonial Pipeline Kanban
 // ============================================================
 function renderStory() {
-  const el = document.getElementById('page-story');
+  var el = document.getElementById('page-story');
   if (!el) return;
 
-  const columns = [
+  var COLS = [
     {
-      id: 'nominated', label: 'NOMINATED', color: '#3B82F6',
-      cards: [
-        { id: 'STY-009', name: 'Mary Wanjiku', county: 'Kiambu', topic: 'Road construction impact', score: 72 },
-        { id: 'STY-010', name: 'Peter Ochieng', county: 'Kisumu', topic: 'Fishing subsidy programme', score: 68 },
+      id:'nominated', label:'NOMINATED', color:'#A78BFA',
+      cards:[
+        {id:'STY-009',name:'Mary Wanjiku',  county:'Kiambu', topic:'Road construction impact on local trade',   score:72},
+        {id:'STY-010',name:'Peter Ochieng', county:'Kisumu', topic:'Fishing subsidy impact on household income', score:68},
       ]
     },
     {
-      id: 'production', label: 'IN PRODUCTION', color: '#F59E0B',
-      cards: [
-        { id: 'STY-006', name: 'Grace Atieno', county: 'Siaya', topic: 'Healthcare facility upgrade', score: 81, eta: 'Ready Sep 16' },
-        { id: 'STY-007', name: 'Hassan Omar', county: 'Mombasa', topic: 'Port jobs expansion', score: 77, eta: 'Ready Sep 17' },
+      id:'production', label:'IN PRODUCTION', color:'#F59E0B',
+      cards:[
+        {id:'STY-006',name:'Grace Atieno', county:'Siaya',   topic:'Healthcare facility upgrade beneficiary',score:81,eta:'Ready Sep 16'},
+        {id:'STY-007',name:'Hassan Omar',  county:'Mombasa', topic:'Port jobs expansion &mdash; dock worker', score:77,eta:'Ready Sep 17'},
       ]
     },
     {
-      id: 'approved', label: 'APPROVED', color: '#7C3AED',
-      cards: [
-        { id: 'STY-004', name: 'Agnes Wambui', county: 'Nakuru', topic: 'Hustler Fund beneficiary', score: 91, approved: true }
+      id:'approved', label:'APPROVED', color:'#7C3AED',
+      cards:[
+        {id:'STY-004',name:'Agnes Wambui',county:'Nakuru',topic:'Hustler Fund beneficiary &mdash; hardware shop',score:91,approved:true},
       ]
     },
     {
-      id: 'deployed', label: 'DEPLOYED', color: '#10B981',
-      cards: [
-        { id: 'STY-001', name: 'James Kamau', county: 'Nyeri', topic: 'SGR impact on farmers', score: 88, reach: 28400, engagement: '74%' },
-        { id: 'STY-002', name: 'Faith Njeri', county: 'Muranga', topic: 'School feeding programme', score: 83, reach: 19200, engagement: '68%' },
-        { id: 'STY-003', name: 'Samuel Gitau', county: 'Nyandarua', topic: 'Fertiliser subsidy', score: 79, reach: 14100, engagement: '62%' },
+      id:'deployed', label:'DEPLOYED', color:'#10B981',
+      cards:[
+        {id:'STY-001',name:'James Kamau', county:'Nyeri',     topic:'SGR impact on farmers &mdash; lower transport costs',score:88,reach:28400,eng:'74%',platforms:['IVR','WA','SMS']},
+        {id:'STY-002',name:'Faith Njeri', county:"Murang'a",  topic:'School feeding programme &mdash; beneficiary family', score:83,reach:19200,eng:'68%',platforms:['WA','FB']},
+        {id:'STY-003',name:'Samuel Gitau',county:'Nyandarua', topic:'Fertiliser subsidy impact on maize yield',            score:79,reach:14100,eng:'62%',platforms:['IVR','SMS']},
       ]
     },
     {
-      id: 'rejected', label: 'REJECTED', color: '#EF4444',
-      cards: [
-        { id: 'STY-005', name: 'Daniel Kipchoge', county: 'Uasin Gishu', topic: 'Land dispute narrative', score: 34, reason: 'Off-message / divisive framing' },
-        { id: 'STY-008', name: 'Ruth Achieng', county: 'Homa Bay', topic: 'Opposition comparison', score: 28, reason: 'Contains unverified claims' },
+      id:'rejected', label:'REJECTED', color:'#EF4444',
+      cards:[
+        {id:'STY-005',name:'Daniel Kipchoge',county:'Uasin Gishu',topic:'Land dispute narrative',        score:34,reason:'Off-message / divisive framing'},
+        {id:'STY-008',name:'Ruth Achieng',   county:'Homa Bay',   topic:'Opposition comparison framing', score:28,reason:'Contains unverified claims'},
       ]
     }
   ];
 
-  const isDeployed = id => STATE.deployedStories.includes(id);
+  function initials(name) {
+    var parts = name.split(' ');
+    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  }
 
-  el.innerHTML = `
-    <div class="section-header">
-      <div>
-        <h2 style="margin:0 0 4px;font-size:1.25rem;font-weight:700;color:var(--text-primary)">The Story — Testimonial Pipeline</h2>
-        <p style="margin:0;color:var(--text-muted);font-size:.85rem">Manage authentic voter stories from nomination through deployment</p>
-      </div>
-      <div class="flex-row" style="gap:8px">
-        <button class="btn-secondary btn-sm" onclick="showToast('Opening submission portal...','info')">Submit Story</button>
-        <button class="btn-primary btn-sm" onclick="showToast('Opening batch upload...','info')">+ Bulk Upload</button>
-      </div>
-    </div>
+  function scoreColor(s) { return s >= 80 ? '#10B981' : s >= 60 ? '#F59E0B' : '#EF4444'; }
 
-    <div class="flex-row" style="gap:12px;margin-bottom:16px">
-      <div class="kpi-card accent-blue" style="flex:1"><div class="kpi-label">Nominated</div><div class="kpi-value">2</div><div class="kpi-sub">Awaiting review</div></div>
-      <div class="kpi-card accent-amber" style="flex:1"><div class="kpi-label">In Production</div><div class="kpi-value">2</div><div class="kpi-sub">Being produced</div></div>
-      <div class="kpi-card accent-violet" style="flex:1"><div class="kpi-label">Approved</div><div class="kpi-value">1</div><div class="kpi-sub">Ready to deploy</div></div>
-      <div class="kpi-card accent-green" style="flex:1"><div class="kpi-label">Deployed</div><div class="kpi-value">3</div><div class="kpi-sub">Total reach: 61,700</div></div>
-      <div class="kpi-card accent-red" style="flex:1"><div class="kpi-label">Rejected</div><div class="kpi-value">2</div><div class="kpi-sub">Off-message</div></div>
-    </div>
+  function platformTag(p) {
+    var m = {IVR:{bg:'rgba(124,58,237,0.15)',c:'#A78BFA'},WA:{bg:'rgba(16,185,129,0.12)',c:'#10B981'},SMS:{bg:'rgba(245,158,11,0.1)',c:'#F59E0B'},FB:{bg:'rgba(45,212,191,0.1)',c:'#2DD4BF'}};
+    var s = m[p] || {bg:'rgba(255,255,255,0.07)',c:'var(--text-muted)'};
+    return '<span class="sty-platform" style="background:' + s.bg + ';color:' + s.c + '">' + p + '</span>';
+  }
 
-    <div class="kanban-board">
-      ${columns.map(col => `
-        <div class="kanban-col">
-          <div class="kanban-col-header" style="border-top:3px solid ${col.color}">
-            <span style="font-size:.75rem;font-weight:700;letter-spacing:.08em;color:${col.color}">${col.label}</span>
-            <span style="font-size:.75rem;color:var(--text-muted);background:var(--bg-tertiary);padding:1px 7px;border-radius:10px">${col.cards.length}</span>
-          </div>
-          ${col.cards.map(card => `
-            <div class="kanban-card">
-              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-                <span style="font-size:.68rem;color:var(--text-muted);font-family:monospace">${card.id}</span>
-                <span style="font-size:.72rem;font-weight:700;color:${card.score >= 80 ? '#10B981' : card.score >= 60 ? '#F59E0B' : '#EF4444'}">${card.score ? card.score + ' pts' : ''}</span>
-              </div>
-              <div style="font-size:.85rem;font-weight:600;color:var(--text-primary);margin-bottom:2px">${card.name}</div>
-              <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:6px">${card.county} County</div>
-              <div style="font-size:.75rem;color:var(--text-secondary);margin-bottom:8px;font-style:italic">"${card.topic}"</div>
-              ${card.eta ? `<div style="font-size:.7rem;color:#F59E0B;margin-bottom:8px">⏱ ${card.eta}</div>` : ''}
-              ${card.reach ? `
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px">
-                  <div style="background:rgba(16,185,129,0.08);border-radius:4px;padding:4px 6px;text-align:center">
-                    <div style="font-size:.65rem;color:var(--text-muted)">Reach</div>
-                    <div style="font-size:.8rem;font-weight:700;color:#10B981">${fmt(card.reach)}</div>
-                  </div>
-                  <div style="background:rgba(16,185,129,0.08);border-radius:4px;padding:4px 6px;text-align:center">
-                    <div style="font-size:.65rem;color:var(--text-muted)">Engagement</div>
-                    <div style="font-size:.8rem;font-weight:700;color:#10B981">${card.engagement}</div>
-                  </div>
-                </div>
-              ` : ''}
-              ${card.reason ? `<div style="font-size:.7rem;color:#EF4444;background:rgba(239,68,68,0.08);padding:4px 6px;border-radius:4px;margin-bottom:6px">✗ ${card.reason}</div>` : ''}
-              ${card.approved ? `
-                <div style="margin-top:6px">
-                  ${isDeployed(card.id)
-                    ? `<div style="font-size:.75rem;color:#10B981;text-align:center;padding:6px">✓ Deployed — IVR blast scheduled 6pm</div>`
-                    : `<button class="btn-primary btn-sm" style="width:100%" onclick="deployStory('${card.id}')">Deploy via IVR</button>`
-                  }
-                </div>
-              ` : ''}
-              ${col.id === 'nominated' ? `
-                <div style="display:flex;gap:6px;margin-top:6px">
-                  <button class="btn-secondary btn-sm" style="flex:1" onclick="showToast('Moving to production...','info')">Approve</button>
-                  <button class="btn-danger btn-sm" style="flex:1" onclick="showToast('Story rejected','info')">Reject</button>
-                </div>
-              ` : ''}
-            </div>
-          `).join('')}
-        </div>
-      `).join('')}
-    </div>
-  `;
+  function buildCard(card, colId, colColor) {
+    var isDeployed = STATE.deployedStories && STATE.deployedStories.includes(card.id);
+    var sc = scoreColor(card.score);
+    var html = '<div class="sty-card">'
+      + '<div style="display:flex;align-items:center;gap:8px">'
+      + '<div class="sty-thumb" style="background:' + colColor + '22;color:' + colColor + '">' + initials(card.name) + '</div>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">'
+      + '<span class="sty-id">' + card.id + '</span>'
+      + '<span class="sty-score" style="background:' + sc + '22;color:' + sc + '">' + card.score + ' pts</span>'
+      + '</div>'
+      + '<div class="sty-name">' + card.name + '</div>'
+      + '<div class="sty-county">' + card.county + ' County</div>'
+      + '</div></div>'
+      + '<div class="sty-topic">&ldquo;' + card.topic + '&rdquo;</div>';
+
+    if (card.eta) html += '<div class="sty-eta">&#9200; ' + card.eta + '</div>';
+
+    if (card.reach) {
+      html += '<div class="sty-reach">'
+        + '<div class="sty-reach-box"><div class="sty-reach-val">' + fmt(card.reach) + '</div><div class="sty-reach-lbl">Reach</div></div>'
+        + '<div class="sty-reach-box"><div class="sty-reach-val">' + card.eng + '</div><div class="sty-reach-lbl">Engage</div></div>'
+        + '</div>';
+      if (card.platforms) html += '<div class="sty-platforms">' + card.platforms.map(platformTag).join('') + '</div>';
+    }
+
+    if (card.reason) html += '<div class="sty-rejection">&#10007; ' + card.reason + '</div>';
+
+    if (card.approved) {
+      html += isDeployed
+        ? '<div style="font-size:10px;color:#10B981;text-align:center;padding:5px;background:rgba(16,185,129,0.08);border-radius:6px">&#10003; Deployed &mdash; IVR blast at 18:00</div>'
+        : '<button class="btn-primary" style="width:100%;padding:7px;font-size:11px" onclick="deployStory(\'' + card.id + '\')">Deploy via IVR &rarr;</button>';
+    }
+
+    if (colId === 'nominated') {
+      html += '<div style="display:flex;gap:6px">'
+        + '<button class="btn-secondary" style="flex:1;padding:5px;font-size:10px" onclick="showToast(\'Moving to production...\',\'info\')">Approve</button>'
+        + '<button style="flex:1;padding:5px;font-size:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#EF4444;border-radius:6px;cursor:pointer" onclick="showToast(\'Story rejected\',\'info\')">Reject</button>'
+        + '</div>';
+    }
+
+    return html + '</div>';
+  }
+
+  var boardHTML = '<div class="sty-board">';
+  COLS.forEach(function(col) {
+    boardHTML += '<div class="sty-col">'
+      + '<div class="sty-col-hdr" style="border-top-color:' + col.color + ';background:' + col.color + '0d">'
+      + '<span class="sty-col-hdr-label" style="color:' + col.color + '">' + col.label + '</span>'
+      + '<span class="sty-col-count">' + col.cards.length + '</span>'
+      + '</div>';
+    col.cards.forEach(function(card) { boardHTML += buildCard(card, col.id, col.color); });
+    boardHTML += '</div>';
+  });
+  boardHTML += '</div>';
+
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<div style="display:flex;align-items:center;gap:10px"><h1 style="color:#F59E0B">The Story</h1></div>'
+    + '<div style="display:flex;gap:8px">'
+    + '<button class="btn-secondary" style="font-size:12px;padding:7px 14px" onclick="showToast(\'Opening submission portal...\',\'info\')">Submit Story</button>'
+    + '<button class="btn-primary" style="font-size:12px;padding:7px 14px" onclick="showToast(\'Opening batch upload...\',\'info\')">+ Bulk Upload</button>'
+    + '</div></div>'
+    + '<div class="page-sub">Testimonial pipeline &mdash; nomination through deployment</div>'
+    + '</div>'
+    + '<div class="sty-pipeline">'
+    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#A78BFA">2</div><div class="sty-stage-lbl">Nominated</div></div>'
+    + '<div class="sty-pipe-sep">&rarr;</div>'
+    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#F59E0B">2</div><div class="sty-stage-lbl">Production</div></div>'
+    + '<div class="sty-pipe-sep">&rarr;</div>'
+    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#7C3AED">1</div><div class="sty-stage-lbl">Approved</div></div>'
+    + '<div class="sty-pipe-sep">&rarr;</div>'
+    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#10B981">3</div><div class="sty-stage-lbl">Deployed</div></div>'
+    + '<div class="sty-pipe-sep" style="color:rgba(239,68,68,0.5)">&mdash;</div>'
+    + '<div class="sty-stage-chip"><div class="sty-stage-num" style="color:#EF4444">2</div><div class="sty-stage-lbl">Rejected</div></div>'
+    + '<div style="flex:1"></div>'
+    + '<div style="text-align:right;padding-right:16px;border-right:1px solid var(--border)">'
+    + '<div style="font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--text-muted)">TOTAL REACH</div>'
+    + '<div style="font-size:22px;font-weight:800;color:#10B981;font-family:var(--font-mono);line-height:1.2">61,700</div>'
+    + '</div>'
+    + '<div style="text-align:right;padding-left:16px">'
+    + '<div style="font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--text-muted)">AVG ENGAGEMENT</div>'
+    + '<div style="font-size:22px;font-weight:800;color:#F59E0B;font-family:var(--font-mono);line-height:1.2">68%</div>'
+    + '</div>'
+    + '</div>'
+    + boardHTML;
 }
 
 // ============================================================
