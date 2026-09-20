@@ -1214,6 +1214,48 @@ body {
 .sty2-onair-dot { width:5px; height:5px; border-radius:50%; background:#fff; flex-shrink:0; animation:sty2-pulse 1.5s ease-in-out infinite; }
 .sty2-cleared-row { display:flex; gap:0; overflow:hidden; }
 .sty2-cleared-thumb { width:130px; flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+/* Wasikie — Gen Z Intelligence */
+.wsk-layout { display:grid; grid-template-columns:1fr 260px; gap:14px; align-items:start; }
+.wsk-warn-item { padding:10px 13px; border-left:3px solid; border-radius:0 8px 8px 0; background:rgba(255,255,255,0.02); margin-bottom:7px; }
+.wsk-sev { font-size:8px; font-weight:800; padding:2px 6px; border-radius:3px; letter-spacing:.07em; margin-right:7px; }
+.wsk-warn-title { font-size:11px; font-weight:700; color:var(--text-primary); }
+.wsk-warn-detail { font-size:9px; color:var(--text-muted); margin-top:4px; line-height:1.4; }
+.wsk-topic-row { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:7px; background:rgba(255,255,255,0.02); margin-bottom:4px; }
+.wsk-topic-bar-wrap { flex:1; height:4px; background:rgba(255,255,255,0.07); border-radius:2px; overflow:hidden; }
+.wsk-topic-bar { height:100%; border-radius:2px; }
+.wsk-inf-item { display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.wsk-inf-avatar { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; flex-shrink:0; color:#fff; }
+.wsk-inf-name { font-size:11px; font-weight:600; color:var(--text-primary); }
+.wsk-inf-platform { font-size:9px; color:var(--text-muted); }
+/* Sauti — Rapid Response */
+.sat-layout { display:grid; grid-template-columns:1fr 260px; gap:14px; align-items:start; }
+.sat-sev { font-size:8px; font-weight:800; padding:3px 8px; border-radius:4px; letter-spacing:.08em; flex-shrink:0; }
+.sat-threat-title { font-size:12px; font-weight:700; color:var(--text-primary); line-height:1.4; }
+.sat-detail { font-size:10px; color:var(--text-secondary); line-height:1.5; margin:8px 0 0; }
+.sat-timeline-row { display:flex; align-items:flex-start; gap:8px; padding:4px 0; }
+.sat-timeline-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+.sat-timeline-time { font-size:9px; font-weight:700; color:var(--text-muted); font-family:var(--font-mono); flex-shrink:0; width:34px; }
+.sat-timeline-label { font-size:9px; color:var(--text-secondary); line-height:1.4; }
+.sat-ai-box { background:rgba(124,58,237,0.07); border:1px solid rgba(124,58,237,0.2); border-radius:8px; padding:12px 14px; margin:10px 0; }
+.sat-ai-label { font-size:8px; font-weight:800; letter-spacing:.1em; color:#A78BFA; margin-bottom:6px; }
+.sat-ai-text { font-size:10px; color:var(--text-secondary); line-height:1.6; font-style:italic; }
+.sat-resolved-row { display:flex; align-items:flex-start; gap:10px; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.sat-resolved-badge { font-size:7px; font-weight:800; padding:2px 6px; border-radius:3px; letter-spacing:.06em; background:rgba(16,185,129,0.12); color:#10B981; flex-shrink:0; margin-top:1px; }
+/* The Lock — GOTV + Election Day */
+.lck-layout { display:grid; grid-template-columns:1fr 260px; gap:14px; align-items:start; }
+.lck-ward-row { display:flex; align-items:center; gap:12px; padding:11px 14px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.lck-ward-name { font-size:11px; font-weight:600; color:var(--text-primary); }
+.lck-ward-county { font-size:9px; color:var(--text-muted); margin-top:1px; }
+.lck-prio { font-size:8px; font-weight:800; padding:2px 6px; border-radius:3px; letter-spacing:.07em; flex-shrink:0; }
+.lck-bar-wrap { flex:1; min-width:60px; max-width:140px; height:5px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
+.lck-bar { height:100%; border-radius:3px; }
+.lck-station-row { display:flex; align-items:center; gap:10px; padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.lck-mode-tab { padding:6px 14px; font-size:10px; font-weight:700; letter-spacing:.05em; background:transparent; border:none; cursor:pointer; color:var(--text-muted); border-radius:6px; transition:all .15s; }
+.lck-mode-tab.active { color:var(--text-primary); background:rgba(255,255,255,0.07); }
+.lck-contact-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.lck-contact-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.lck-contact-track { flex:1; height:5px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
+.lck-contact-fill { height:100%; border-radius:3px; }
 .sty-eta { font-size:9px; color:#F59E0B; font-family:var(--font-mono); }
 </style>
 </head>
@@ -4944,173 +4986,164 @@ function renderStory() {
 function renderWasikie() {
   destroyChart('gen-z-platform-chart');
 
-  const el = document.getElementById('page-wasikie');
+  var el = document.getElementById('page-wasikie');
   if (!el) return;
 
-  const influencers = [
-    { name: 'Kairo Speaks', platform: 'TikTok', followers: '841K', sentiment: 0.62, reach: 'High', badge: 'badge-win' },
-    { name: 'NairobiVibes', platform: 'Instagram', followers: '512K', sentiment: 0.41, reach: 'High', badge: 'badge-grow' },
-    { name: 'ZedNation254', platform: 'Twitter/X', followers: '328K', sentiment: -0.18, reach: 'Medium', badge: 'badge-watch' },
-    { name: 'GenZKenya', platform: 'TikTok', followers: '295K', sentiment: -0.34, reach: 'Medium', badge: 'badge-defend' },
-    { name: 'StreetCodeKE', platform: 'YouTube', followers: '187K', sentiment: 0.55, reach: 'Medium', badge: 'badge-win' },
-    { name: 'Mrembo254', platform: 'Instagram', followers: '143K', sentiment: 0.28, reach: 'Medium', badge: 'badge-grow' },
-    { name: 'KasiTalks', platform: 'Twitter/X', followers: '98K', sentiment: -0.52, reach: 'Low', badge: 'badge-defend' },
-    { name: 'YouthVoicesKE', platform: 'YouTube', followers: '87K', sentiment: 0.11, reach: 'Low', badge: 'badge-hold' },
-    { name: 'NakuruYouth', platform: 'WhatsApp', followers: '74K', sentiment: 0.44, reach: 'Low', badge: 'badge-grow' },
-    { name: 'HustlerGen', platform: 'TikTok', followers: '61K', sentiment: 0.67, reach: 'Low', badge: 'badge-win' },
+  var WARNS = [
+    {sev:'HIGH',   color:'#EF4444', title:'Anti-government TikTok trend escalating',    loc:'National',        time:'2h ago', detail:'#WatuHawatuathiri trending &mdash; 2.3M views in 18hrs. Narrative: youth unemployment unaddressed.'},
+    {sev:'MEDIUM', color:'#F59E0B', title:'Negative Twitter/X Spaces planned',          loc:'Nairobi',         time:'4h ago', detail:'Scheduled Twitter Space: &ldquo;Why Gen Z won&rsquo;t vote&rdquo; &mdash; 14 accounts promoting, est. 8,000 listeners.'},
+    {sev:'MEDIUM', color:'#F59E0B', title:'Misinformation: Hustler Fund age limit',     loc:'Nakuru + Kisumu', time:'6h ago', detail:'Viral claim: &ldquo;Hustler Fund excludes under-25s&rdquo; &mdash; FALSE. Shared 4,200 times via WhatsApp groups.'},
   ];
 
-  const warnings = [
-    { title: 'Anti-government TikTok trend escalating', location: 'National', severity: 'HIGH', detail: '#WatuHawatuathiri trending — 2.3M views in 18hrs. Narrative: youth unemployment unaddressed.', time: '2h ago' },
-    { title: 'Negative Twitter/X spaces planned', location: 'Nairobi', severity: 'MEDIUM', detail: 'Scheduled Twitter Space: "Why Gen Z won\'t vote" — 14 known accounts promoting, est. 8,000 listeners.', time: '4h ago' },
-    { title: 'Misinformation about Hustler Fund age limit', location: 'Nakuru + Kisumu', severity: 'MEDIUM', detail: 'Viral claim: "Hustler Fund excludes under-25s" — FALSE. Shared 4,200 times via WhatsApp groups.', time: '6h ago' },
+  var TOPICS = [
+    {tag:'#WatuHawatuathiri', views:'2.3M', sent:-0.71, pct:100, hot:true},
+    {tag:'#HustlerFund2027',  views:'841K', sent:0.62,  pct:37,  hot:false},
+    {tag:'#YouthVoiceKE',     views:'512K', sent:-0.18, pct:22,  hot:false},
+    {tag:'#SGRYouth',         views:'298K', sent:0.44,  pct:13,  hot:false},
+    {tag:'#NairobiYouth',     views:'187K', sent:0.11,  pct:8,   hot:false},
   ];
 
-  el.innerHTML = `
-    <div class="section-header">
-      <div>
-        <h2 style="margin:0 0 4px;font-size:1.25rem;font-weight:700;color:var(--text-primary)">Wasikie — Gen Z Intelligence</h2>
-        <p style="margin:0;color:var(--text-muted);font-size:.85rem">Youth sentiment monitoring, influencer network &amp; early warning system</p>
-      </div>
-      <div class="flex-row" style="gap:8px">
-        <span class="live-indicator">● LIVE</span>
-        <button class="btn-primary btn-sm" onclick="navigate('sauti')">Open Sauti Rapid Response</button>
-      </div>
-    </div>
+  var INFS = [
+    {name:'Kairo Speaks',  platform:'TikTok',    followers:'841K', sent:0.62,  color:'#10B981', bg:'rgba(16,185,129,0.18)'},
+    {name:'NairobiVibes',  platform:'Instagram', followers:'512K', sent:0.41,  color:'#10B981', bg:'rgba(16,185,129,0.13)'},
+    {name:'ZedNation254',  platform:'Twitter/X', followers:'328K', sent:-0.18, color:'#F59E0B', bg:'rgba(245,158,11,0.14)'},
+    {name:'GenZKenya',     platform:'TikTok',    followers:'295K', sent:-0.34, color:'#EF4444', bg:'rgba(239,68,68,0.14)'},
+    {name:'StreetCodeKE',  platform:'YouTube',   followers:'187K', sent:0.55,  color:'#10B981', bg:'rgba(16,185,129,0.13)'},
+    {name:'Mrembo254',     platform:'Instagram', followers:'143K', sent:0.28,  color:'#10B981', bg:'rgba(16,185,129,0.10)'},
+    {name:'KasiTalks',     platform:'Twitter/X', followers:'98K',  sent:-0.52, color:'#EF4444', bg:'rgba(239,68,68,0.14)'},
+    {name:'HustlerGen',    platform:'TikTok',    followers:'61K',  sent:0.67,  color:'#10B981', bg:'rgba(16,185,129,0.18)'},
+  ];
 
-    <div class="flex-row" style="gap:12px;margin-bottom:16px">
-      <div class="kpi-card accent-red" style="flex:1">
-        <div class="kpi-label">Gen Z Sentiment Index</div>
-        <div class="kpi-value" style="color:#EF4444">-0.12</div>
-        <div class="kpi-trend down">▼ Below national avg (+0.24)</div>
-      </div>
-      <div class="kpi-card accent-amber" style="flex:1">
-        <div class="kpi-label">Active Warnings</div>
-        <div class="kpi-value">3</div>
-        <div class="kpi-sub">2 medium · 1 high</div>
-      </div>
-      <div class="kpi-card accent-green" style="flex:1">
-        <div class="kpi-label">Monitored Influencers</div>
-        <div class="kpi-value">147</div>
-        <div class="kpi-trend up">▲ 23 positive</div>
-      </div>
-      <div class="kpi-card accent-blue" style="flex:1">
-        <div class="kpi-label">Total Reach</div>
-        <div class="kpi-value">4.2M</div>
-        <div class="kpi-sub">Across 5 platforms</div>
-      </div>
-    </div>
+  function ini(name) { var p=name.split(' '); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
 
-    <!-- Warnings -->
-    <div style="margin-bottom:16px">
-      <div style="font-size:.85rem;font-weight:600;color:var(--text-primary);margin-bottom:10px">⚠ Early Warning Queue</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        ${warnings.map((w,i) => `
-          <div class="card-accent" style="padding:14px 18px;border-left:3px solid ${w.severity==='HIGH'?'#EF4444':'#F59E0B'}">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-              <div>
-                <span class="${w.severity==='HIGH'?'badge-critical':'badge-warn'}" style="margin-right:8px">${w.severity}</span>
-                <span style="font-size:.85rem;font-weight:600;color:var(--text-primary)">${w.title}</span>
-              </div>
-              <div style="display:flex;gap:6px;align-items:center">
-                <span style="font-size:.72rem;color:var(--text-muted)">${w.time}</span>
-                <button class="btn-danger btn-sm" onclick="navigate('sauti');showToast('Escalating to Sauti Rapid Response...','info')">Escalate to Sauti</button>
-              </div>
-            </div>
-            <div style="font-size:.78rem;color:var(--text-secondary)">${w.location} · ${w.detail}</div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
+  var warnsHTML = '';
+  for (var wi=0; wi<WARNS.length; wi++) {
+    var w = WARNS[wi];
+    warnsHTML += '<div class="wsk-warn-item" style="border-left-color:' + w.color + '">'
+      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px">'
+      + '<div><span class="wsk-sev" style="background:' + w.color + '22;color:' + w.color + '">' + w.sev + '</span>'
+      + '<span class="wsk-warn-title">' + w.title + '</span></div>'
+      + '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
+      + '<span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">' + w.time + '</span>'
+      + '<button class="btn-secondary" style="padding:3px 8px;font-size:9px;color:#EF4444;border-color:rgba(239,68,68,0.3)" '
+      + 'onclick="navigate(\'sauti\');showToast(\'Escalating to Sauti...\',\'info\')">'
+      + 'Escalate</button>'
+      + '</div></div>'
+      + '<div class="wsk-warn-detail"><span style="color:var(--text-secondary)">' + w.loc + '</span> &middot; ' + w.detail + '</div>'
+      + '</div>';
+  }
 
-    <div class="grid-2" style="gap:16px;margin-bottom:16px">
-      <div class="card" style="padding:20px">
-        <div class="card-header" style="margin-bottom:12px">
-          <span style="font-weight:600;color:var(--text-primary)">Platform Signal Breakdown</span>
-          <span style="font-size:.75rem;color:var(--text-muted)">Last 24h</span>
-        </div>
-        <div style="height:220px">
-          <canvas id="gen-z-platform-chart"></canvas>
-        </div>
-      </div>
+  var topicsHTML = '';
+  for (var ti=0; ti<TOPICS.length; ti++) {
+    var t = TOPICS[ti];
+    var tsc = t.sent > 0.2 ? '#10B981' : t.sent < -0.1 ? '#EF4444' : '#F59E0B';
+    var tSign = t.sent > 0 ? '+' : '';
+    topicsHTML += '<div class="wsk-topic-row">'
+      + (t.hot ? '<span style="font-size:7px;font-weight:800;background:#EF4444;color:#fff;padding:2px 5px;border-radius:3px;flex-shrink:0">HOT</span>'
+               : '<span style="width:27px;flex-shrink:0"></span>')
+      + '<span style="font-size:11px;font-weight:600;color:var(--text-primary);flex:1;min-width:0">' + t.tag + '</span>'
+      + '<div class="wsk-topic-bar-wrap"><div class="wsk-topic-bar" style="width:' + t.pct + '%;background:' + tsc + '"></div></div>'
+      + '<span style="font-size:9px;color:var(--text-muted);width:38px;text-align:right;flex-shrink:0">' + t.views + '</span>'
+      + '<span style="font-size:9px;font-weight:800;color:' + tsc + ';font-family:var(--font-mono);width:36px;text-align:right;flex-shrink:0">'
+      + tSign + t.sent.toFixed(2) + '</span>'
+      + '</div>';
+  }
 
-      <div class="card" style="padding:20px">
-        <div class="card-header" style="margin-bottom:12px">
-          <span style="font-weight:600;color:var(--text-primary)">Trending Topics (Gen Z)</span>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          ${[
-            { tag: '#WatuHawatuathiri', count: '2.3M views', sent: -0.71, hot: true },
-            { tag: '#HustlerFund2027', count: '841K views', sent: 0.62 },
-            { tag: '#YouthVoiceKE', count: '512K views', sent: -0.18 },
-            { tag: '#SGRYouth', count: '298K views', sent: 0.44 },
-            { tag: '#NairobiYouth', count: '187K views', sent: 0.11 },
-          ].map(t => `
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--bg-tertiary);border-radius:6px">
-              <div style="display:flex;align-items:center;gap:8px">
-                ${t.hot ? '<span style="font-size:.65rem;background:#EF4444;color:#fff;padding:1px 5px;border-radius:3px;font-weight:700">HOT</span>' : ''}
-                <span style="font-size:.82rem;font-weight:600;color:var(--text-primary)">${t.tag}</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px">
-                <span style="font-size:.75rem;color:var(--text-muted)">${t.count}</span>
-                <span style="font-size:.75rem;font-weight:700;color:${t.sent>0?'#10B981':'#EF4444'}">${t.sent > 0 ? '+' : ''}${t.sent.toFixed(2)}</span>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </div>
+  var infsHTML = '';
+  for (var ii=0; ii<INFS.length; ii++) {
+    var inf = INFS[ii];
+    var iSign = inf.sent > 0 ? '+' : '';
+    infsHTML += '<div class="wsk-inf-item">'
+      + '<div class="wsk-inf-avatar" style="background:' + inf.bg + ';color:' + inf.color + '">' + ini(inf.name) + '</div>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div class="wsk-inf-name">' + inf.name + '</div>'
+      + '<div class="wsk-inf-platform">' + inf.platform + ' &middot; ' + inf.followers + '</div>'
+      + '</div>'
+      + '<span style="font-size:10px;font-weight:800;color:' + inf.color + ';font-family:var(--font-mono)">'
+      + iSign + inf.sent.toFixed(2) + '</span>'
+      + '</div>';
+  }
 
-    <!-- Influencer Table -->
-    <div class="card" style="padding:20px">
-      <div class="card-header" style="margin-bottom:12px">
-        <span style="font-weight:600;color:var(--text-primary)">Top Gen Z Influencer Network</span>
-        <button class="btn-ghost btn-sm" onclick="showToast('Exporting influencer list...','info')">Export</button>
-      </div>
-      <table class="data-table">
-        <thead><tr><th>#</th><th>Name</th><th>Platform</th><th>Followers</th><th>Sentiment</th><th>Est. Reach</th><th>Action</th></tr></thead>
-        <tbody>
-          ${influencers.map((inf,i) => `
-            <tr>
-              <td style="color:var(--text-muted)">${i+1}</td>
-              <td style="font-weight:500;color:var(--text-primary)">${inf.name}</td>
-              <td><span style="font-size:.75rem;color:var(--text-muted)">${inf.platform}</span></td>
-              <td>${inf.followers}</td>
-              <td><span style="font-weight:700;color:${inf.sentiment>0.3?'#10B981':inf.sentiment>0?'#F59E0B':'#EF4444'}">${inf.sentiment>0?'+':''}${inf.sentiment.toFixed(2)}</span></td>
-              <td><span class="${inf.badge}">${inf.reach}</span></td>
-              <td><button class="btn-ghost btn-sm" onclick="showToast('Opening engagement options for ${inf.name}...','info')">Engage</button></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
+  var rightPanel = '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">PLATFORM SIGNALS</span>'
+    + '<span style="font-size:9px;color:var(--text-muted)">last 24h</span>'
+    + '</div>'
+    + '<div style="padding:12px;height:190px"><canvas id="gen-z-platform-chart"></canvas></div>'
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">INFLUENCER NETWORK</span>'
+    + '<button class="btn-secondary" style="padding:3px 8px;font-size:9px" onclick="showToast(\'Exporting list...\',\'info\')">Export</button>'
+    + '</div>'
+    + infsHTML
+    + '</div>'
+    + '</div>';
 
-  setTimeout(() => {
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<h1 style="color:#2DD4BF">Wasikie</h1>'
+    + '<span class="amp-live-dot"></span>'
+    + '</div>'
+    + '<button class="btn-primary" style="font-size:12px;padding:7px 16px" onclick="navigate(\'sauti\')">Open Sauti Rapid Response &rarr;</button>'
+    + '</div>'
+    + '<div class="page-sub">Gen Z intelligence &mdash; youth sentiment, influencer network &amp; early warning system</div>'
+    + '</div>'
+
+    + '<div class="if-stats-row">'
+    + '<div class="if-stat is-flag"><div class="if-stat-label">Gen Z Sentiment</div><div class="if-stat-val" style="color:#EF4444">-0.12</div><div class="if-stat-sub">Below national avg</div></div>'
+    + '<div class="if-stat is-watch"><div class="if-stat-label">Active Warnings</div><div class="if-stat-val" style="color:#F59E0B">3</div><div class="if-stat-sub">2 medium &middot; 1 high</div></div>'
+    + '<div class="if-stat is-pool"><div class="if-stat-label">Monitored</div><div class="if-stat-val" style="color:#2DD4BF">147</div><div class="if-stat-sub">influencers</div></div>'
+    + '<div class="if-stat is-pool"><div class="if-stat-label">Total Reach</div><div class="if-stat-val" style="color:#2DD4BF">4.2M</div><div class="if-stat-sub">across 5 platforms</div></div>'
+    + '<div class="if-stat is-win"><div class="if-stat-label">Positive Signals</div><div class="if-stat-val" style="color:#10B981">124</div><div class="if-stat-sub">last 24h</div></div>'
+    + '<div class="if-stat is-brand"><div class="if-stat-label">Platforms</div><div class="if-stat-val" style="color:#A78BFA">5</div><div class="if-stat-sub">active monitoring</div></div>'
+    + '</div>'
+
+    + '<div class="wsk-layout">'
+    + '<div style="display:flex;flex-direction:column;gap:14px">'
+
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">EARLY WARNING QUEUE</span>'
+    + '<span style="font-size:9px;font-weight:800;color:#EF4444;font-family:var(--font-mono)">1 HIGH &middot; 2 MEDIUM</span>'
+    + '</div>'
+    + '<div style="padding:10px 12px">' + warnsHTML + '</div>'
+    + '</div>'
+
+    + '<div class="card">'
+    + '<div class="card-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">TRENDING TOPICS</span>'
+    + '<span style="font-size:9px;color:var(--text-muted)">Gen Z &middot; last 24h</span>'
+    + '</div>'
+    + topicsHTML
+    + '</div>'
+
+    + '</div>'
+    + rightPanel
+    + '</div>';
+
+  setTimeout(function(){
     mkChart('gen-z-platform-chart', {
       type: 'bar',
       data: {
         labels: ['TikTok','Twitter/X','Instagram','WhatsApp','YouTube'],
-        datasets: [{
-          label: 'Positive signals',
-          data: [124, 89, 67, 201, 43],
-          backgroundColor: 'rgba(16,185,129,0.7)', borderColor: '#10B981', borderWidth: 1, borderRadius: 4,
-        },{
-          label: 'Negative signals',
-          data: [89, 144, 45, 78, 31],
-          backgroundColor: 'rgba(239,68,68,0.7)', borderColor: '#EF4444', borderWidth: 1, borderRadius: 4,
-        }]
+        datasets: [
+          {label:'Positive',  data:[124,89,67,201,43], backgroundColor:'rgba(16,185,129,0.75)', borderColor:'#10B981', borderWidth:1, borderRadius:4},
+          {label:'Negative',  data:[89,144,45,78,31],  backgroundColor:'rgba(239,68,68,0.75)',  borderColor:'#EF4444', borderWidth:1, borderRadius:4},
+        ]
       },
       options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'top', labels: { color: '#94A3B8', font: { size: 11 }, boxWidth: 10 } },
-          tooltip: { backgroundColor: 'rgba(5,13,26,0.9)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, titleColor: '#F1F5F9', bodyColor: '#94A3B8' }
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'top',labels:{color:'#94A3B8',font:{size:9},boxWidth:8,padding:8}},
+          tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}
         },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: '#94A3B8', font: { size: 10 } } },
-          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#475569', font: { size: 10 } } },
-          stacked: false
+        scales:{
+          x:{grid:{display:false},ticks:{color:'#94A3B8',font:{size:9}}},
+          y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9}}}
         }
       }
     });
@@ -5120,158 +5153,167 @@ function renderWasikie() {
 // ============================================================
 // renderSauti() — Rapid Response
 // ============================================================
+// renderSauti() — Rapid Response
+// ============================================================
 function renderSauti() {
   destroyChart('response-effectiveness-chart');
 
-  const el = document.getElementById('page-sauti');
+  var el = document.getElementById('page-sauti');
   if (!el) return;
 
-  el.innerHTML = `
-    <div class="section-header">
-      <div>
-        <h2 style="margin:0 0 4px;font-size:1.25rem;font-weight:700;color:var(--text-primary)">Sauti — Rapid Response</h2>
-        <p style="margin:0;color:var(--text-muted);font-size:.85rem">Threat monitoring, counter-narrative deployment &amp; response effectiveness tracking</p>
-      </div>
-      <div class="flex-row" style="gap:8px">
-        <span class="live-indicator">● MONITORING</span>
-        <button class="btn-primary btn-sm" onclick="showToast('Opening manual threat report...','info')">+ Report Threat</button>
-      </div>
-    </div>
+  var TIMELINE = [
+    {time:'08:14', label:'Initial tweet posted &mdash; single claim, limited reach',        color:'#475569'},
+    {time:'08:31', label:'Thread grows to 28 tweets &mdash; gaining traction on Twitter/X', color:'#F59E0B'},
+    {time:'08:52', label:'Media pickup: NTV Kenya, Standard Digital share thread',           color:'#F97316'},
+    {time:'09:26', label:'Dira AI flags CRITICAL &mdash; severity auto-assigned',           color:'#EF4444'},
+    {time:'09:27', label:'Counter-narrative draft generated by AI for review',              color:'#7C3AED'},
+  ];
 
-    <div class="flex-row" style="gap:12px;margin-bottom:16px">
-      <div class="kpi-card accent-red" style="flex:1">
-        <div class="kpi-label">Active Threats</div>
-        <div class="kpi-value">3</div>
-        <div class="kpi-trend down">▲ 1 critical</div>
-      </div>
-      <div class="kpi-card accent-green" style="flex:1">
-        <div class="kpi-label">Resolved (7d)</div>
-        <div class="kpi-value">11</div>
-        <div class="kpi-trend up">▲ 78% success rate</div>
-      </div>
-      <div class="kpi-card accent-blue" style="flex:1">
-        <div class="kpi-label">Avg Response Time</div>
-        <div class="kpi-value">23m</div>
-        <div class="kpi-trend up">▲ Down from 41m</div>
-      </div>
-      <div class="kpi-card accent-amber" style="flex:1">
-        <div class="kpi-label">Avg Engagement Drop</div>
-        <div class="kpi-value">71%</div>
-        <div class="kpi-sub">Post counter-narrative</div>
-      </div>
-    </div>
+  var RESOLVED = [
+    {label:'Fertiliser subsidy misinformation &mdash; WhatsApp viral chain', drop:'83%', time:'18m', date:'Sep 13'},
+    {label:'False poll figures shared by opposition social accounts',         drop:'76%', time:'24m', date:'Sep 12'},
+    {label:'Fake quote attributed to H.E. on pension reform',                drop:'91%', time:'11m', date:'Sep 11'},
+    {label:'Misrepresented SGR ridership statistics on Facebook',             drop:'68%', time:'31m', date:'Sep 10'},
+  ];
 
-    <!-- CRITICAL Threat -->
-    <div class="card-accent" style="padding:20px;border-left:4px solid #EF4444;margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-        <div>
-          <span class="badge-critical" style="margin-right:8px">CRITICAL</span>
-          <span style="font-size:.95rem;font-weight:700;color:var(--text-primary)">SGR Corruption Narrative — Viral Twitter/X Thread</span>
-        </div>
-        <span style="font-size:.75rem;color:var(--text-muted)">Detected 1h 12m ago</span>
-      </div>
-      <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:14px">
-        A 28-tweet thread from @KenyaPoliticsWatch alleging contractor kickbacks on SGR Phase 2. Currently at 4,200 RTs and climbing. Three mainstream media accounts have shared. Requires immediate counter-narrative.
-      </div>
+  var tlHTML = '';
+  for (var ti=0; ti<TIMELINE.length; ti++) {
+    var t = TIMELINE[ti];
+    tlHTML += '<div class="sat-timeline-row">'
+      + '<span class="sat-timeline-time">' + t.time + '</span>'
+      + '<div class="sat-timeline-dot" style="background:' + t.color + '"></div>'
+      + '<span class="sat-timeline-label">' + t.label + '</span>'
+      + '</div>';
+  }
 
-      <div class="voter-timeline" style="margin-bottom:16px">
-        ${[
-          { time: '08:14', label: 'Initial tweet posted', color: '#475569' },
-          { time: '08:31', label: 'Thread grows to 28 tweets — gaining traction', color: '#F59E0B' },
-          { time: '08:52', label: 'Media pickup: NTV Kenya, Standard Digital share', color: '#F97316' },
-          { time: '09:26', label: 'Dira AI flags — CRITICAL severity assigned', color: '#EF4444' },
-          { time: '09:27', label: 'AI counter-narrative draft generated', color: '#7C3AED' },
-        ].map(t => `
-          <div class="timeline-row">
-            <div class="timeline-dot" style="background:${t.color}"></div>
-            <div class="timeline-content">
-              <span style="font-size:.7rem;color:var(--text-muted);font-family:monospace">${t.time}</span>
-              <span style="font-size:.8rem;color:var(--text-secondary);margin-left:8px">${t.label}</span>
-            </div>
-          </div>
-        `).join('')}
-      </div>
+  var resolvedHTML = '';
+  for (var ri=0; ri<RESOLVED.length; ri++) {
+    var r = RESOLVED[ri];
+    resolvedHTML += '<div class="sat-resolved-row">'
+      + '<span class="sat-resolved-badge">RESOLVED</span>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="font-size:10px;font-weight:600;color:var(--text-primary)">' + r.label + '</div>'
+      + '<div style="font-size:9px;color:var(--text-muted);margin-top:2px">' + r.date + ' &middot; Resolved in ' + r.time + '</div>'
+      + '</div>'
+      + '<span style="font-size:11px;font-weight:800;color:#10B981;font-family:var(--font-mono);flex-shrink:0">&darr;' + r.drop + '</span>'
+      + '</div>';
+  }
 
-      <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:8px;padding:14px;margin-bottom:12px">
-        <div style="font-size:.72rem;color:#A78BFA;font-weight:700;letter-spacing:.06em;margin-bottom:6px">AI RESPONSE DRAFT</div>
-        <div style="font-size:.82rem;color:var(--text-secondary);line-height:1.6">
-          "The facts on SGR: Phase 2 procurement records are public and available at Treasury. All contracts underwent mandatory competitive bidding per PPADA 2015. The EACC audit (2024) found no irregularities. We welcome scrutiny — because the project delivered. 47,000 jobs. On time. Under budget."
-        </div>
-      </div>
+  var rightPanel = '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">EFFECTIVENESS TREND</span>'
+    + '<span style="font-size:9px;color:var(--text-muted)">7-day avg</span>'
+    + '</div>'
+    + '<div style="padding:12px;height:200px"><canvas id="response-effectiveness-chart"></canvas></div>'
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">RECENT RESOLVED</span>'
+    + '</div>'
+    + resolvedHTML
+    + '</div>'
+    + '</div>';
 
-      <div style="display:flex;gap:8px">
-        <button class="btn-primary btn-sm" onclick="addAudit('Current User','National Ops Director','response.approved','SAU-CRIT-001','Counter-narrative approved and queued for posting');showToast('✓ Response approved — queuing for Twitter/X post','success')">Approve &amp; Send</button>
-        <button class="btn-secondary btn-sm" onclick="showToast('Opening response editor...','info')">Edit Draft</button>
-        <button class="btn-ghost btn-sm" onclick="showToast('Escalating to Director...','info')">Escalate</button>
-      </div>
-    </div>
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<h1 style="color:#EF4444">Sauti</h1>'
+    + '<span class="amp-live-dot" style="background:#EF4444;box-shadow:0 0 0 3px rgba(239,68,68,0.18)"></span>'
+    + '</div>'
+    + '<button class="btn-primary" style="font-size:12px;padding:7px 16px;background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.4);color:#EF4444" '
+    + 'onclick="showToast(\'Opening manual threat report...\',\'info\')">+ Report Threat</button>'
+    + '</div>'
+    + '<div class="page-sub">Threat monitoring, counter-narrative deployment &amp; response effectiveness</div>'
+    + '</div>'
 
-    <!-- WARNING Threat -->
-    <div class="card-accent" style="padding:16px 20px;border-left:4px solid #F59E0B;margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <span class="badge-warn" style="margin-right:8px">WARNING</span>
-          <span style="font-size:.88rem;font-weight:600;color:var(--text-primary)">Opposition Radio Ad — False Claim on Healthcare Privatisation</span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span style="font-size:.75rem;color:var(--text-muted)">Under review</span>
-          <button class="btn-secondary btn-sm" onclick="showToast('Drafting counter-narrative...','info')">Draft Response</button>
-        </div>
-      </div>
-      <div style="font-size:.78rem;color:var(--text-secondary);margin-top:6px">
-        Radio spot claiming "government privatising Kenyatta National Hospital." KNH management have issued a denial. Recommend coordinated media rebuttal within 2 hours.
-      </div>
-    </div>
+    + '<div class="if-stats-row">'
+    + '<div class="if-stat is-flag"><div class="if-stat-label">Active Threats</div><div class="if-stat-val" style="color:#EF4444">3</div><div class="if-stat-sub">1 critical &middot; 2 warning</div></div>'
+    + '<div class="if-stat is-win"><div class="if-stat-label">Resolved (7d)</div><div class="if-stat-val" style="color:#10B981">11</div><div class="if-stat-sub">78% success rate</div></div>'
+    + '<div class="if-stat is-pool"><div class="if-stat-label">Avg Response</div><div class="if-stat-val" style="color:#2DD4BF">23m</div><div class="if-stat-sub">down from 41m</div></div>'
+    + '<div class="if-stat is-win"><div class="if-stat-label">Engagement Drop</div><div class="if-stat-val" style="color:#10B981">71%</div><div class="if-stat-sub">post counter-narrative</div></div>'
+    + '</div>'
 
-    <!-- RESOLVED Threat -->
-    <div class="card" style="padding:16px 20px;border-left:4px solid #10B981;margin-bottom:16px;opacity:0.8">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <span class="badge-green" style="margin-right:8px">RESOLVED</span>
-          <span style="font-size:.85rem;font-weight:500;color:var(--text-primary)">Fertiliser subsidy misinformation — WhatsApp viral chain</span>
-        </div>
-        <span style="font-size:.78rem;color:#10B981;font-weight:600">↓ 83% engagement drop · Resolved in 18m</span>
-      </div>
-      <div style="font-size:.75rem;color:var(--text-muted);margin-top:4px">Counter-narrative deployed Sep 13 via IVR + official WhatsApp blast. Misinformation reach contained.</div>
-    </div>
+    + '<div class="sat-layout">'
+    + '<div style="display:flex;flex-direction:column;gap:12px">'
 
-    <!-- Response Effectiveness Chart -->
-    <div class="card" style="padding:20px">
-      <div class="card-header" style="margin-bottom:12px">
-        <span style="font-weight:600;color:var(--text-primary)">Response Effectiveness (7-Day Trend)</span>
-        <span style="font-size:.75rem;color:var(--text-muted)">Avg engagement drop post counter-narrative</span>
-      </div>
-      <div style="height:200px">
-        <canvas id="response-effectiveness-chart"></canvas>
-      </div>
-    </div>
-  `;
+    // CRITICAL threat
+    + '<div class="card" style="padding:0;overflow:hidden;border-color:rgba(239,68,68,0.35)">'
+    + '<div style="padding:12px 14px;border-left:3px solid #EF4444;background:rgba(239,68,68,0.04)">'
+    + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">'
+    + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+    + '<span class="sat-sev" style="background:#EF4444;color:#fff">CRITICAL</span>'
+    + '<span class="sat-threat-title">SGR Corruption Narrative &mdash; Viral Twitter/X Thread</span>'
+    + '</div>'
+    + '<span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);flex-shrink:0">1h 12m ago</span>'
+    + '</div>'
+    + '<div class="sat-detail">A 28-tweet thread from @KenyaPoliticsWatch alleging contractor kickbacks on SGR Phase 2. Currently at 4,200 RTs and climbing. Three mainstream media accounts have shared.</div>'
+    + '</div>'
 
-  setTimeout(() => {
+    + '<div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05)">'
+    + '<div style="font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px">THREAT TIMELINE</div>'
+    + tlHTML
+    + '</div>'
+
+    + '<div class="sat-ai-box" style="margin:0;border-radius:0;border-left:0;border-right:0;border-top:0">'
+    + '<div class="sat-ai-label">AI COUNTER-NARRATIVE DRAFT &mdash; READY FOR REVIEW</div>'
+    + '<div class="sat-ai-text">&ldquo;The facts on SGR: Phase 2 procurement records are public and available at Treasury. All contracts underwent mandatory competitive bidding per PPADA 2015. The EACC audit (2024) found no irregularities. We welcome scrutiny &mdash; because the project delivered. 47,000 jobs. On time. Under budget.&rdquo;</div>'
+    + '</div>'
+
+    + '<div style="padding:10px 14px;display:flex;gap:8px">'
+    + '<button class="btn-primary" style="padding:7px 14px;font-size:11px" '
+    + 'onclick="addAudit(\'Current User\',\'National Ops Director\',\'response.approved\',\'SAU-CRIT-001\',\'Counter-narrative approved and queued\');showToast(\'Response approved &mdash; queuing for Twitter/X\',\'success\')">Approve &amp; Send</button>'
+    + '<button class="btn-secondary" style="padding:7px 12px;font-size:11px" onclick="showToast(\'Opening response editor...\',\'info\')">Edit Draft</button>'
+    + '<button class="btn-secondary" style="padding:7px 12px;font-size:11px" onclick="showToast(\'Escalating to Director...\',\'info\')">Escalate</button>'
+    + '</div>'
+    + '</div>'
+
+    // WARNING threat
+    + '<div class="card" style="padding:0;overflow:hidden;border-color:rgba(245,158,11,0.3)">'
+    + '<div style="padding:12px 14px;border-left:3px solid #F59E0B;background:rgba(245,158,11,0.03)">'
+    + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">'
+    + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+    + '<span class="sat-sev" style="background:rgba(245,158,11,0.15);color:#F59E0B">WARNING</span>'
+    + '<span class="sat-threat-title">Opposition Radio Ad &mdash; False Claim on Healthcare Privatisation</span>'
+    + '</div>'
+    + '<span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);flex-shrink:0">Under review</span>'
+    + '</div>'
+    + '<div class="sat-detail">Radio spot claiming &ldquo;government privatising Kenyatta National Hospital.&rdquo; KNH management issued a denial. Recommend coordinated media rebuttal within 2 hours.</div>'
+    + '</div>'
+    + '<div style="padding:10px 14px">'
+    + '<button class="btn-secondary" style="padding:6px 12px;font-size:11px;color:#F59E0B;border-color:rgba(245,158,11,0.3)" onclick="showToast(\'Drafting counter-narrative...\',\'info\')">Draft Response &rarr;</button>'
+    + '</div>'
+    + '</div>'
+
+    + '</div>'
+    + rightPanel
+    + '</div>';
+
+  setTimeout(function(){
     mkChart('response-effectiveness-chart', {
       type: 'line',
       data: {
         labels: ['Sep 9','Sep 10','Sep 11','Sep 12','Sep 13','Sep 14','Sep 15'],
         datasets: [{
-          label: 'Avg engagement drop post-response %',
+          label: 'Engagement drop %',
           data: [62, 71, 68, 75, 72, 78, 71],
-          borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.1)',
-          fill: true, tension: 0.4, pointRadius: 4, borderWidth: 2.5,
+          borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.08)',
+          fill: true, tension: 0.4, pointRadius: 3, borderWidth: 2,
+          pointBackgroundColor: '#10B981',
         }]
       },
       options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(5,13,26,0.9)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
-            titleColor: '#F1F5F9', bodyColor: '#94A3B8',
-            callbacks: { label: ctx => ` ${ctx.parsed.y}% drop` }
-          }
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{display:false},
+          tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,
+            titleColor:'#F1F5F9',bodyColor:'#94A3B8',
+            callbacks:{label:function(ctx){return ' '+ctx.parsed.y+'% drop';}}}
         },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: '#475569', font: { size: 10 } } },
-          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#475569', font: { size: 10 }, callback: v => v + '%' }, min: 50, max: 90 }
+        scales:{
+          x:{grid:{display:false},ticks:{color:'#475569',font:{size:9}}},
+          y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9},callback:function(v){return v+'%';}},min:50,max:90}
         }
       }
     });
@@ -5281,221 +5323,198 @@ function renderSauti() {
 // ============================================================
 // renderLock() — GOTV + Election Day
 // ============================================================
+// renderLock() — GOTV + Election Day
+// ============================================================
 function renderLock() {
   destroyChart('contact-method-chart');
 
-  const el = document.getElementById('page-lock');
+  var el = document.getElementById('page-lock');
   if (!el) return;
 
-  const isElectionDay = STATE.lockMode === 'election';
+  var isElectionDay = STATE.lockMode === 'election';
 
-  const gotvWards = [
-    { ward: 'Kiamunyi', county: 'Nakuru', registered: 28400, committed: 16820, rate: 59.2, priority: 'CRITICAL', color: '#EF4444' },
-    { ward: 'Menengai West', county: 'Nakuru', registered: 22100, committed: 14800, rate: 67.0, priority: 'HIGH', color: '#F97316' },
-    { ward: 'Flamingo', county: 'Nakuru', registered: 19800, committed: 13640, rate: 68.9, priority: 'HIGH', color: '#F97316' },
-    { ward: 'Rhonda', county: 'Nakuru', registered: 18200, committed: 13200, rate: 72.5, priority: 'MEDIUM', color: '#F59E0B' },
-    { ward: 'Lanet/Umoja', county: 'Nakuru', registered: 17400, committed: 12850, rate: 73.9, priority: 'MEDIUM', color: '#F59E0B' },
-    { ward: 'Dagoretti North', county: 'Nairobi', registered: 31200, committed: 23400, rate: 75.0, priority: 'MEDIUM', color: '#F59E0B' },
-    { ward: 'Kangemi', county: 'Nairobi', registered: 24100, committed: 18200, rate: 75.5, priority: 'HOLD', color: '#3B82F6' },
-    { ward: 'Westlands', county: 'Nairobi', registered: 19800, committed: 15200, rate: 76.8, priority: 'HOLD', color: '#3B82F6' },
-    { ward: 'Limuru', county: 'Kiambu', registered: 16800, committed: 13200, rate: 78.6, priority: 'HOLD', color: '#3B82F6' },
-    { ward: 'Thika Township', county: 'Kiambu', registered: 22400, committed: 18100, rate: 80.8, priority: 'GREEN', color: '#10B981' },
+  var WARDS = [
+    {ward:'Kiamunyi',      county:'Nakuru',  reg:28400, comm:16820, rate:59.2, prio:'CRITICAL', color:'#EF4444'},
+    {ward:'Menengai West', county:'Nakuru',  reg:22100, comm:14800, rate:67.0, prio:'HIGH',     color:'#F97316'},
+    {ward:'Flamingo',      county:'Nakuru',  reg:19800, comm:13640, rate:68.9, prio:'HIGH',     color:'#F97316'},
+    {ward:'Rhonda',        county:'Nakuru',  reg:18200, comm:13200, rate:72.5, prio:'MEDIUM',   color:'#F59E0B'},
+    {ward:'Lanet/Umoja',   county:'Nakuru',  reg:17400, comm:12850, rate:73.9, prio:'MEDIUM',   color:'#F59E0B'},
+    {ward:'Dagoretti N.',  county:'Nairobi', reg:31200, comm:23400, rate:75.0, prio:'MEDIUM',   color:'#F59E0B'},
+    {ward:'Kangemi',       county:'Nairobi', reg:24100, comm:18200, rate:75.5, prio:'HOLD',     color:'#A78BFA'},
+    {ward:'Westlands',     county:'Nairobi', reg:19800, comm:15200, rate:76.8, prio:'HOLD',     color:'#A78BFA'},
+    {ward:'Limuru',        county:'Kiambu',  reg:16800, comm:13200, rate:78.6, prio:'HOLD',     color:'#A78BFA'},
+    {ward:'Thika Township',county:'Kiambu',  reg:22400, comm:18100, rate:80.8, prio:'LOCKED',   color:'#10B981'},
   ];
 
-  const stations = [
-    { id: 'NAK-001', name: 'Kiamunyi Primary School', ward: 'Kiamunyi', reg: 1820, agent: true },
-    { id: 'NAK-002', name: 'ACK St. Andrews Church', ward: 'Kiamunyi', reg: 1640, agent: false },
-    { id: 'NAK-003', name: 'Kiamunyi Secondary School', ward: 'Kiamunyi', reg: 1950, agent: true },
-    { id: 'NAK-004', name: 'Nakuru DEB Primary', ward: 'Menengai', reg: 2100, agent: false },
-    { id: 'NAK-005', name: 'Flamingo Primary School', ward: 'Flamingo', reg: 1780, agent: true },
-    { id: 'NAK-006', name: 'Afraha Stadium Hall A', ward: 'Rhonda', reg: 2400, agent: true },
-    { id: 'NAK-007', name: 'Moi Forces Academy', ward: 'Lanet', reg: 1320, agent: false },
-    { id: 'NAK-008', name: 'Nakuru National Polytechnic', ward: 'Flamingo', reg: 2180, agent: true },
+  var STATIONS = [
+    {id:'NAK-001', name:'Kiamunyi Primary School',      ward:'Kiamunyi',  reg:1820, agent:true},
+    {id:'NAK-002', name:'ACK St. Andrews Church',       ward:'Kiamunyi',  reg:1640, agent:false},
+    {id:'NAK-003', name:'Kiamunyi Secondary School',    ward:'Kiamunyi',  reg:1950, agent:true},
+    {id:'NAK-004', name:'Nakuru DEB Primary',           ward:'Menengai',  reg:2100, agent:false},
+    {id:'NAK-005', name:'Flamingo Primary School',      ward:'Flamingo',  reg:1780, agent:true},
+    {id:'NAK-006', name:'Afraha Stadium Hall A',        ward:'Rhonda',    reg:2400, agent:true},
+    {id:'NAK-007', name:'Moi Forces Academy',           ward:'Lanet',     reg:1320, agent:false},
+    {id:'NAK-008', name:'Nakuru National Polytechnic',  ward:'Flamingo',  reg:2180, agent:true},
   ];
 
-  el.innerHTML = `
-    <div class="section-header">
-      <div>
-        <h2 style="margin:0 0 4px;font-size:1.25rem;font-weight:700;color:var(--text-primary)">Lock — GOTV &amp; Election Day</h2>
-        <p style="margin:0;color:var(--text-muted);font-size:.85rem">Get-out-the-vote operations, voter commitment tracking &amp; polling station coverage</p>
-      </div>
-      <div class="flex-row" style="gap:8px">
-        <div style="display:flex;background:var(--bg-tertiary);border:1px solid var(--border-default);border-radius:8px;overflow:hidden">
-          <button class="tab ${!isElectionDay?'active':''}" onclick="STATE.lockMode='gotv';renderLock()" style="padding:6px 14px;font-size:.8rem">CAMPAIGN MODE</button>
-          <button class="tab ${isElectionDay?'active':''}" onclick="STATE.lockMode='election';renderLock()" style="padding:6px 14px;font-size:.8rem">ELECTION DAY</button>
-        </div>
-      </div>
-    </div>
+  var CONTACTS = [
+    {label:'IVR Call',    pct:42, color:'#7C3AED', count:'12,113'},
+    {label:'WhatsApp',    pct:31, color:'#10B981',  count:'8,940'},
+    {label:'Agent Visit', pct:27, color:'#2DD4BF',  count:'7,787'},
+  ];
 
-    ${!isElectionDay ? `
-      <!-- GOTV MODE -->
-      <div class="flex-row" style="gap:12px;margin-bottom:16px">
-        <div class="kpi-card accent-green" style="flex:1">
-          <div class="kpi-label">Committed Voters</div>
-          <div class="kpi-value">159,410</div>
-          <div class="kpi-trend up">▲ +4,210 this week</div>
-        </div>
-        <div class="kpi-card accent-amber" style="flex:1">
-          <div class="kpi-label">Avg Commitment Rate</div>
-          <div class="kpi-value">73.1%</div>
-          <div class="kpi-sub">Across 10 priority wards</div>
-        </div>
-        <div class="kpi-card accent-red" style="flex:1">
-          <div class="kpi-label">Critical Wards</div>
-          <div class="kpi-value">1</div>
-          <div class="kpi-sub">Below 65% threshold</div>
-        </div>
-        <div class="kpi-card accent-blue" style="flex:1">
-          <div class="kpi-label">Contacts Made (7d)</div>
-          <div class="kpi-value">28,840</div>
-          <div class="kpi-trend up">▲ All channels combined</div>
-        </div>
-      </div>
+  var tabHTML = '<div style="display:flex;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:2px">'
+    + '<button class="lck-mode-tab' + (!isElectionDay ? ' active' : '') + '" onclick="STATE.lockMode=\'gotv\';renderLock()">CAMPAIGN MODE</button>'
+    + '<button class="lck-mode-tab' + (isElectionDay  ? ' active' : '') + '" onclick="STATE.lockMode=\'election\';renderLock()">ELECTION DAY</button>'
+    + '</div>';
 
-      <div class="grid-2" style="gap:16px;margin-bottom:16px">
-        <div class="card" style="padding:20px">
-          <div class="card-header" style="margin-bottom:12px">
-            <span style="font-weight:600;color:var(--text-primary)">GOTV Priority Stack — Top 10 Wards</span>
-          </div>
-          <table class="data-table" style="font-size:.8rem">
-            <thead><tr><th>Ward</th><th>County</th><th>Registered</th><th>Committed</th><th>Rate</th><th>Priority</th></tr></thead>
-            <tbody>
-              ${gotvWards.map(w => `
-                <tr>
-                  <td style="font-weight:500;color:var(--text-primary)">${w.ward}</td>
-                  <td style="color:var(--text-muted)">${w.county}</td>
-                  <td>${fmt(w.registered)}</td>
-                  <td>${fmt(w.committed)}</td>
-                  <td>
-                    <div style="display:flex;align-items:center;gap:6px">
-                      <div style="width:50px;height:5px;background:var(--bg-tertiary);border-radius:3px;overflow:hidden">
-                        <div style="height:100%;width:${w.rate}%;background:${w.color};border-radius:3px"></div>
-                      </div>
-                      <span style="color:${w.color};font-weight:600">${pct(w.rate)}</span>
-                    </div>
-                  </td>
-                  <td><span style="font-size:.7rem;font-weight:700;color:${w.color}">${w.priority}</span></td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="card" style="padding:20px">
-          <div class="card-header" style="margin-bottom:12px">
-            <span style="font-weight:600;color:var(--text-primary)">Contact Method Breakdown</span>
-            <span style="font-size:.75rem;color:var(--text-muted)">Last 7 days</span>
-          </div>
-          <div style="height:200px;margin-bottom:16px">
-            <canvas id="contact-method-chart"></canvas>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            ${[
-              { label: 'IVR Call', pct: 42, color: '#7C3AED', count: '12,113' },
-              { label: 'WhatsApp', pct: 31, color: '#3B82F6', count: '8,940' },
-              { label: 'Agent Visit', pct: 27, color: '#10B981', count: '7,787' },
-            ].map(m => `
-              <div style="display:flex;align-items:center;gap:10px">
-                <div style="width:10px;height:10px;border-radius:50%;background:${m.color};flex-shrink:0"></div>
-                <span style="font-size:.8rem;color:var(--text-secondary);flex:1">${m.label}</span>
-                <div class="progress-bar" style="flex:2">
-                  <div class="progress-fill" style="width:${m.pct}%;background:${m.color}"></div>
-                </div>
-                <span style="font-size:.78rem;font-weight:600;color:var(--text-primary);min-width:50px;text-align:right">${m.pct}%</span>
-                <span style="font-size:.75rem;color:var(--text-muted);min-width:40px;text-align:right">${m.count}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-    ` : `
-      <!-- ELECTION DAY MODE -->
-      <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
-        <span style="font-size:1.4rem">🗳</span>
-        <div>
-          <div style="font-size:.9rem;font-weight:700;color:#FCA5A5">ELECTION DAY MODE ACTIVE</div>
-          <div style="font-size:.78rem;color:var(--text-muted)">Polling station coverage monitoring · Real-time agent check-ins · Incident reporting</div>
-        </div>
-      </div>
-
-      <div class="flex-row" style="gap:12px;margin-bottom:16px">
-        <div class="kpi-card accent-green" style="flex:1">
-          <div class="kpi-label">Stations Covered</div>
-          <div class="kpi-value">${5 + Object.keys(STATE.stationCheckIns).length}</div>
-          <div class="kpi-sub">of ${stations.length} total</div>
-        </div>
-        <div class="kpi-card accent-red" style="flex:1">
-          <div class="kpi-label">Uncovered</div>
-          <div class="kpi-value">${stations.filter(s=>!s.agent&&!STATE.stationCheckIns[s.id]).length}</div>
-          <div class="kpi-sub">Dispatching agents</div>
-        </div>
-        <div class="kpi-card accent-amber" style="flex:1">
-          <div class="kpi-label">Incidents Reported</div>
-          <div class="kpi-value">2</div>
-          <div class="kpi-sub">1 resolved</div>
-        </div>
-        <div class="kpi-card accent-blue" style="flex:1">
-          <div class="kpi-label">Turnout (est.)</div>
-          <div class="kpi-value">34.2%</div>
-          <div class="kpi-trend up">▲ Tracking above target</div>
-        </div>
-      </div>
-
-      <div class="card" style="padding:20px">
-        <div class="card-header" style="margin-bottom:12px">
-          <span style="font-weight:600;color:var(--text-primary)">Polling Station Coverage</span>
-          <span style="font-size:.75rem;color:var(--text-muted)">Nakuru County · ${stations.length} stations</span>
-        </div>
-        <table class="data-table">
-          <thead><tr><th>Station ID</th><th>Name</th><th>Ward</th><th>Registered</th><th>Agent Status</th><th>Action</th></tr></thead>
-          <tbody>
-            ${stations.map(s => {
-              const covered = s.agent || !!STATE.stationCheckIns[s.id];
-              return `
-                <tr>
-                  <td class="mono">${s.id}</td>
-                  <td style="font-weight:500;color:var(--text-primary)">${s.name}</td>
-                  <td style="color:var(--text-muted)">${s.ward}</td>
-                  <td>${fmt(s.reg)}</td>
-                  <td>
-                    <span style="display:flex;align-items:center;gap:5px;font-size:.78rem;color:${covered?'#10B981':'#EF4444'}">
-                      <span style="width:7px;height:7px;border-radius:50%;background:${covered?'#10B981':'#EF4444'}"></span>
-                      ${covered?'Agent on site':'UNCOVERED'}
-                    </span>
-                  </td>
-                  <td>
-                    ${covered
-                      ? `<span style="font-size:.75rem;color:var(--text-muted)">Monitoring</span>`
-                      : `<button class="btn-danger btn-sm" onclick="dispatchElectionAgent('${s.id}')">Dispatch Agent</button>`
-                    }
-                  </td>
-                </tr>
-              `;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>
-    `}
-  `;
+  var mainHTML = '';
 
   if (!isElectionDay) {
-    setTimeout(() => {
+    var wardRows = '';
+    for (var wi=0; wi<WARDS.length; wi++) {
+      var w = WARDS[wi];
+      wardRows += '<div class="lck-ward-row">'
+        + '<div style="min-width:110px;max-width:130px">'
+        + '<div class="lck-ward-name">' + w.ward + '</div>'
+        + '<div class="lck-ward-county">' + w.county + '</div>'
+        + '</div>'
+        + '<div class="lck-bar-wrap"><div class="lck-bar" style="width:' + w.rate + '%;background:' + w.color + '"></div></div>'
+        + '<span style="font-size:11px;font-weight:800;color:' + w.color + ';font-family:var(--font-mono);width:40px;text-align:right;flex-shrink:0">' + w.rate + '%</span>'
+        + '<span class="lck-prio" style="background:' + w.color + '18;color:' + w.color + ';width:60px;text-align:center">' + w.prio + '</span>'
+        + '</div>';
+    }
+
+    var contactRows = '';
+    for (var ci=0; ci<CONTACTS.length; ci++) {
+      var c = CONTACTS[ci];
+      contactRows += '<div class="lck-contact-row">'
+        + '<div class="lck-contact-dot" style="background:' + c.color + '"></div>'
+        + '<span style="font-size:10px;color:var(--text-secondary);flex:1">' + c.label + '</span>'
+        + '<div class="lck-contact-track"><div class="lck-contact-fill" style="width:' + c.pct + '%;background:' + c.color + '"></div></div>'
+        + '<span style="font-size:10px;font-weight:700;color:var(--text-primary);width:28px;text-align:right">' + c.pct + '%</span>'
+        + '<span style="font-size:9px;color:var(--text-muted);width:44px;text-align:right">' + c.count + '</span>'
+        + '</div>';
+    }
+
+    var rightPanel = '<div style="display:flex;flex-direction:column;gap:14px">'
+      + '<div class="card" style="padding:0;overflow:hidden">'
+      + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+      + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">CONTACT METHODS</span>'
+      + '<span style="font-size:9px;color:var(--text-muted)">last 7d</span>'
+      + '</div>'
+      + '<div style="padding:12px;height:180px"><canvas id="contact-method-chart"></canvas></div>'
+      + '<div style="padding:0 12px 12px">' + contactRows + '</div>'
+      + '</div>'
+      + '<div class="card">'
+      + '<div class="card-header" style="margin-bottom:10px">'
+      + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">TARGET</span>'
+      + '</div>'
+      + '<div style="display:flex;flex-direction:column;gap:6px">'
+      + '<div style="display:flex;justify-content:space-between;font-size:10px"><span style="color:var(--text-muted)">Target by election day</span><span style="font-weight:700;color:#10B981">200,000</span></div>'
+      + '<div style="height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden"><div style="height:100%;width:79.7%;background:linear-gradient(90deg,#10B981,#2DD4BF);border-radius:3px"></div></div>'
+      + '<div style="font-size:9px;color:var(--text-muted)">159,410 committed &middot; 79.7% to target</div>'
+      + '</div>'
+      + '</div>'
+      + '</div>';
+
+    mainHTML = '<div class="if-stats-row">'
+      + '<div class="if-stat is-win"><div class="if-stat-label">Committed Voters</div><div class="if-stat-val" style="color:#10B981">159K</div><div class="if-stat-sub">+4,210 this week</div></div>'
+      + '<div class="if-stat is-watch"><div class="if-stat-label">Avg Commitment</div><div class="if-stat-val" style="color:#F59E0B">73.1%</div><div class="if-stat-sub">10 priority wards</div></div>'
+      + '<div class="if-stat is-flag"><div class="if-stat-label">Critical Wards</div><div class="if-stat-val" style="color:#EF4444">1</div><div class="if-stat-sub">below 65% threshold</div></div>'
+      + '<div class="if-stat is-pool"><div class="if-stat-label">Contacts (7d)</div><div class="if-stat-val" style="color:#2DD4BF">28,840</div><div class="if-stat-sub">all channels</div></div>'
+      + '</div>'
+      + '<div class="lck-layout">'
+      + '<div class="card" style="padding:0;overflow:hidden">'
+      + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+      + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">GOTV PRIORITY STACK</span>'
+      + '<span style="font-size:9px;color:var(--text-muted)">top 10 wards</span>'
+      + '</div>'
+      + wardRows
+      + '</div>'
+      + rightPanel
+      + '</div>';
+
+  } else {
+    var coveredCount = 0;
+    var uncoveredCount = 0;
+    var stationRows = '';
+    for (var si=0; si<STATIONS.length; si++) {
+      var s = STATIONS[si];
+      var isCovered = s.agent || !!STATE.stationCheckIns[s.id];
+      if (isCovered) coveredCount++; else uncoveredCount++;
+      stationRows += '<div class="lck-station-row">'
+        + '<span style="font-size:9px;font-weight:700;color:var(--text-muted);font-family:var(--font-mono);width:62px;flex-shrink:0">' + s.id + '</span>'
+        + '<div style="flex:1;min-width:0">'
+        + '<div style="font-size:11px;font-weight:600;color:var(--text-primary)">' + s.name + '</div>'
+        + '<div style="font-size:9px;color:var(--text-muted)">' + s.ward + ' &middot; ' + fmt(s.reg) + ' registered</div>'
+        + '</div>'
+        + '<div style="display:flex;align-items:center;gap:5px;flex-shrink:0">'
+        + '<span style="width:7px;height:7px;border-radius:50%;background:' + (isCovered?'#10B981':'#EF4444') + ';display:inline-block"></span>'
+        + '<span style="font-size:9px;font-weight:700;color:' + (isCovered?'#10B981':'#EF4444') + '">' + (isCovered?'COVERED':'UNCOVERED') + '</span>'
+        + '</div>'
+        + (!isCovered
+          ? '<button class="btn-secondary" style="padding:3px 8px;font-size:9px;color:#EF4444;border-color:rgba(239,68,68,0.3);flex-shrink:0" '
+            + 'onclick="dispatchElectionAgent(\'' + s.id + '\')">Dispatch</button>'
+          : '<span style="font-size:9px;color:var(--text-muted);width:64px;text-align:right">Monitoring</span>')
+        + '</div>';
+    }
+
+    mainHTML = '<div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px">'
+      + '<div style="width:8px;height:8px;border-radius:50%;background:#EF4444;flex-shrink:0;animation:sty2-pulse 1.5s ease-in-out infinite"></div>'
+      + '<div>'
+      + '<div style="font-size:11px;font-weight:800;color:#FCA5A5;letter-spacing:.06em">ELECTION DAY MODE ACTIVE</div>'
+      + '<div style="font-size:9px;color:var(--text-muted)">Polling station coverage &middot; Agent check-ins &middot; Incident reporting</div>'
+      + '</div>'
+      + '</div>'
+      + '<div class="if-stats-row">'
+      + '<div class="if-stat is-win"><div class="if-stat-label">Stations Covered</div><div class="if-stat-val" style="color:#10B981">' + coveredCount + '</div><div class="if-stat-sub">of ' + STATIONS.length + ' total</div></div>'
+      + '<div class="if-stat is-flag"><div class="if-stat-label">Uncovered</div><div class="if-stat-val" style="color:#EF4444">' + uncoveredCount + '</div><div class="if-stat-sub">dispatching agents</div></div>'
+      + '<div class="if-stat is-watch"><div class="if-stat-label">Incidents</div><div class="if-stat-val" style="color:#F59E0B">2</div><div class="if-stat-sub">1 resolved</div></div>'
+      + '<div class="if-stat is-pool"><div class="if-stat-label">Turnout (est.)</div><div class="if-stat-val" style="color:#2DD4BF">34.2%</div><div class="if-stat-sub">above target</div></div>'
+      + '</div>'
+      + '<div class="card" style="padding:0;overflow:hidden">'
+      + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+      + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">POLLING STATION COVERAGE</span>'
+      + '<span style="font-size:9px;color:var(--text-muted)">Nakuru County &middot; ' + STATIONS.length + ' stations</span>'
+      + '</div>'
+      + stationRows
+      + '</div>';
+  }
+
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<h1 style="color:#10B981">The Lock</h1>'
+    + '<span class="amp-live-dot"></span>'
+    + '</div>'
+    + tabHTML
+    + '</div>'
+    + '<div class="page-sub">Get-out-the-vote operations &middot; voter commitment tracking &middot; polling station coverage</div>'
+    + '</div>'
+    + mainHTML;
+
+  if (!isElectionDay) {
+    setTimeout(function(){
       mkChart('contact-method-chart', {
         type: 'doughnut',
         data: {
           labels: ['IVR Call','WhatsApp','Agent Visit'],
           datasets: [{
             data: [42, 31, 27],
-            backgroundColor: ['rgba(124,58,237,0.8)','rgba(59,130,246,0.8)','rgba(16,185,129,0.8)'],
-            borderColor: ['#7C3AED','#3B82F6','#10B981'],
+            backgroundColor: ['rgba(124,58,237,0.8)','rgba(16,185,129,0.75)','rgba(45,212,191,0.8)'],
+            borderColor: ['#7C3AED','#10B981','#2DD4BF'],
             borderWidth: 2,
           }]
         },
         options: {
-          responsive: true, maintainAspectRatio: false, cutout: '65%',
-          plugins: {
-            legend: { position: 'bottom', labels: { color: '#94A3B8', font: { size: 11 }, boxWidth: 10, padding: 12 } },
-            tooltip: { backgroundColor: 'rgba(5,13,26,0.9)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, titleColor: '#F1F5F9', bodyColor: '#94A3B8', callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
+          responsive:true, maintainAspectRatio:false, cutout:'65%',
+          plugins:{
+            legend:{position:'bottom',labels:{color:'#94A3B8',font:{size:9},boxWidth:8,padding:10}},
+            tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,
+              titleColor:'#F1F5F9',bodyColor:'#94A3B8',
+              callbacks:{label:function(ctx){return ' '+ctx.label+': '+ctx.parsed+'%';}}}
           }
         }
       });
