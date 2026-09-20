@@ -2432,193 +2432,345 @@ function renderMsingi() {
 }
 
 function renderRungu() {
-  const openAlerts = STATE.alerts.filter(a=>a.status==='open');
-  const critAlerts = openAlerts.filter(a=>a.severity==='CRITICAL'||a.severity==='SYSTEM_FAILURE');
-  const totalVoters = COUNTIES.reduce((s,c)=>s+c.reg_voters,0);
-  const totalAgents = COUNTIES.reduce((s,c)=>s+c.agents,0);
-  const avgCoverage = (COUNTIES.reduce((s,c)=>s+c.coverage,0)/COUNTIES.length).toFixed(1);
-  const avgScore = (COUNTIES.reduce((s,c)=>s+c.score,0)/COUNTIES.length).toFixed(1);
-  const winCount = COUNTIES.filter(c=>c.tier==='WIN').length;
-  const growCount = COUNTIES.filter(c=>c.tier==='GROW').length;
+  // ── Clock & countdown
+  const electionDate = new Date('2027-08-10');
+  const now = new Date();
+  const daysLeft = Math.ceil((electionDate - now) / (1000 * 60 * 60 * 24));
+  const briefDate = now.toLocaleDateString('en-KE', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+  const h = now.getHours();
+  const greeting = h < 12 ? 'Habari za asubuhi' : h < 17 ? 'Habari za mchana' : 'Habari za jioni';
 
-  const moduleHealth = [
-    {name:'Rungu',sub:'Command',status:'healthy',uptime:'99.9%'},
-    {name:'Signal',sub:'Intel',status:'healthy',uptime:'100%'},
-    {name:'I-Force',sub:'Agents',status:'healthy',uptime:'99.7%'},
-    {name:'Amplifier',sub:'AI Calls',status:'warning',uptime:'97.2%'},
-    {name:'Kura',sub:'IVR',status:'healthy',uptime:'99.8%'},
-    {name:'The Story',sub:'Content',status:'healthy',uptime:'100%'},
-    {name:'Wasikie',sub:'Gen Z',status:'healthy',uptime:'99.5%'},
-    {name:'Sauti',sub:'Response',status:'healthy',uptime:'99.9%'},
-    {name:'The Lock',sub:'GOTV',status:'healthy',uptime:'99.6%'},
-    {name:'Health',sub:'System',status:'healthy',uptime:'99.8%'},
-    {name:'Dira',sub:'Counties',status:'healthy',uptime:'100%'},
-    {name:'Audit',sub:'Trail',status:'healthy',uptime:'100%'}
-  ];
+  // ── Operational data
+  const openAlerts = STATE.alerts.filter(a => a.status === 'open');
+  const critAlerts = openAlerts.filter(a => a.severity === 'CRITICAL' || a.severity === 'SYSTEM_FAILURE');
+  const totalAgents = COUNTIES.reduce((s,c) => s + c.agents, 0);
+  const avgCoverage = (COUNTIES.reduce((s,c) => s + c.coverage, 0) / COUNTIES.length).toFixed(1);
 
+  // ── Projection data from NATIONAL_COUNTIES
+  const winC   = NATIONAL_COUNTIES.filter(c => c.status27 === 'WIN');
+  const watchC = NATIONAL_COUNTIES.filter(c => c.status27 === 'WATCH');
+  const monC   = NATIONAL_COUNTIES.filter(c => c.status27 === 'MONITOR');
+  const gateAt = winC.length;
+  const gateColor = gateAt >= 24 ? DC.WIN : gateAt >= 18 ? DC.WATCH : DC.FLAG;
+  const gateLabel = gateAt >= 24 ? 'Gate Secured' : gateAt >= 18 ? 'Gate Within Reach' : 'Gate At Risk';
+  const totalReg = NATIONAL_COUNTIES.reduce((s,c) => s + c.reg, 0);
+  const projShare = (NATIONAL_COUNTIES.reduce((s,c) => s + (c.proj27 * c.reg), 0) / totalReg).toFixed(1);
+
+  // ── Top Watch counties by priority
+  const topWatch = [...watchC].sort((a,b) => ((b.priority??1)-(a.priority??1)) || (b.reg - a.reg));
+
+  // ── Intelligence feed (recent events)
   const recentEvents = [
-    {color:'#EF4444',msg:'CRITICAL: SHA card spike in Nakuru — 12,841 engagements',time:'20m ago'},
-    {color:'#10B981',msg:'47 converts: James Mwangi, Kiamunyi ward',time:'35m ago'},
-    {color:'#F59E0B',msg:'WARNING: 2 polling stations uncovered in Kiamunyi',time:'1h ago'},
-    {color:'#3B82F6',msg:'IVR batch complete: Nakuru County 32,441 answered',time:'2h ago'},
-    {color:'#10B981',msg:'Uasin Gishu IVR: +8% sentiment shift',time:'2.5h ago'},
-    {color:'#F59E0B',msg:'4 silent agents flagged in Nakuru county',time:'3h ago'}
+    {color:DC.FLAG, msg:'CRITICAL: SHA card spike in Nakuru — 12,841 engagements', time:'20m ago'},
+    {color:DC.WIN,  msg:'47 converts: James Mwangi, Kiamunyi ward', time:'35m ago'},
+    {color:DC.WATCH,msg:'WARNING: 2 polling stations uncovered in Kiamunyi', time:'1h ago'},
+    {color:DC.POOL, msg:'IVR batch complete: Nakuru County 32,441 answered', time:'2h ago'},
+    {color:DC.WIN,  msg:'Uasin Gishu IVR: +8% sentiment shift', time:'2.5h ago'},
+    {color:DC.WATCH,msg:'4 silent agents flagged in Nakuru county', time:'3h ago'},
   ];
 
+  // ── Actions required
   const actions = [
-    {text:'Deploy SHA counter-narrative to Nakuru WhatsApp groups',urgency:'critical'},
-    {text:'Redeploy 4 agents from Menengai West to Kiamunyi Ward',urgency:'high'},
-    {text:'Approve Agnes Wambui testimonial story for IVR deployment',urgency:'medium'},
-    {text:'Schedule Nakuru East follow-up IVR batch — healthcare focus',urgency:'medium'},
-    {text:'Review Njoro teacher WhatsApp group response plan',urgency:'high'}
+    {text:'Deploy SHA counter-narrative to Nakuru WhatsApp groups', urgency:'critical'},
+    {text:'Redeploy 4 agents from Menengai West to Kiamunyi Ward', urgency:'high'},
+    {text:'Approve Agnes Wambui testimonial story for IVR deployment', urgency:'medium'},
+    {text:'Schedule Nakuru East follow-up IVR batch — healthcare focus', urgency:'medium'},
+    {text:'Review Njoro teacher WhatsApp group response plan', urgency:'high'},
+  ];
+
+  // ── Module definitions
+  const MODULES = [
+    {
+      id:'msingi', name:'Msingi', sub:'Battlefield Brief',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`,
+      metric:`<span style="color:${DC.WIN}">${winC.length} WIN</span> &middot; <span style="color:${DC.WATCH}">${watchC.length} WATCH</span> &middot; <span style="color:${DC.MONITOR}">${monC.length} MONITOR</span>`,
+      status:'LIVE', sc:DC.WIN,
+    },
+    {
+      id:'dira', name:'Dira', sub:'County Intelligence',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+      metric:`47 counties &middot; ward-level drill-down`,
+      status:'LIVE', sc:DC.WIN,
+    },
+    {
+      id:'signal', name:'Signal', sub:'Intelligence Alerts',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>`,
+      metric: openAlerts.length > 0
+        ? `<span style="color:${DC.FLAG}">${critAlerts.length} critical</span> &middot; ${openAlerts.length} open`
+        : `<span style="color:${DC.WIN}">All clear</span> &middot; 0 alerts`,
+      status: critAlerts.length > 0 ? 'ALERT' : openAlerts.length > 0 ? 'WATCH' : 'CLEAR',
+      sc: critAlerts.length > 0 ? DC.FLAG : openAlerts.length > 0 ? DC.WATCH : DC.WIN,
+    },
+    {
+      id:'iforce', name:'I-Force', sub:'Field Operations',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+      metric:`${totalAgents.toLocaleString()} agents &middot; ${avgCoverage}% coverage`,
+      status:'ACTIVE', sc:DC.WIN,
+    },
+    {
+      id:'amplifier', name:'Amplifier', sub:'Messaging & IVR',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
+      metric:`IVR campaigns &middot; AI content engine`,
+      status:'ACTIVE', sc:DC.WIN,
+    },
+    {
+      id:'kura', name:'Kura Connect', sub:'Voter Mobilization',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+      metric:`Registration gaps &middot; GOTV targeting`,
+      status:'ACTIVE', sc:DC.WIN,
+    },
+    {
+      id:'story', name:'The Story', sub:'Narrative Strategy',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+      metric:`Message architecture &middot; media`,
+      status:'ACTIVE', sc:DC.WIN,
+    },
+    {
+      id:'wasikie', name:'Wasikie', sub:'Youth Intelligence',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
+      metric:`Gen Z pulse &middot; sentiment tracker`,
+      status:'ACTIVE', sc:DC.WIN,
+    },
+    {
+      id:'sauti', name:'Sauti', sub:'Voter Response',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`,
+      metric:`Field feedback &middot; response rate`,
+      status:'ACTIVE', sc:DC.WIN,
+    },
+    {
+      id:'lock', name:'The Lock', sub:'Get Out The Vote',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+      metric:`GOTV milestones &middot; ${daysLeft}d out`,
+      status:'ACTIVE', sc:DC.WIN,
+    },
+    {
+      id:'health', name:'Health', sub:'System Status',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+      metric:`12/12 modules &middot; 99.8% uptime`,
+      status:'HEALTHY', sc:DC.WIN,
+    },
+    {
+      id:'audit', name:'Audit', sub:'Activity Trail',
+      icon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+      metric:`Full activity log &middot; tamper-proof`,
+      status:'LOG', sc:DC.MONITOR,
+    },
   ];
 
   document.getElementById('page-rungu').innerHTML = `
-    <div class="page-header">
-      <h1>Rungu Command</h1>
-      <div class="page-sub">
-        <span class="live-indicator">LIVE</span>
-        <span>National Operations Dashboard · Kenya 2027</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${winCount} WIN · ${growCount} GROW counties</span>
+    <style>
+      .rh-hero {
+        background: linear-gradient(135deg, #3500A0 0%, #7C3AED 52%, #A804E0 100%);
+        border-radius: 16px; padding: 34px 40px 28px; margin-bottom: 20px;
+        position: relative; overflow: hidden;
+      }
+      .rh-hero::before {
+        content:''; position:absolute; inset:0;
+        background: radial-gradient(ellipse at 78% 10%, rgba(255,255,255,0.12) 0%, transparent 55%);
+        pointer-events:none;
+      }
+      .rh-greeting { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.52); margin-bottom:5px; font-family:var(--font-mono); }
+      .rh-title { font-size:26px; font-weight:700; color:#fff; margin:0 0 5px; line-height:1.15; }
+      .rh-daterow { font-size:13px; color:rgba(255,255,255,0.62); margin-bottom:20px; }
+      .rh-stats { display:flex; gap:0; flex-wrap:wrap; }
+      .rh-stat { display:flex; flex-direction:column; gap:1px; padding:0 24px 0 0; }
+      .rh-stat:first-child { padding-left:0; }
+      .rh-stat-label { font-size:9px; text-transform:uppercase; letter-spacing:0.09em; color:rgba(255,255,255,0.45); font-family:var(--font-mono); }
+      .rh-stat-val { font-size:22px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; font-family:var(--font-mono); line-height:1.1; }
+      .rh-stat-sub { font-size:10px; color:rgba(255,255,255,0.38); }
+      .rh-divider { width:1px; background:rgba(255,255,255,0.14); align-self:stretch; margin:2px 24px 2px 0; }
+      .rh-sec { font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); margin:0 0 10px; font-family:var(--font-mono); }
+      .rh-alerts { display:flex; flex-direction:column; gap:5px; margin-bottom:18px; }
+      .rh-alert-row {
+        display:flex; align-items:center; gap:10px;
+        background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.14);
+        border-left:3px solid #EF4444; border-radius:8px; padding:9px 12px;
+        cursor:pointer; transition:background 0.15s;
+      }
+      .rh-alert-row:hover { background:rgba(239,68,68,0.13); }
+      .rh-alert-sev { font-size:9px; font-weight:700; letter-spacing:0.07em; color:#EF4444; font-family:var(--font-mono); min-width:56px; }
+      .rh-alert-title { font-size:12.5px; color:var(--text-primary); flex:1; }
+      .rh-alert-time { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); white-space:nowrap; }
+      .rh-mods-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
+      .rh-mod {
+        background:var(--bg-surface); border:1px solid var(--border); border-radius:10px;
+        padding:14px 14px 12px; cursor:pointer; position:relative; overflow:hidden;
+        display:flex; flex-direction:column; gap:4px; min-height:118px;
+        transition:border-color 0.13s, background 0.13s, transform 0.1s;
+      }
+      .rh-mod:hover { border-color:rgba(167,139,250,0.5); background:var(--bg-surface-2); transform:translateY(-1px); }
+      .rh-mod-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+      .rh-mod-icon { width:30px; height:30px; border-radius:7px; background:rgba(124,58,237,0.1); display:flex; align-items:center; justify-content:center; color:#A78BFA; flex-shrink:0; }
+      .rh-mod-badge { font-size:8px; font-weight:700; letter-spacing:0.07em; padding:2px 5px; border-radius:3px; font-family:var(--font-mono); }
+      .rh-mod-name { font-size:13px; font-weight:600; color:var(--text-primary); line-height:1.2; }
+      .rh-mod-sub { font-size:10px; color:var(--text-muted); line-height:1.3; }
+      .rh-mod-metric { font-size:11px; color:var(--text-secondary); font-family:var(--font-mono); line-height:1.4; margin-top:auto; font-variant-numeric:tabular-nums; }
+      .rh-mod-arrow { position:absolute; right:10px; bottom:10px; font-size:13px; color:var(--text-muted); opacity:0; transition:opacity 0.12s, transform 0.12s; }
+      .rh-mod:hover .rh-mod-arrow { opacity:1; transform:translateX(2px); }
+      .rh-pulse-grid { display:grid; grid-template-columns:1fr 334px; gap:14px; }
+      .rh-event-row { display:flex; align-items:flex-start; gap:9px; padding:8px 16px; border-bottom:1px solid var(--border); }
+      .rh-event-row:last-child { border-bottom:none; }
+      .rh-event-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+      .rh-event-msg { font-size:12px; color:var(--text-primary); flex:1; line-height:1.4; }
+      .rh-event-time { font-size:10px; color:var(--text-muted); font-family:var(--font-mono); white-space:nowrap; flex-shrink:0; }
+      .rh-action-item { display:flex; align-items:flex-start; gap:10px; padding:8px 14px; border-bottom:1px solid var(--border); }
+      .rh-action-item:last-child { border-bottom:none; }
+      .rh-action-num { width:18px; height:18px; border-radius:50%; background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.2); color:#A78BFA; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+      .rh-action-text { font-size:12px; color:var(--text-primary); flex:1; line-height:1.4; }
+      .rh-urgency { font-size:8px; font-weight:700; letter-spacing:0.06em; padding:2px 5px; border-radius:3px; font-family:var(--font-mono); flex-shrink:0; white-space:nowrap; }
+    </style>
+
+    <!-- ── HERO ── -->
+    <div class="rh-hero">
+      <div class="rh-greeting">${greeting}</div>
+      <h1 class="rh-title">Dira Command Centre</h1>
+      <div class="rh-daterow">${briefDate} &nbsp;·&nbsp; <strong style="color:rgba(255,255,255,0.88)">${daysLeft.toLocaleString()}</strong> days to General Election</div>
+      <div class="rh-stats">
+        <div class="rh-stat">
+          <div class="rh-stat-label">24-County Gate</div>
+          <div class="rh-stat-val" style="color:${gateAt>=24?'#6EE7B7':gateAt>=18?'#FCD34D':'#FCA5A5'}">${gateAt}<span style="font-size:13px;color:rgba(255,255,255,0.42)">/24</span></div>
+          <div class="rh-stat-sub">${gateLabel}</div>
+        </div>
+        <div class="rh-divider"></div>
+        <div class="rh-stat">
+          <div class="rh-stat-label">Proj. Vote Share</div>
+          <div class="rh-stat-val" style="color:${parseFloat(projShare)>=50?'#6EE7B7':'#FCD34D'}">${projShare}<span style="font-size:13px;color:rgba(255,255,255,0.42)">%</span></div>
+          <div class="rh-stat-sub">national 2027 model</div>
+        </div>
+        <div class="rh-divider"></div>
+        <div class="rh-stat">
+          <div class="rh-stat-label">WATCH Counties</div>
+          <div class="rh-stat-val" style="color:#FCD34D">${watchC.length}</div>
+          <div class="rh-stat-sub">battleground · swing</div>
+        </div>
+        <div class="rh-divider"></div>
+        <div class="rh-stat">
+          <div class="rh-stat-label">Field Force</div>
+          <div class="rh-stat-val">${totalAgents.toLocaleString()}</div>
+          <div class="rh-stat-sub">${avgCoverage}% avg. coverage</div>
+        </div>
+        <div class="rh-divider"></div>
+        <div class="rh-stat">
+          <div class="rh-stat-label">Open Alerts</div>
+          <div class="rh-stat-val" style="color:${openAlerts.length>0?'#FCA5A5':'#6EE7B7'}">${openAlerts.length}</div>
+          <div class="rh-stat-sub">${critAlerts.length} critical</div>
+        </div>
       </div>
     </div>
 
-    <div class="kpi-grid">
-      <div class="kpi-card accent-violet">
-        <div class="kpi-icon" style="color:#8B5CF6">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <div class="kpi-label">National Coverage</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#8B5CF6,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${avgCoverage}%</div>
-        <div class="kpi-sub">${fmt(totalVoters)} registered voters</div>
-        <div class="kpi-trend up">↑ +2.1% this week</div>
-      </div>
-      <div class="kpi-card accent-blue">
-        <div class="kpi-icon" style="color:#3B82F6">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div class="kpi-label">Active Agents</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#3B82F6,#2DD4BF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${fmt(totalAgents)}</div>
-        <div class="kpi-sub">Across 47 counties</div>
-        <div class="kpi-trend up">↑ +89 deployed this week</div>
-      </div>
-      <div class="kpi-card accent-teal">
-        <div class="kpi-icon" style="color:#2DD4BF">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div class="kpi-label">Avg Support Score</div>
-        <div class="kpi-value" style="background:linear-gradient(135deg,#2DD4BF,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${avgScore}</div>
-        <div class="kpi-sub">Target: 65.0 by election day</div>
-        <div class="kpi-trend up">↑ +1.4 this month</div>
-      </div>
-      <div class="kpi-card ${critAlerts.length>0?'accent-amber':''}">
-        <div class="kpi-icon" style="color:${openAlerts.length>0?'#EF4444':'#10B981'}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-        <div class="kpi-label">Active Alerts</div>
-        <div class="kpi-value" style="color:${openAlerts.length>0?'#EF4444':'#10B981'}">${openAlerts.length}</div>
-        <div class="kpi-sub">${critAlerts.length} critical · ${openAlerts.length-critAlerts.length} warnings</div>
-        <div class="kpi-trend ${openAlerts.length>0?'down':'up'}">${openAlerts.length>0?'⚠ Requires attention':'✓ All systems clear'}</div>
-      </div>
+    <!-- ── ALERTS (only if any) ── -->
+    ${openAlerts.length > 0 ? `
+    <div class="rh-sec">Priority Alerts — ${critAlerts.length} Critical</div>
+    <div class="rh-alerts">
+      ${openAlerts.slice(0,3).map(a=>`
+        <div class="rh-alert-row" onclick="openAlertModal('${a.id}')">
+          <span class="rh-alert-sev">${a.severity}</span>
+          <span class="rh-alert-title">${a.title}</span>
+          <span class="rh-alert-time">${relativeTime(a.created_at)}</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-muted);flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>`).join('')}
+    </div>` : ''}
+
+    <!-- ── MODULE COMMAND GRID ── -->
+    <div class="rh-sec">Module Command</div>
+    <div class="rh-mods-grid">
+      ${MODULES.map(m=>`
+        <div class="rh-mod" onclick="navigate('${m.id}')">
+          <div class="rh-mod-top">
+            <div class="rh-mod-icon">${m.icon}</div>
+            <div class="rh-mod-badge" style="color:${m.sc};background:${m.sc}1A;border:1px solid ${m.sc}33">${m.status}</div>
+          </div>
+          <div class="rh-mod-name">${m.name}</div>
+          <div class="rh-mod-sub">${m.sub}</div>
+          <div class="rh-mod-metric">${m.metric}</div>
+          <div class="rh-mod-arrow">→</div>
+        </div>`).join('')}
     </div>
 
-    <div class="flex-row" style="margin-bottom:24px">
-      <div class="col-1-4 flex-col">
-        <div class="grid-2" style="margin-bottom:16px">
-          <div class="card">
-            <div class="card-header"><h3>Coverage Trend</h3><span style="font-size:11px;color:var(--text-muted)">10 weeks</span></div>
-            <div class="chart-container" style="height:160px"><canvas id="coverage-trend-chart"></canvas></div>
+    <!-- ── CAMPAIGN PULSE ── -->
+    <div class="rh-sec">Campaign Pulse</div>
+    <div class="rh-pulse-grid">
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:11px 16px 9px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0;font-size:13px">Intelligence Feed</h3>
+            <span style="font-size:10px;color:var(--text-muted)">Last 24h</span>
           </div>
-          <div class="card">
-            <div class="card-header"><h3>County Tiers</h3><span style="font-size:11px;color:var(--text-muted)">47 counties</span></div>
-            <div class="chart-container" style="height:160px"><canvas id="tier-donut-chart"></canvas></div>
-          </div>
+          ${recentEvents.map(e=>`
+            <div class="rh-event-row">
+              <div class="rh-event-dot" style="background:${e.color}"></div>
+              <div class="rh-event-msg">${e.msg}</div>
+              <div class="rh-event-time">${e.time}</div>
+            </div>`).join('')}
         </div>
 
-        <div class="card">
-          <div class="section-header">
-            <h2>47-County Intelligence Map</h2>
-            <div class="tier-legend">
-              ${['WIN','GROW','HOLD','DEFEND','WATCH'].map(t=>`<div class="legend-item"><div class="legend-dot" style="background:${tierColor(t)}"></div>${t}</div>`).join('')}
+        <div class="card card-accent" style="padding:0;overflow:hidden">
+          <div style="padding:11px 16px 9px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0;font-size:13px">Actions Required</h3>
+            <span class="badge badge-red">${actions.length}</span>
+          </div>
+          ${actions.map((a,i)=>`
+            <div class="rh-action-item">
+              <div class="rh-action-num">${i+1}</div>
+              <div class="rh-action-text">${a.text}</div>
+              <div class="rh-urgency" style="color:${a.urgency==='critical'?DC.FLAG:a.urgency==='high'?DC.WATCH:DC.MONITOR};background:${a.urgency==='critical'?DC.FLAG+'14':a.urgency==='high'?DC.WATCH+'14':DC.MONITOR+'14'}">${a.urgency.toUpperCase()}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        ${topWatch.length > 0 ? `
+        <div class="card" style="border-left:3px solid ${DC.WATCH}">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <h3 style="margin:0;font-size:12px;color:${DC.WATCH}">Priority Battleground</h3>
+            <span class="badge" style="background:${DC.WATCH}1A;color:${DC.WATCH};border:1px solid ${DC.WATCH}33;font-family:var(--font-mono)">P${topWatch[0].priority}</span>
+          </div>
+          <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:2px">${topWatch[0].name}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">${topWatch[0].region||''} · ${Math.round(topWatch[0].reg/1000)}K registered</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">
+            <div style="background:var(--bg-surface-2);border-radius:6px;padding:7px 8px;text-align:center">
+              <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px">2022</div>
+              <div style="font-size:14px;font-weight:700;font-family:var(--font-mono);color:var(--text-primary)">${topWatch[0].uda}%</div>
+            </div>
+            <div style="background:${DC.WATCH}14;border:1px solid ${DC.WATCH}33;border-radius:6px;padding:7px 8px;text-align:center">
+              <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px">2027</div>
+              <div style="font-size:14px;font-weight:700;font-family:var(--font-mono);color:${DC.WATCH}">${topWatch[0].proj27}%</div>
+            </div>
+            <div style="background:var(--bg-surface-2);border-radius:6px;padding:7px 8px;text-align:center">
+              <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px">Swing</div>
+              <div style="font-size:14px;font-weight:700;font-family:var(--font-mono);color:${(topWatch[0].delta27??0)>=0?DC.WIN:DC.WATCH}">${(topWatch[0].delta27??0)>=0?'+':''}${topWatch[0].delta27??0}pp</div>
             </div>
           </div>
-          <div class="county-grid">
-            ${COUNTIES.map(c=>`<div class="county-tile" style="background:${tierBg(c.tier)};border-color:${tierColor(c.tier)}33" onclick="navigateToDira(${c.id})" title="${c.name}: ${c.tier} · Score ${c.score} · Coverage ${c.coverage}%">
-              <div class="county-tile-name">${c.name}</div>
-              <div class="county-tile-score" style="color:${tierColor(c.tier)}">${c.score}</div>
-              <div class="county-tile-tier" style="color:${tierColor(c.tier)}">${c.tier}</div>
-            </div>`).join('')}
-          </div>
-          <div class="sync-bar">Last sync: <span class="sync-time">Just now</span> · Next: 5 min</div>
-        </div>
-      </div>
-
-      <div class="col-1 flex-col">
-        <div class="card">
-          <div class="card-header"><h3>Active Alerts</h3><span class="badge badge-red">${openAlerts.length}</span></div>
-          ${openAlerts.length===0?'<div class="empty-state">All clear — no active alerts</div>':openAlerts.slice(0,3).map(a=>`
-            <div class="alert-row" style="border-left-color:${severityColor(a.severity)}" onclick="openAlertModal('${a.id}')">
-              <span class="alert-row-sev" style="color:${severityColor(a.severity)}">${a.severity}</span>
-              <span class="alert-row-title">${a.title}</span>
-              <span class="alert-row-time">${relativeTime(a.created_at)}</span>
-            </div>`).join('')}
-        </div>
+          ${topWatch[0].signals27 ? `<div style="font-size:10.5px;color:var(--text-muted);line-height:1.6">${topWatch[0].signals27.slice(0,2).map(s=>`<div>· ${s}</div>`).join('')}</div>` : ''}
+          <button onclick="navigate('msingi')" style="margin-top:10px;width:100%;background:${DC.WATCH}14;border:1px solid ${DC.WATCH}33;color:${DC.WATCH};border-radius:6px;padding:7px;font-size:11.5px;font-weight:600;cursor:pointer">Open in Msingi →</button>
+        </div>` : ''}
 
         <div class="card">
-          <div class="card-header"><h3>Module Health</h3><span style="font-size:11px;color:var(--green)">12/12 Online</span></div>
-          <div class="module-health-grid">
-            ${moduleHealth.map(m=>`<div class="health-item">
-              <div class="dot ${m.status==='healthy'?'dot-green':m.status==='warning'?'dot-amber':'dot-red'}"></div>
-              <div><div class="health-name">${m.name}</div><div style="font-size:10px;color:var(--text-muted)">${m.sub} · ${m.uptime}</div></div>
-            </div>`).join('')}
+          <div style="margin-bottom:12px"><h3 style="margin:0;font-size:12px">2027 Landscape</h3></div>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+            ${[
+              {label:'WIN  ≥50%',      n:winC.length,   c:DC.WIN},
+              {label:'WATCH 35–50%',   n:watchC.length, c:DC.WATCH},
+              {label:'MONITOR <35%',   n:monC.length,   c:DC.MONITOR},
+            ].map(r=>`
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="font-size:12px;font-weight:700;font-family:var(--font-mono);color:${r.c};min-width:22px;text-align:right">${r.n}</div>
+                <div style="flex:1;background:var(--bg-surface-2);border-radius:3px;height:4px;overflow:hidden">
+                  <div style="height:4px;background:${r.c};width:${Math.round(r.n/47*100)}%;border-radius:3px"></div>
+                </div>
+                <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);min-width:90px">${r.label}</div>
+              </div>`).join('')}
           </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header"><h3>Recent Events</h3></div>
-          <div class="events-list" id="rungu-events">
-            ${recentEvents.map(e=>`<div class="event-row"><div class="event-dot" style="background:${e.color}"></div><div class="event-msg">${e.msg}</div><div class="event-time">${e.time}</div></div>`).join('')}
+          <div style="padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <span style="font-size:11px;color:var(--text-muted)">24-county gate</span>
+            <span style="font-size:14px;font-weight:700;font-family:var(--font-mono);color:${gateColor}">${gateAt} / 24</span>
           </div>
-        </div>
-
-        <div class="card card-accent">
-          <div class="card-header"><h3>Actions Required</h3><span class="badge badge-red">${actions.length}</span></div>
-          ${actions.map((a,i)=>`<div class="action-item">
-            <div class="action-num">${i+1}</div>
-            <div>${a.text}</div>
-            <span class="badge badge-${a.urgency==='critical'?'critical':a.urgency==='high'?'alert':'warn'}">${a.urgency.toUpperCase()}</span>
-          </div>`).join('')}
+          <button onclick="navigate('msingi')" style="width:100%;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.18);color:#A78BFA;border-radius:6px;padding:7px;font-size:11.5px;font-weight:600;cursor:pointer">Open Battlefield Brief →</button>
         </div>
       </div>
     </div>
   `;
-
-  setTimeout(()=>{
-    mkChart('coverage-trend-chart',{
-      type:'line',
-      data:{
-        labels:['Jul 15','Jul 22','Jul 29','Aug 5','Aug 12','Aug 19','Aug 26','Sep 2','Sep 9','Sep 15'],
-        datasets:[{
-          label:'Coverage %',data:[38,41,44,47,49,51,53,55,57,59],
-          borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.15)',fill:true,tension:0.4,pointRadius:3,borderWidth:2.5
-        },{
-          label:'Agent Rate %',data:[72,74,75,77,78,80,81,82,83,83],
-          borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,0.08)',fill:true,tension:0.4,pointRadius:3,borderWidth:2
-        }]
-      },
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#94A3B8',font:{size:10},boxWidth:10}},tooltip:{mode:'index',intersect:false,backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:9},callback:v=>v+'%'},min:30,max:100}},interaction:{mode:'nearest',axis:'x',intersect:false}}
-    });
-    const tierCounts={WIN:0,GROW:0,HOLD:0,DEFEND:0,WATCH:0};
-    COUNTIES.forEach(c=>tierCounts[c.tier]++);
-    mkChart('tier-donut-chart',{
-      type:'doughnut',
-      data:{
-        labels:['WIN','GROW','HOLD','DEFEND','WATCH'],
-        datasets:[{data:[tierCounts.WIN,tierCounts.GROW,tierCounts.HOLD,tierCounts.DEFEND,tierCounts.WATCH],backgroundColor:['rgba(16,185,129,0.85)','rgba(245,158,11,0.85)','rgba(249,115,22,0.85)','rgba(239,68,68,0.85)','rgba(100,116,139,0.85)'],borderColor:['#10B981','#F59E0B','#F97316','#EF4444','#64748B'],borderWidth:2,hoverOffset:6}]
-      },
-      options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{color:'#94A3B8',font:{size:10},padding:8,boxWidth:8}},tooltip:{backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}}}
-    });
-  },80);
 }
 
 function renderDira() {
