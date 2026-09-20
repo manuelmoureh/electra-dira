@@ -5623,244 +5623,219 @@ function renderLock() {
 // ============================================================
 // renderHealth() — System Health
 // ============================================================
+
 function renderHealth() {
   destroyChart('api-perf-chart');
 
-  const el = document.getElementById('page-health');
+  var el = document.getElementById('page-health');
   if (!el) return;
 
-  const services = [
-    { name: 'api-core', status: 'operational', uptime: '99.97%', latency: '187ms', requests: '2.4M/day', color: '#10B981' },
-    { name: 'api-intel', status: 'operational', uptime: '99.91%', latency: '234ms', requests: '890K/day', color: '#10B981' },
-    { name: 'kura-ivr', status: 'operational', uptime: '99.88%', latency: '412ms', requests: '45.8K active', color: '#10B981' },
-    { name: 'signal-ingest', status: 'degraded', uptime: '98.41%', latency: '621ms', requests: 'SMS delays +4m', color: '#F59E0B' },
-    { name: 'auth-service', status: 'operational', uptime: '99.99%', latency: '42ms', requests: '124K sessions', color: '#10B981' },
+  var services = [
+    {name:'api-core',     status:'operational', uptime:'99.97%', latency:'187ms', requests:'2.4M/day',        color:'#10B981'},
+    {name:'api-intel',    status:'operational', uptime:'99.91%', latency:'234ms', requests:'890K/day',         color:'#10B981'},
+    {name:'kura-ivr',     status:'operational', uptime:'99.88%', latency:'412ms', requests:'45.8K active',     color:'#10B981'},
+    {name:'signal-ingest',status:'degraded',    uptime:'98.41%', latency:'621ms', requests:'SMS delays +4m',   color:'#F59E0B'},
+    {name:'auth-service', status:'operational', uptime:'99.99%', latency:'42ms',  requests:'124K sessions',    color:'#10B981'}
   ];
 
-  const pipelines = [
-    { name: 'IPRS Voter Registry Sync', source: 'IEBC → PostgreSQL', interval: '6h', last: '3h ago', status: 'OK', records: '22.1M' },
-    { name: 'M-Pesa Daraja Webhook', source: 'Safaricom → api-core', interval: 'Real-time', last: '2m ago', status: 'OK', records: '1,240 txn/hr' },
-    { name: 'Social Sentiment Scraper', source: 'Twitter/TikTok → signal-ingest', interval: '5m', last: '8m ago', status: 'SLOW', records: '14K posts/batch' },
-    { name: 'Agent GPS Telemetry', source: 'iForce App → api-core', interval: 'Real-time', last: '12s ago', status: 'OK', records: '2,847 pings/hr' },
-    { name: 'IVR CDR Feed', source: 'Infobip → kura-ivr', interval: 'Real-time', last: '1m ago', status: 'OK', records: '45.8K calls active' },
-    { name: 'AI Model Inference', source: 'OpenAI/Claude → api-intel', interval: 'On-demand', last: '4m ago', status: 'OK', records: '342 req/hr' },
-    { name: 'Backup Snapshot', source: 'PostgreSQL → S3', interval: '24h', last: '11h ago', status: 'OK', records: 'Last: 2.8GB' },
+  var pipelines = [
+    {name:'IPRS Voter Registry Sync',  source:'IEBC &rarr; PostgreSQL',             interval:'6h',        last:'3h ago',  status:'OK',   records:'22.1M'},
+    {name:'M-Pesa Daraja Webhook',     source:'Safaricom &rarr; api-core',          interval:'Real-time', last:'2m ago',  status:'OK',   records:'1,240 txn/hr'},
+    {name:'Social Sentiment Scraper',  source:'Twitter/TikTok &rarr; signal-ingest',interval:'5m',        last:'8m ago',  status:'SLOW', records:'14K posts/batch'},
+    {name:'Agent GPS Telemetry',       source:'iForce App &rarr; api-core',         interval:'Real-time', last:'12s ago', status:'OK',   records:'2,847 pings/hr'},
+    {name:'IVR CDR Feed',              source:'Infobip &rarr; kura-ivr',            interval:'Real-time', last:'1m ago',  status:'OK',   records:'45.8K calls active'},
+    {name:'AI Model Inference',        source:'OpenAI/Claude &rarr; api-intel',     interval:'On-demand', last:'4m ago',  status:'OK',   records:'342 req/hr'},
+    {name:'Backup Snapshot',           source:'PostgreSQL &rarr; S3',               interval:'24h',       last:'11h ago', status:'OK',   records:'Last: 2.8GB'}
   ];
 
-  el.innerHTML = `
-    <div class="section-header">
-      <div>
-        <h2 style="margin:0 0 4px;font-size:1.25rem;font-weight:700;color:var(--text-primary)">System Health</h2>
-        <p style="margin:0;color:var(--text-muted);font-size:.85rem">Infrastructure status, data pipeline monitoring &amp; performance metrics</p>
-      </div>
-      <div class="flex-row" style="gap:8px">
-        <span class="live-indicator">● ALL SYSTEMS</span>
-        <button class="btn-ghost btn-sm" onclick="showToast('Opening status page...','info')">Status Page</button>
-      </div>
-    </div>
+  var infra = [
+    {label:'Daraja API', val:'99.4%', sub:'Uptime &middot; 1,240 txn/hr',      color:'#10B981'},
+    {label:'PostgreSQL', val:'14ms',  sub:'Avg query time &middot; 12.4GB RAM', color:'#A78BFA'},
+    {label:'WebSocket',  val:'847',   sub:'Active connections',                  color:'#7C3AED'},
+    {label:'Job Queue',  val:'12',    sub:'Pending &middot; 0 failed',           color:'#10B981'}
+  ];
 
-    <!-- Services Grid -->
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px">
-      ${services.map(s => `
-        <div class="card" style="padding:16px;border-top:3px solid ${s.color}">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-            <span style="width:8px;height:8px;border-radius:50%;background:${s.color};flex-shrink:0"></span>
-            <span style="font-size:.75rem;font-weight:700;color:var(--text-primary);font-family:monospace">${s.name}</span>
-          </div>
-          <div style="font-size:.7rem;color:${s.color};font-weight:600;margin-bottom:8px;text-transform:uppercase">${s.status}</div>
-          <div style="font-size:.7rem;color:var(--text-muted);margin-bottom:2px">Uptime: <strong style="color:var(--text-secondary)">${s.uptime}</strong></div>
-          <div style="font-size:.7rem;color:var(--text-muted);margin-bottom:2px">p95: <strong style="color:var(--text-secondary)">${s.latency}</strong></div>
-          <div style="font-size:.7rem;color:var(--text-subtle)">${s.requests}</div>
-        </div>
-      `).join('')}
-    </div>
+  var servicesHTML = '';
+  for (var si = 0; si < services.length; si++) {
+    var sv = services[si];
+    servicesHTML += '<div class="card" style="padding:16px;border-top:3px solid ' + sv.color + '">'
+      + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">'
+      + '<span style="width:8px;height:8px;border-radius:50%;background:' + sv.color + ';flex-shrink:0"></span>'
+      + '<span style="font-size:10px;font-weight:700;color:var(--text-primary);font-family:var(--font-mono)">' + sv.name + '</span>'
+      + '</div>'
+      + '<div style="font-size:9px;color:' + sv.color + ';font-weight:800;margin-bottom:8px;letter-spacing:.06em;text-transform:uppercase">' + sv.status + '</div>'
+      + '<div style="font-size:10px;color:var(--text-muted);margin-bottom:2px">Uptime: <strong style="color:var(--text-secondary)">' + sv.uptime + '</strong></div>'
+      + '<div style="font-size:10px;color:var(--text-muted);margin-bottom:2px">p95: <strong style="color:var(--text-secondary)">' + sv.latency + '</strong></div>'
+      + '<div style="font-size:9px;color:var(--text-muted)">' + sv.requests + '</div>'
+      + '</div>';
+  }
 
-    <!-- API Performance Chart -->
-    <div class="card" style="padding:20px;margin-bottom:16px">
-      <div class="card-header" style="margin-bottom:12px">
-        <span style="font-weight:600;color:var(--text-primary)">API Response Time — 24h p95 (ms)</span>
-        <span style="font-size:.75rem;color:var(--text-muted)">api-core + api-intel</span>
-      </div>
-      <div style="height:200px">
-        <canvas id="api-perf-chart"></canvas>
-      </div>
-    </div>
+  var pipelineRows = '';
+  for (var pi = 0; pi < pipelines.length; pi++) {
+    var p = pipelines[pi];
+    var stBg = p.status==='OK' ? 'rgba(16,185,129,0.12)' : 'rgba(245,158,11,0.12)';
+    var stC  = p.status==='OK' ? '#10B981' : '#F59E0B';
+    pipelineRows += '<tr>'
+      + '<td style="font-weight:600;color:var(--text-primary);font-size:11px">' + p.name + '</td>'
+      + '<td style="color:var(--text-muted);font-size:10px;font-family:var(--font-mono)">' + p.source + '</td>'
+      + '<td style="font-size:11px">' + p.interval + '</td>'
+      + '<td style="font-size:11px">' + p.last + '</td>'
+      + '<td style="font-size:10px;color:var(--text-muted)">' + p.records + '</td>'
+      + '<td><span style="font-size:8px;font-weight:800;padding:2px 6px;border-radius:3px;background:' + stBg + ';color:' + stC + ';letter-spacing:.05em">' + p.status + '</span></td>'
+      + '</tr>';
+  }
 
-    <!-- Data Pipelines -->
-    <div class="card" style="padding:20px;margin-bottom:16px">
-      <div class="card-header" style="margin-bottom:12px">
-        <span style="font-weight:600;color:var(--text-primary)">Data Pipelines</span>
-        <span style="font-size:.75rem;color:#F59E0B">1 degraded</span>
-      </div>
-      <table class="data-table" style="font-size:.78rem">
-        <thead><tr><th>Pipeline</th><th>Source</th><th>Interval</th><th>Last Run</th><th>Records</th><th>Status</th></tr></thead>
-        <tbody>
-          ${pipelines.map(p => `
-            <tr>
-              <td style="font-weight:500;color:var(--text-primary)">${p.name}</td>
-              <td style="color:var(--text-muted);font-size:.72rem">${p.source}</td>
-              <td>${p.interval}</td>
-              <td>${p.last}</td>
-              <td style="font-size:.72rem;color:var(--text-muted)">${p.records}</td>
-              <td><span class="${p.status==='OK'?'badge-win':'badge-warn'}">${p.status}</span></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
+  var infraHTML = '';
+  for (var ii = 0; ii < infra.length; ii++) {
+    var m = infra[ii];
+    infraHTML += '<div class="card" style="padding:16px;text-align:center">'
+      + '<div style="font-size:10px;color:var(--text-muted);margin-bottom:6px;letter-spacing:.05em">' + m.label + '</div>'
+      + '<div style="font-size:22px;font-weight:800;color:' + m.color + ';margin-bottom:4px;font-family:var(--font-mono)">' + m.val + '</div>'
+      + '<div style="font-size:9px;color:var(--text-muted)">' + m.sub + '</div>'
+      + '</div>';
+  }
 
-    <!-- Infrastructure Metrics -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-      ${[
-        { label: 'Daraja API', val: '99.4%', sub: 'Uptime · 1,240 txn/hr', color: '#10B981' },
-        { label: 'PostgreSQL', val: '14ms', sub: 'Avg query time · 12.4GB RAM', color: '#3B82F6' },
-        { label: 'WebSocket', val: '847', sub: 'Active connections', color: '#7C3AED' },
-        { label: 'Job Queue', val: '12', sub: 'Pending · 0 failed', color: '#10B981' },
-      ].map(m => `
-        <div class="card" style="padding:16px;text-align:center">
-          <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:6px">${m.label}</div>
-          <div style="font-size:1.4rem;font-weight:800;color:${m.color};margin-bottom:4px">${m.val}</div>
-          <div style="font-size:.7rem;color:var(--text-subtle)">${m.sub}</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<h1 style="color:#2DD4BF">System Health</h1>'
+    + '<div style="display:flex;align-items:center;gap:8px">'
+    + '<span class="live-indicator">ALL SYSTEMS</span>'
+    + '<button class="btn-secondary" style="font-size:11px;padding:6px 12px" onclick="showToast(\'Opening status page...\',\'info\')">Status Page</button>'
+    + '</div>'
+    + '</div>'
+    + '<div class="page-sub">Infrastructure status, data pipeline monitoring &amp; performance metrics</div>'
+    + '</div>'
+    + '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:14px">' + servicesHTML + '</div>'
+    + '<div class="card" style="margin-bottom:14px">'
+    + '<div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">API RESPONSE TIME &mdash; 24H P95</span><span style="font-size:10px;color:var(--text-muted)">api-core + api-intel</span></div>'
+    + '<div style="height:200px"><canvas id="api-perf-chart"></canvas></div>'
+    + '</div>'
+    + '<div class="card" style="margin-bottom:14px;padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">DATA PIPELINES</span>'
+    + '<span style="font-size:9px;color:#F59E0B;font-weight:700">1 degraded</span>'
+    + '</div>'
+    + '<table class="data-table" style="font-size:11px">'
+    + '<thead><tr><th>Pipeline</th><th>Source</th><th>Interval</th><th>Last Run</th><th>Records</th><th>Status</th></tr></thead>'
+    + '<tbody>' + pipelineRows + '</tbody>'
+    + '</table>'
+    + '</div>'
+    + '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">' + infraHTML + '</div>';
 
-  setTimeout(() => {
-    mkChart('api-perf-chart', {
-      type: 'line',
-      data: {
-        labels: ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00'],
-        datasets: [{
-          label: 'api-core p95 (ms)',
-          data: [165,142,138,151,189,210,198,201,187,193,202,187],
-          borderColor: '#7C3AED', backgroundColor: 'rgba(124,58,237,0.1)', fill: true, tension: 0.4, pointRadius: 2, borderWidth: 2,
-        },{
-          label: 'api-intel p95 (ms)',
-          data: [220,198,215,228,245,262,238,248,241,253,247,234],
-          borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.08)', fill: true, tension: 0.4, pointRadius: 2, borderWidth: 2,
-        }]
+  setTimeout(function(){
+    mkChart('api-perf-chart',{
+      type:'line',
+      data:{
+        labels:['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00'],
+        datasets:[
+          {label:'api-core p95 (ms)',  data:[165,142,138,151,189,210,198,201,187,193,202,187],borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,0.1)',fill:true,tension:0.4,pointRadius:2,borderWidth:2},
+          {label:'api-intel p95 (ms)', data:[220,198,215,228,245,262,238,248,241,253,247,234],borderColor:'#2DD4BF',backgroundColor:'rgba(45,212,191,0.06)',fill:true,tension:0.4,pointRadius:2,borderWidth:2}
+        ]
       },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'top', labels: { color: '#94A3B8', font: { size: 11 }, boxWidth: 10 } },
-          tooltip: { mode: 'index', intersect: false, backgroundColor: 'rgba(5,13,26,0.9)', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, titleColor: '#F1F5F9', bodyColor: '#94A3B8' }
-        },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: '#475569', font: { size: 10 } } },
-          y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#475569', font: { size: 10 }, callback: v => v + 'ms' } }
-        }
-      }
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#94A3B8',font:{size:10},boxWidth:10}},tooltip:{mode:'index',intersect:false,backgroundColor:'rgba(5,13,26,0.9)',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#F1F5F9',bodyColor:'#94A3B8'}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569',font:{size:10},callback:function(v){return v+'ms';}}}}}
     });
-  }, 50);
+  },50);
 }
 
-// ============================================================
-// renderAudit() — Audit Trail
-// ============================================================
 function renderAudit() {
-  const el = document.getElementById('page-audit');
+  var el = document.getElementById('page-audit');
   if (!el) return;
 
-  const q = (STATE.auditSearch || '').toLowerCase();
-  const filtered = STATE.auditLog.filter(e =>
-    !q ||
-    (e.user||'').toLowerCase().includes(q) ||
-    (e.action||'').toLowerCase().includes(q) ||
-    (e.target||'').toLowerCase().includes(q) ||
-    (e.detail||'').toLowerCase().includes(q) ||
-    (e.role||'').toLowerCase().includes(q)
-  );
+  var q = (STATE.auditSearch || '').toLowerCase();
+  var filtered = STATE.auditLog.filter(function(e){
+    return !q
+      || (e.user||'').toLowerCase().includes(q)
+      || (e.action||'').toLowerCase().includes(q)
+      || (e.target||'').toLowerCase().includes(q)
+      || (e.detail||'').toLowerCase().includes(q)
+      || (e.role||'').toLowerCase().includes(q);
+  });
 
-  const actionColor = action => {
+  function actionColor(action) {
     if (!action) return '#475569';
-    const a = action.toLowerCase();
+    var a = action.toLowerCase();
     if (a.includes('delete') || a.includes('banned') || a.includes('removed')) return '#EF4444';
     if (a.includes('redeployment') || a.includes('dispatched')) return '#F97316';
     if (a.includes('approved') || a.includes('deployed') || a.includes('resolved') || a.includes('completed')) return '#10B981';
     if (a.includes('login') || a.includes('auth') || a.includes('role')) return '#7C3AED';
     if (a.includes('alert') || a.includes('flagged') || a.includes('escalate')) return '#F59E0B';
-    return '#3B82F6';
-  };
+    return '#A78BFA';
+  }
 
-  el.innerHTML = `
-    <div class="section-header">
-      <div>
-        <h2 style="margin:0 0 4px;font-size:1.25rem;font-weight:700;color:var(--text-primary)">Audit Trail</h2>
-        <p style="margin:0;color:var(--text-muted);font-size:.85rem">Immutable log of all system actions, role changes &amp; interventions</p>
-      </div>
-      <div class="flex-row" style="gap:8px">
-        <span style="font-size:.8rem;color:var(--text-muted)">${STATE.auditLog.length} total entries</span>
-        <button class="btn-ghost btn-sm" onclick="showToast('Exporting audit log as CSV...','info')">Export CSV</button>
-      </div>
-    </div>
+  var timelineEvents = [
+    {date:'Sep 2',  time:'09:14', event:'Voter registered in IPRS sync &mdash; Tier 2 assigned',                            color:'#475569', tag:'SYNC'},
+    {date:'Sep 5',  time:'14:32', event:'IVR contact &mdash; Hustler Fund testimonial. Option 1 (Positive). Duration: 38s', color:'#2DD4BF', tag:'IVR'},
+    {date:'Sep 8',  time:'11:07', event:'Agent visit by James O. &mdash; Committed vote confirmed. Uplift: +22pts',         color:'#10B981', tag:'AGENT'},
+    {date:'Sep 10', time:'16:44', event:'WhatsApp message delivered &mdash; GOTV reminder. Read: &#10003;',                 color:'#7C3AED', tag:'MSG'},
+    {date:'Sep 12', time:'10:21', event:'AI re-score triggered &mdash; moved to Tier 1 (score: 87). Flag: high-value',     color:'#F59E0B', tag:'AI'},
+    {date:'Sep 14', time:'08:55', event:'IVR callback request fulfilled &mdash; 4m 12s call, concerns addressed',           color:'#2DD4BF', tag:'IVR'},
+    {date:'Sep 15', time:'07:30', event:'GOTV final-day reminder sent via IVR. Answered. Duration: 24s',                   color:'#2DD4BF', tag:'GOTV'}
+  ];
 
-    <div style="margin-bottom:14px">
-      <input
-        class="audit-search-input"
-        type="text"
-        placeholder="Search by user, action, target, role…"
-        value="${STATE.auditSearch || ''}"
-        oninput="STATE.auditSearch=this.value;renderAudit()"
-      />
-    </div>
+  var reversed = filtered.slice().reverse();
+  var tableRows = '';
+  if (filtered.length === 0) {
+    tableRows = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)">No audit entries match your search.</td></tr>';
+  } else {
+    for (var ri = 0; ri < reversed.length; ri++) {
+      var e = reversed[ri];
+      var ac = actionColor(e.action);
+      tableRows += '<tr class="audit-row" style="border-left:3px solid ' + ac + '">'
+        + '<td class="mono" style="font-size:10px;white-space:nowrap;color:var(--text-muted)">' + relativeTime(e.timestamp) + '</td>'
+        + '<td style="font-size:11px;font-weight:500;color:var(--text-primary)">' + (e.user||'&mdash;') + '</td>'
+        + '<td><span class="role-badge" style="font-size:9px">' + (e.role||'&mdash;') + '</span></td>'
+        + '<td><span class="mono" style="font-size:10px;color:' + ac + '">' + (e.action||'&mdash;') + '</span></td>'
+        + '<td style="font-size:11px;color:var(--text-secondary)">' + (e.target||'&mdash;') + '</td>'
+        + '<td style="font-size:10px;color:var(--text-muted);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (e.detail||'&mdash;') + '</td>'
+        + '</tr>';
+    }
+  }
 
-    <div class="card" style="padding:0;overflow:hidden;margin-bottom:16px">
-      <table class="audit-table" style="width:100%">
-        <thead><tr><th>Time</th><th>User</th><th>Role</th><th>Action</th><th>Target</th><th>Detail</th></tr></thead>
-        <tbody>
-          ${filtered.length === 0 ? `
-            <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)">No audit entries match your search.</td></tr>
-          ` : filtered.slice().reverse().map(e => `
-            <tr class="audit-row" style="border-left:3px solid ${actionColor(e.action)}">
-              <td class="mono" style="font-size:.72rem;white-space:nowrap;color:var(--text-muted)">${relativeTime(e.timestamp)}</td>
-              <td style="font-size:.8rem;font-weight:500;color:var(--text-primary)">${e.user || '—'}</td>
-              <td><span class="role-badge" style="font-size:.68rem">${e.role || '—'}</span></td>
-              <td><span class="mono" style="font-size:.73rem;color:${actionColor(e.action)}">${e.action || '—'}</span></td>
-              <td style="font-size:.78rem;color:var(--text-secondary)">${e.target || '—'}</td>
-              <td class="audit-detail" style="font-size:.75rem;color:var(--text-muted);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.detail || '—'}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
+  var timelineHTML = '';
+  for (var ti = 0; ti < timelineEvents.length; ti++) {
+    var tv = timelineEvents[ti];
+    timelineHTML += '<div class="timeline-row">'
+      + '<div class="timeline-dot" style="background:' + tv.color + '"></div>'
+      + '<div class="timeline-content">'
+      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">'
+      + '<span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">' + tv.date + ' &middot; ' + tv.time + '</span>'
+      + '<span style="font-size:8px;font-weight:800;padding:1px 5px;border-radius:3px;background:' + tv.color + '22;color:' + tv.color + ';letter-spacing:.05em">' + tv.tag + '</span>'
+      + '</div>'
+      + '<div style="font-size:11px;color:var(--text-secondary)">' + tv.event + '</div>'
+      + '</div>'
+      + '</div>';
+  }
 
-    <!-- Voter Timeline -->
-    <div class="card" style="padding:20px">
-      <div class="card-header" style="margin-bottom:14px">
-        <span style="font-weight:600;color:var(--text-primary)">Voter Timeline — KMY-2847</span>
-        <span style="font-size:.75rem;color:var(--text-muted)">Agnes Wanjiku · Kiamunyi Ward · Nakuru</span>
-      </div>
-      <div class="voter-timeline">
-        ${[
-          { date: 'Sep 2', time: '09:14', event: 'Voter registered in IPRS sync — Tier 2 assigned', color: '#475569', icon: '📋' },
-          { date: 'Sep 5', time: '14:32', event: 'IVR contact — Hustler Fund testimonial. Option 1 (Positive). Duration: 38s', color: '#3B82F6', icon: '📞' },
-          { date: 'Sep 8', time: '11:07', event: 'Agent visit by James O. — Committed vote confirmed. Uplift: +22pts', color: '#10B981', icon: '🤝' },
-          { date: 'Sep 10', time: '16:44', event: 'WhatsApp message delivered — GOTV reminder. Read: ✓', color: '#7C3AED', icon: '💬' },
-          { date: 'Sep 12', time: '10:21', event: 'AI re-score triggered — moved to Tier 1 (score: 87). Flag: high-value target', color: '#F59E0B', icon: '🤖' },
-          { date: 'Sep 14', time: '08:55', event: 'IVR callback request fulfilled — 4m 12s call, additional concerns addressed', color: '#10B981', icon: '📞' },
-          { date: 'Sep 15', time: '07:30', event: 'GOTV final-day reminder sent via IVR. Answered. Duration: 24s', color: '#3B82F6', icon: '🗳' },
-        ].map(t => `
-          <div class="timeline-row">
-            <div class="timeline-dot" style="background:${t.color}"></div>
-            <div class="timeline-content">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-                <span style="font-size:.68rem;color:var(--text-muted);font-family:monospace">${t.date} · ${t.time}</span>
-                <span style="font-size:.72rem">${t.icon}</span>
-              </div>
-              <div style="font-size:.8rem;color:var(--text-secondary)">${t.event}</div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
+  el.innerHTML = ''
+    + '<div class="page-header">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between">'
+    + '<h1 style="color:#A78BFA">Audit Trail</h1>'
+    + '<div style="display:flex;align-items:center;gap:10px">'
+    + '<span style="font-size:11px;color:var(--text-muted)">' + STATE.auditLog.length + ' total entries</span>'
+    + '<button class="btn-secondary" style="font-size:11px;padding:6px 12px" onclick="showToast(\'Exporting audit log as CSV...\',\'info\')">Export CSV</button>'
+    + '</div>'
+    + '</div>'
+    + '<div class="page-sub">Immutable log of all system actions, role changes &amp; interventions</div>'
+    + '</div>'
+    + '<div style="margin-bottom:14px">'
+    + '<input class="audit-search-input" type="text" placeholder="Search by user, action, target, role&hellip;" value="' + (STATE.auditSearch||'') + '" oninput="STATE.auditSearch=this.value;renderAudit()" />'
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden;margin-bottom:14px">'
+    + '<table class="audit-table" style="width:100%">'
+    + '<thead><tr><th>Time</th><th>User</th><th>Role</th><th>Action</th><th>Target</th><th>Detail</th></tr></thead>'
+    + '<tbody>' + tableRows + '</tbody>'
+    + '</table>'
+    + '</div>'
+    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border)">'
+    + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">VOTER TIMELINE &mdash; KMY-2847</span>'
+    + '<span style="font-size:10px;color:var(--text-muted)">Agnes Wanjiku &middot; Kiamunyi Ward &middot; Nakuru</span>'
+    + '</div>'
+    + '<div class="voter-timeline" style="padding:14px 16px">' + timelineHTML + '</div>'
+    + '</div>';
 }
 
-// ============================================================
-// navigate() — Page routing with chart cleanup
-// ============================================================
 function navigate(page) {
   STATE.page = page;
   if (window.location.hash.replace(/^#/,'') !== page) history.replaceState(null,'','#'+page);
