@@ -2126,7 +2126,7 @@ function renderMsingi() {
             <span style="display:inline-block;width:18px;height:1px;background:rgba(167,139,250,0.5)"></span>
             Kenya 2027 · Presidential Election Intelligence
           </div>
-          <h1 style="font-size:48px;font-weight:700;letter-spacing:-0.04em;margin:0 0 6px;line-height:.95;background:linear-gradient(135deg,#DDD6FE 0%,#A78BFA 50%,#8B5CF6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Msingi</h1>
+          <h1 style="font-size:48px;font-weight:700;letter-spacing:-0.04em;margin:0 0 6px;line-height:1;padding-right:4px;background:linear-gradient(135deg,#DDD6FE 0%,#A78BFA 50%,#8B5CF6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Msingi</h1>
           <div style="font-size:15px;font-weight:500;color:rgba(203,213,225,0.75);letter-spacing:-.005em;margin-bottom:18px">The Battlefield 2027</div>
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
             <span style="font-size:10px;color:rgba(148,163,184,0.55)">${briefDate}</span>
@@ -4437,8 +4437,10 @@ function startClock() {
     const pad = n => String(n).padStart(2, '0');
     const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
     const date = now.toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-    const el = document.getElementById('system-clock');
-    if (el) el.textContent = `${time} EAT · ${date}`;
+    const sysClock = document.getElementById('system-clock');
+    if (sysClock) sysClock.textContent = `${time} EAT · ${date}`;
+    const liveClock = document.getElementById('live-clock');
+    if (liveClock) liveClock.textContent = time;
   }
   tick();
   setInterval(tick, 1000);
