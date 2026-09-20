@@ -1328,9 +1328,138 @@ body {
 .fs-input:focus, .fs-select:focus, .fs-textarea:focus { border-color:var(--border-accent); }
 .fs-signal-btn { display:flex; align-items:center; gap:6px; background:rgba(249,115,22,0.12); border:1px solid rgba(249,115,22,0.3); color:#F97316; border-radius:8px; padding:7px 13px; font-size:11px; font-weight:700; letter-spacing:.04em; cursor:pointer; }
 .fs-signal-btn:hover { background:rgba(249,115,22,0.18); }
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM 1 — HEARTBEAT STRIP + PIPELINE HEALTH
+═══════════════════════════════════════════════════ */
+.hb-strip { position:fixed; top:0; left:0; right:0; height:3px; z-index:9999; background:var(--bg-base); }
+.hb-track { height:100%; width:100%; background:rgba(255,255,255,0.05); position:relative; overflow:hidden; }
+.hb-glow { position:absolute; top:0; left:-60%; width:60%; height:100%; background:linear-gradient(90deg,transparent,#7C3AED,#10B981,transparent); animation:hb-sweep 2.8s ease-in-out infinite; }
+@keyframes hb-sweep { 0%{left:-60%} 100%{left:110%} }
+.hb-strip.degraded .hb-glow { background:linear-gradient(90deg,transparent,#F59E0B,#EF4444,transparent); animation-duration:4s; }
+.hb-strip.stale .hb-glow { display:none; }
+.hb-strip.stale .hb-track { background:rgba(239,68,68,0.4); animation:pulse-stale 1.5s infinite; }
+.pipeline-banner { display:none; padding:5px 20px 5px 60px; font-size:9px; font-weight:800; letter-spacing:.08em; align-items:center; gap:10px; }
+.pipeline-banner.visible { display:flex; }
+.pipeline-banner.degraded { background:rgba(245,158,11,0.1); border-bottom:1px solid rgba(245,158,11,0.25); color:#F59E0B; }
+.pipeline-banner.stale { background:rgba(239,68,68,0.1); border-bottom:1px solid rgba(239,68,68,0.25); color:#EF4444; }
+.pipeline-banner-dismiss { margin-left:auto; cursor:pointer; opacity:.6; font-size:13px; }
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM 2 — VISUAL DATA DECAY
+═══════════════════════════════════════════════════ */
+.freshness-tag { font-size:8px; font-weight:700; font-family:var(--font-mono); padding:1px 5px; border-radius:3px; letter-spacing:.04em; }
+.freshness-tag.ft-live { color:#10B981; background:rgba(16,185,129,0.1); }
+.freshness-tag.ft-aging { color:#F59E0B; background:rgba(245,158,11,0.1); }
+.freshness-tag.ft-stale { color:#EF4444; background:rgba(239,68,68,0.1); animation:pulse-stale 2s infinite; }
+.card.panel-aging { border-color:rgba(245,158,11,0.25) !important; }
+.card.panel-stale { border-color:rgba(239,68,68,0.3) !important; opacity:0.75; }
+.panel-freshness-row { display:flex; align-items:center; justify-content:space-between; padding:5px 14px; background:var(--bg-sunken); border-bottom:1px solid var(--border); font-size:8px; color:var(--text-muted); letter-spacing:.04em; }
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM 3 — MONITORING / ACTION MODE
+═══════════════════════════════════════════════════ */
+.mode-pill { display:flex; align-items:center; gap:5px; font-size:9px; font-weight:800; letter-spacing:.07em; padding:3px 9px; border-radius:20px; cursor:pointer; transition:all .2s; }
+.mode-pill.monitoring { color:#10B981; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2); }
+.mode-pill.action { color:#F97316; background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.35); animation:pulse-action .9s ease-in-out infinite; }
+@keyframes pulse-action { 0%,100%{box-shadow:0 0 0 0 rgba(249,115,22,0.4)} 50%{box-shadow:0 0 0 5px rgba(249,115,22,0)} }
+.mode-dot { width:5px; height:5px; border-radius:50%; background:currentColor; }
+.action-overlay { display:none; position:fixed; inset:0; background:rgba(5,13,26,0.55); z-index:50; pointer-events:none; }
+body.action-mode .action-overlay { display:block; }
+body.action-mode .card:not(.action-focal) { opacity:0.35; transition:opacity .25s; }
+body.action-mode .card.action-focal { z-index:60; position:relative; box-shadow:0 0 0 2px rgba(249,115,22,0.5), 0 20px 60px rgba(0,0,0,0.6); border-radius:var(--radius-md); }
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM 4 — CONFIDENCE BANDS + EVIDENCE CHAIN
+═══════════════════════════════════════════════════ */
+.conf-row { display:flex; align-items:center; gap:8px; margin:6px 0; }
+.conf-track { flex:1; height:5px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
+.conf-fill { height:100%; border-radius:3px; transition:width .5s; }
+.conf-pct { font-size:10px; font-weight:800; font-family:var(--font-mono); width:32px; text-align:right; flex-shrink:0; }
+.conf-lbl { font-size:8px; color:var(--text-muted); letter-spacing:.05em; width:70px; flex-shrink:0; }
+.evidence-chain { margin-top:12px; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.ec-head { padding:7px 12px; background:var(--bg-surface); border-bottom:1px solid var(--border); font-size:9px; font-weight:800; letter-spacing:.09em; color:var(--text-muted); display:flex; align-items:center; justify-content:space-between; }
+.ec-link { display:flex; align-items:flex-start; gap:10px; padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.ec-link:last-child { border-bottom:none; }
+.ec-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+.ec-body { flex:1; min-width:0; }
+.ec-text { font-size:11px; color:var(--text-primary); line-height:1.45; }
+.ec-meta { font-size:9px; color:var(--text-muted); margin-top:3px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.ec-conf { font-size:8px; font-weight:800; font-family:var(--font-mono); padding:1px 5px; border-radius:3px; }
+.rec-card { background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:13px 14px; margin-bottom:10px; transition:border-color .2s; }
+.rec-card:hover { border-color:var(--border-strong); }
+.rec-card-title { font-size:12px; font-weight:700; color:var(--text-primary); line-height:1.35; }
+.rec-card-meta { font-size:9px; color:var(--text-muted); margin-top:3px; font-family:var(--font-mono); letter-spacing:.03em; }
+.rec-actions { display:flex; gap:6px; margin-top:10px; align-items:center; flex-wrap:wrap; }
+.rec-execute { font-size:10px; font-weight:700; padding:5px 12px; border-radius:5px; background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.3); color:#A78BFA; cursor:pointer; transition:all .15s; }
+.rec-execute:hover { background:rgba(124,58,237,0.28); }
+.rec-execute.executed { color:#10B981; background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.25); cursor:default; }
+.rec-dismiss { font-size:10px; padding:5px 10px; border-radius:5px; background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--text-muted); cursor:pointer; }
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM 5 — ALERT TRIAGE QUEUE
+═══════════════════════════════════════════════════ */
+.triage-header { padding:9px 14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+.triage-counts { display:flex; gap:10px; }
+.triage-count-item { font-size:9px; font-weight:700; display:flex; align-items:center; gap:4px; }
+.triage-section-lbl { padding:5px 14px; font-size:8px; font-weight:800; letter-spacing:.1em; color:var(--text-muted); background:var(--bg-sunken); border-bottom:1px solid rgba(255,255,255,0.04); }
+.triage-row { display:flex; align-items:flex-start; gap:10px; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.04); cursor:pointer; transition:background .15s; }
+.triage-row:hover { background:var(--bg-surface-hover); }
+.triage-status { font-size:7px; font-weight:800; padding:2px 6px; border-radius:3px; letter-spacing:.06em; flex-shrink:0; width:76px; text-align:center; margin-top:1px; }
+.ts-investigating { color:#A78BFA; background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.25); }
+.ts-ready { color:#F59E0B; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.25); }
+.ts-escalated { color:#EF4444; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.25); animation:pulse-stale 1.8s infinite; }
+.ts-resolved { color:#10B981; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2); }
+.triage-prog-wrap { height:2px; background:rgba(167,139,250,0.1); border-radius:1px; overflow:hidden; margin-top:4px; }
+.triage-prog-fill { height:100%; background:#A78BFA; border-radius:1px; transition:width 1.2s linear; }
+.triage-row-body { flex:1; min-width:0; }
+.triage-row-title { font-size:11px; font-weight:600; color:var(--text-primary); line-height:1.35; }
+.triage-row-sub { font-size:9px; color:var(--text-muted); margin-top:2px; display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM 6 — GEOGRAPHIC DECISION MATRIX
+═══════════════════════════════════════════════════ */
+.geo-matrix { display:grid; grid-template-columns:repeat(auto-fill,minmax(88px,1fr)); gap:5px; }
+.geo-cell { border-radius:5px; padding:8px 7px; cursor:pointer; transition:all .15s; border:1px solid transparent; position:relative; }
+.geo-cell:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.3); z-index:2; }
+.geo-cell-name { font-size:8px; font-weight:700; color:rgba(255,255,255,0.9); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.geo-cell-score { font-size:13px; font-weight:800; font-family:var(--font-mono); margin-top:2px; }
+.geo-cell-trend { position:absolute; top:4px; right:5px; font-size:10px; font-weight:800; }
+.geo-cell-class { font-size:7px; font-weight:800; letter-spacing:.05em; margin-top:2px; opacity:.75; }
+.geo-matrix-legend { display:flex; gap:12px; flex-wrap:wrap; margin-top:8px; padding-top:8px; border-top:1px solid var(--border); }
+.geo-legend-item { display:flex; align-items:center; gap:5px; font-size:9px; color:var(--text-muted); }
+.geo-legend-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+
+/* ═══════════════════════════════════════════════════
+   SYSTEM 7 — OUTCOME TRACKING / FEEDBACK LOOP
+═══════════════════════════════════════════════════ */
+.outcome-track { margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+.outcome-lbl { font-size:8px; font-weight:800; letter-spacing:.09em; color:var(--text-muted); margin-bottom:6px; }
+.outcome-row { display:flex; align-items:center; gap:8px; padding:4px 0; font-size:10px; }
+.outcome-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.outcome-desc { color:var(--text-secondary); flex:1; }
+.outcome-val { font-weight:800; font-family:var(--font-mono); color:var(--text-primary); }
+.outcome-delta { font-size:9px; font-weight:700; }
+.outcome-delta.pos { color:#10B981; }
+.outcome-delta.neg { color:#EF4444; }
 </style>
 </head>
 <body>
+
+<!-- HEARTBEAT STRIP — ambient liveness signal -->
+<div class="hb-strip" id="hb-strip">
+  <div class="hb-track"><div class="hb-glow"></div></div>
+</div>
+
+<!-- PIPELINE HEALTH BANNER — appears when data is degraded/stale -->
+<div class="pipeline-banner" id="pipeline-banner">
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  <span id="pipeline-banner-text">DATA PIPELINE DELAYED &mdash; intelligence may be stale</span>
+  <span class="pipeline-banner-dismiss" onclick="document.getElementById('pipeline-banner').classList.remove('visible')">&times;</span>
+</div>
+
+<!-- ACTION MODE OVERLAY -->
+<div class="action-overlay" id="action-overlay"></div>
 
 <!-- ══════════════════════════════════════════════════════════
      ROLE SELECTION MODAL
@@ -1607,6 +1736,10 @@ body {
           <span id="alert-badge-label">3 alerts</span>
         </div>
         <span class="classification-badge">Restricted &mdash; Campaign Intelligence</span>
+        <div class="mode-pill monitoring" id="mode-pill" onclick="toggleActionMode()" title="Click to toggle action mode">
+          <span class="mode-dot"></span>
+          <span id="mode-pill-label">MONITORING</span>
+        </div>
         <button class="btn-demo" id="demo-toggle" onclick="toggleDemoMode()">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Demo
@@ -2314,15 +2447,118 @@ const STATE = {
   demoStep:0,
   clockInterval:null,
   realtimeInterval:null,
-  gotv_mode:'campaign'
+  gotv_mode:'campaign',
+  // ── Architecture extensions
+  mode:'monitoring',
+  pipelineHealth:'live',
+  lastHeartbeat:Date.now(),
+  panelFreshness:{},
+  recOutcomes:{},
+  triageTimers:{}
 };
+
+// ── EVENT BUS — cross-module signal propagation
+var EventBus = (function(){
+  var _h = {};
+  return {
+    on: function(ev, fn){ if(!_h[ev]) _h[ev]=[]; _h[ev].push(fn); },
+    off: function(ev, fn){ if(!_h[ev]) return; _h[ev]=_h[ev].filter(function(h){return h!==fn;}); },
+    emit: function(ev, data){ var hs=_h[ev]||[]; for(var i=0;i<hs.length;i++) hs[i](data); }
+  };
+})();
+
+// ── COUNTY CLASSIFICATION LAYER — geographic decision matrix data
+var COUNTY_MATRIX = [
+  {id:32,name:'Nakuru',     score:72,classification:'favorable', trend:'up',   last_intervention:'Agent redeployment',  intervention_days:2},
+  {id:1, name:'Mombasa',    score:61,classification:'battleground',trend:'down', last_intervention:'IVR batch campaign',  intervention_days:5},
+  {id:47,name:'Nairobi',    score:68,classification:'favorable', trend:'stable',last_intervention:'Amplifier push',       intervention_days:1},
+  {id:22,name:'Kisumu',     score:44,classification:'difficult',  trend:'down', last_intervention:'KOL outreach',         intervention_days:8},
+  {id:15,name:'Nyeri',      score:58,classification:'battleground',trend:'down',last_intervention:'Coalition messaging',  intervention_days:3},
+  {id:27,name:'U/Gishu',    score:79,classification:'safe',       trend:'up',   last_intervention:'IVR follow-up',        intervention_days:1},
+  {id:30,name:'Meru',       score:71,classification:'favorable',  trend:'up',   last_intervention:'Mann Ki Baat event',   intervention_days:4},
+  {id:38,name:'Machakos',   score:52,classification:'battleground',trend:'stable',last_intervention:'Field canvass',      intervention_days:6},
+  {id:11,name:'Kiambu',     score:74,classification:'favorable',  trend:'up',   last_intervention:'Agent deployment',     intervention_days:2},
+  {id:7, name:'Kakamega',   score:49,classification:'battleground',trend:'stable',last_intervention:'Radio messaging',    intervention_days:9},
+  {id:9, name:'Kilifi',     score:55,classification:'battleground',trend:'up',   last_intervention:'Coast Unity Summit',  intervention_days:3},
+  {id:3, name:'Kisii',      score:64,classification:'favorable',  trend:'stable',last_intervention:'Hustler Fund rally',  intervention_days:5},
+  {id:14,name:'Murang\'a',  score:76,classification:'safe',       trend:'up',   last_intervention:'Women\'s empowerment', intervention_days:2},
+  {id:40,name:'Makueni',    score:41,classification:'difficult',  trend:'down', last_intervention:'Counter-messaging',    intervention_days:7},
+  {id:33,name:'Nandi',      score:69,classification:'favorable',  trend:'up',   last_intervention:'Agricultural outreach',intervention_days:3},
+  {id:18,name:'Laikipia',   score:62,classification:'favorable',  trend:'stable',last_intervention:'Security narrative',  intervention_days:6},
+  {id:36,name:'Kajiado',    score:57,classification:'battleground',trend:'up',  last_intervention:'Maasai KOL briefing',  intervention_days:4},
+  {id:25,name:'Siaya',      score:38,classification:'difficult',  trend:'stable',last_intervention:'ODM counter-program', intervention_days:10},
+  {id:21,name:'Kirinyaga',  score:54,classification:'battleground',trend:'down', last_intervention:'Coalition drift response',intervention_days:1},
+  {id:6, name:'Bungoma',    score:48,classification:'battleground',trend:'down', last_intervention:'UDA rally',            intervention_days:5},
+  {id:20,name:'Embu',       score:70,classification:'favorable',  trend:'up',   last_intervention:'BBI follow-up',        intervention_days:3},
+  {id:29,name:'Trans Nzoia',score:65,classification:'favorable',  trend:'stable',last_intervention:'Farmers\' subsidy',   intervention_days:4},
+  {id:41,name:'Kwale',      score:51,classification:'battleground',trend:'up',  last_intervention:'Coast IVR push',        intervention_days:6},
+  {id:35,name:'Nyandarua',  score:67,classification:'favorable',  trend:'stable',last_intervention:'Youth engagement',    intervention_days:5},
+];
 
 function getInitialAlerts() {
   return [
-    {id:'ALT-4421',type:'sha_rejection_spike',severity:'CRITICAL',title:'SHA Card Rejection Spike — Nakuru County Hospital',description:'47 SHA card rejections reported at Nakuru County Hospital in the last 6 hours. Social media amplification active with 12,841 engagements on top tweet. Recommended: immediate SHA ministerial response and system check.',county:'Nakuru',county_id:32,source:'Signal Intelligence',ai_response:'Escalate to SHA Cabinet Secretary. Deploy "SHA is being fixed" message via Amplifier to Nakuru WhatsApp groups. Counter-narrative already drafted.',status:'open',created_at:new Date(Date.now()-7200000)},
-    {id:'ALT-4422',type:'agent_coverage_gap',severity:'WARNING',title:'Agent Coverage Gap — Kiamunyi Ward (2 Polling Stations)',description:'KW-003 (Rhonda Social Hall) and KW-006 (Kiamunyi High School) are unassigned. Combined voter count: 3,728. 14 days to election.',county:'Nakuru',county_id:32,source:'I-Force Module',ai_response:'Recommend immediate redeployment of 4 agents from Menengai West (surplus). Kiamunyi ward coordinator notified.',status:'open',created_at:new Date(Date.now()-14400000)},
-    {id:'ALT-4423',type:'positive_feedback',severity:'INFORMATIONAL',title:'Uasin Gishu IVR: +8% Sentiment Shift on Economic Messaging',description:'Uasin Gishu respondents showing a statistically significant 8% positive swing on Hustler Fund and SHA messaging vs last week.',county:'Uasin Gishu',county_id:27,source:'Kura Connect IVR',ai_response:null,status:'open',created_at:new Date(Date.now()-21600000)},
-    {id:'ALT-4425',type:'coalition_drift',severity:'WARNING',title:'Coalition Drift — Mt. Kenya Bloc (Nyeri, Kirinyaga)',description:'TIFA Jun 2026 shows 12% drop in UDA support in Nyeri and Kirinyaga vs Q1 2026 baseline. Historical Gachagua strongholds showing uncommitted movement aligned with his court appeal. 3 ward coordinators in Nyeri reporting unusual inactivity from previously reliable community leaders.',county:'Nyeri',county_id:15,source:'Signal Intelligence + Field Reports',ai_response:'Deploy Gachagua bridge-building messaging to Nyeri and Kirinyaga WhatsApp networks immediately. Identify and brief 8 key opinion leaders in Nyeri town and Othaya. Increase IVR contact frequency in both counties from weekly to 3x/week. Monitor Gachagua court ruling timeline closely.',status:'open',created_at:new Date(Date.now()-28800000)}
+    {id:'ALT-4421',type:'sha_rejection_spike',severity:'CRITICAL',
+     title:'SHA Card Rejection Spike &mdash; Nakuru County Hospital',
+     description:'47 SHA card rejections reported at Nakuru County Hospital in the last 6 hours. Social media amplification active with 12,841 engagements on top tweet.',
+     county:'Nakuru',county_id:32,
+     source:'Signal Intelligence',source_tier:'primary',
+     confidence:88,
+     triage_status:'escalated',triage_progress:100,
+     evidence:[
+       {text:'47 rejection incidents logged via SHA national system API',conf:95,source:'SHA API',age:'22m',col:'#EF4444'},
+       {text:'Twitter/X monitoring: 12,841 engagements on top-3 tweets, sentiment -0.82',conf:91,source:'Signal Intelligence',age:'18m',col:'#EF4444'},
+       {text:'3 ward coordinators in Nakuru Town reported constituent complaints',conf:78,source:'Field Reports',age:'1h 4m',col:'#F59E0B'},
+       {text:'Historical pattern match: SHA spike in Muranga (Apr 2026) cost 4pt approval. Confidence: high.',conf:84,source:'Historical Model',age:'N/A',col:'#A78BFA'}
+     ],
+     ai_response:'Escalate to SHA Cabinet Secretary. Deploy "SHA is being fixed" message via Amplifier to Nakuru WhatsApp groups. Counter-narrative already drafted.',
+     status:'open',created_at:new Date(Date.now()-7200000)},
+
+    {id:'ALT-4422',type:'agent_coverage_gap',severity:'WARNING',
+     title:'Agent Coverage Gap &mdash; Kiamunyi Ward (2 Polling Stations)',
+     description:'KW-003 (Rhonda Social Hall) and KW-006 (Kiamunyi High School) are unassigned. Combined voter count: 3,728. 14 days to election.',
+     county:'Nakuru',county_id:32,
+     source:'I-Force Module',source_tier:'primary',
+     confidence:97,
+     triage_status:'ready',triage_progress:100,
+     evidence:[
+       {text:'KW-003 and KW-006 show null agent_id in I-Force booth database (verified)',conf:99,source:'I-Force DB',age:'14m',col:'#EF4444'},
+       {text:'Combined reg voter count 3,728 — above the 3,500 intervention threshold',conf:99,source:'IEBC Registry',age:'6h',col:'#10B981'},
+       {text:'Menengai West shows 4 surplus agents vs optimal coverage model',conf:89,source:'Coverage Model',age:'2h',col:'#A78BFA'},
+       {text:'Predicted coverage uplift of +18% if 4 agents redeployed within 48h',conf:82,source:'Predictive Model',age:'2h',col:'#A78BFA'}
+     ],
+     ai_response:'Recommend immediate redeployment of 4 agents from Menengai West (surplus). Kiamunyi ward coordinator notified.',
+     status:'open',created_at:new Date(Date.now()-14400000)},
+
+    {id:'ALT-4423',type:'positive_feedback',severity:'INFORMATIONAL',
+     title:'Uasin Gishu IVR: +8% Sentiment Shift on Economic Messaging',
+     description:'Uasin Gishu respondents showing a statistically significant 8% positive swing on Hustler Fund and SHA messaging vs last week.',
+     county:'Uasin Gishu',county_id:27,
+     source:'Kura Connect IVR',source_tier:'secondary',
+     confidence:74,
+     triage_status:'ready',triage_progress:100,
+     evidence:[
+       {text:'32,441 Uasin Gishu respondents sampled (70.8% answer rate) — statistically robust',conf:91,source:'Kura IVR',age:'6h',col:'#10B981'},
+       {text:'Hustler Fund approval: 72% this week vs 64% last week (+8pts)',conf:88,source:'IVR Batch #34',age:'6h',col:'#10B981'},
+       {text:'Cross-reference with SHA approval shows correlated improvement (+5pts)',conf:71,source:'IVR Batch #34',age:'6h',col:'#A78BFA'}
+     ],
+     ai_response:null,
+     status:'open',created_at:new Date(Date.now()-21600000)},
+
+    {id:'ALT-4425',type:'coalition_drift',severity:'WARNING',
+     title:'Coalition Drift &mdash; Mt. Kenya Bloc (Nyeri, Kirinyaga)',
+     description:'TIFA Jun 2026 shows 12% drop in UDA support in Nyeri and Kirinyaga vs Q1 2026 baseline. 3 ward coordinators reporting unusual inactivity from previously reliable community leaders.',
+     county:'Nyeri',county_id:15,
+     source:'Signal Intelligence + Field Reports',source_tier:'primary',
+     confidence:81,
+     triage_status:'escalated',triage_progress:100,
+     evidence:[
+       {text:'TIFA poll Jun 2026 (n=1,847, Nyeri + Kirinyaga): UDA at 54% vs 66% in Q1 2026 baseline (-12pts)',conf:85,source:'TIFA Polling',age:'18d',col:'#F59E0B'},
+       {text:'3 ward coordinators (Othaya, Tetu, Kirinyaga Central) reporting KOL disengagement',conf:72,source:'Field Reports',age:'4h 12m',col:'#F59E0B'},
+       {text:'Gachagua court appeal filed 2026-09-10 — historically correlated with Mt. Kenya bloc volatility',conf:68,source:'Intelligence Brief',age:'11d',col:'#A78BFA'},
+       {text:'Social listening: "Gachagua" mentions +340% in Nyeri county WhatsApp networks',conf:79,source:'Signal Intelligence',age:'8h',col:'#F59E0B'}
+     ],
+     ai_response:'Deploy Gachagua bridge-building messaging to Nyeri and Kirinyaga WhatsApp networks immediately. Identify and brief 8 key opinion leaders in Nyeri town and Othaya. Increase IVR frequency from weekly to 3x/week.',
+     status:'open',created_at:new Date(Date.now()-28800000)}
   ];
 }
 
@@ -2346,13 +2582,6 @@ function getInitialAuditLog() {
 
 function addAudit(user, role, action, target, detail, before, after) {
   STATE.auditLog.unshift({timestamp:new Date(),user,role,action,target,detail:detail||'',before:before||null,after:after||null});
-}
-
-function addAlert(alert) {
-  STATE.alerts.unshift(alert);
-  updateAlertBadge();
-  showAlertBanner(alert);
-  addAudit('System','Alert System','alert.created',alert.id,alert.title);
 }
 
 function updateAlertBadge() {
@@ -2391,57 +2620,132 @@ function dismissBanner() {
 }
 
 function openAlertModal(alertId) {
-  const alert = STATE.alerts.find(a=>a.id===alertId);
+  var alert = STATE.alerts.find(function(a){return a.id===alertId;});
   if(!alert) return;
-  const modal = document.getElementById('alert-modal');
+  var modal = document.getElementById('alert-modal');
   if(!modal) return;
-  const color = severityColor(alert.severity);
-  modal.innerHTML=`<div class="modal-box" style="position:relative">
-    <button class="modal-close" onclick="closeAlertModal()">×</button>
-    <div class="modal-header">
-      <span class="modal-sev badge badge-${alert.severity.toLowerCase()}" style="background:${color}18;color:${color};border-color:${color}30">${alert.severity}</span>
-      <h2>${alert.title}</h2>
-    </div>
-    <div class="modal-body">
-      <p>${alert.description}</p>
-      <div class="modal-meta">
-        <span>📍 ${alert.county||'National'}</span>
-        <span>🕐 ${relativeTime(alert.created_at)}</span>
-        <span>📡 ${alert.source}</span>
-        <span style="color:${alert.status==='open'?'#EF4444':'#10B981'}">${alert.status==='open'?'⚠ Open':'✓ Resolved'}</span>
-      </div>
-      ${alert.ai_response?`<div class="modal-response"><div class="response-label">AI Recommended Response</div><div class="response-text">${alert.ai_response}</div></div>`:''}
-    </div>
-    <div class="modal-actions">
-      ${alert.status==='open'?`<button class="btn-primary btn-sm" onclick="approveResponse('${alert.id}')">Approve Response</button>`:''}
-      ${alert.status==='open'?`<button class="btn-secondary btn-sm" onclick="acknowledgeAlert('${alert.id}')">Acknowledge</button>`:''}
-      ${alert.status==='open'?`<button class="btn-danger btn-sm" onclick="resolveAlert('${alert.id}')">Resolve Alert</button>`:''}
-      <button class="btn-ghost btn-sm" onclick="closeAlertModal()">Close</button>
-    </div>
-  </div>`;
+  var color = severityColor(alert.severity);
+  var conf = alert.confidence || 70;
+  var confColor = conf>=80?'#10B981':conf>=60?'#F59E0B':'#EF4444';
+  var tierLabel = alert.source_tier==='primary'?'PRIMARY':'DERIVED';
+  var tierColor2 = alert.source_tier==='primary'?'#10B981':'#A78BFA';
+
+  var ecHTML = '';
+  if(alert.evidence && alert.evidence.length) {
+    ecHTML = '<div class="evidence-chain" style="margin-top:14px">'
+      + '<div class="ec-head"><span>EVIDENCE CHAIN (' + alert.evidence.length + ' signals)</span>'
+      + '<span style="font-size:9px;font-weight:700;color:' + confColor + '">' + conf + '% overall confidence</span></div>';
+    for(var ei=0;ei<alert.evidence.length;ei++){
+      var ev = alert.evidence[ei];
+      var ec = ev.conf>=80?'#10B981':ev.conf>=60?'#F59E0B':'#EF4444';
+      ecHTML += '<div class="ec-link">'
+        + '<div class="ec-dot" style="background:' + ev.col + '"></div>'
+        + '<div class="ec-body">'
+        + '<div class="ec-text">' + ev.text + '</div>'
+        + '<div class="ec-meta">'
+        + '<span style="color:var(--text-muted)">' + ev.source + '</span>'
+        + '<span>&bull;</span>'
+        + '<span>' + ev.age + ' ago</span>'
+        + '<span class="ec-conf" style="color:' + ec + ';background:' + ec + '15">' + ev.conf + '%</span>'
+        + '</div></div></div>';
+    }
+    ecHTML += '</div>';
+  }
+
+  var aiHTML = '';
+  if(alert.ai_response) {
+    aiHTML = '<div class="modal-response" style="margin-top:12px">'
+      + '<div class="response-label" style="display:flex;align-items:center;justify-content:space-between">'
+      + '<span>AI Recommended Response</span>'
+      + '<span style="font-size:9px;font-family:var(--font-mono);color:' + confColor + '">' + conf + '% confidence</span>'
+      + '</div>'
+      + '<div class="conf-row">'
+      + '<div class="conf-track"><div class="conf-fill" style="width:' + conf + '%;background:' + confColor + '"></div></div>'
+      + '<span class="conf-pct" style="color:' + confColor + '">' + conf + '%</span>'
+      + '</div>'
+      + '<div class="response-text">' + alert.ai_response + '</div>'
+      + '</div>';
+  }
+
+  var outHTML = '';
+  var outcome = STATE.recOutcomes[alertId];
+  if(outcome) {
+    outHTML = '<div class="outcome-track">'
+      + '<div class="outcome-lbl">OUTCOME RECORD</div>'
+      + '<div class="outcome-row">'
+      + '<div class="outcome-dot" style="background:#10B981"></div>'
+      + '<span class="outcome-desc">Response executed ' + outcome.when + ' by ' + outcome.by + '</span>'
+      + '<span class="outcome-val outcome-delta pos">' + outcome.result + '</span>'
+      + '</div></div>';
+  }
+
+  modal.innerHTML = '<div class="modal-box" style="position:relative;max-width:560px">'
+    + '<button class="modal-close" onclick="closeAlertModal()">&times;</button>'
+    + '<div class="modal-header">'
+    + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+    + '<span class="modal-sev badge" style="background:' + color + '18;color:' + color + ';border:1px solid ' + color + '30">' + alert.severity + '</span>'
+    + '<span class="triage-status ts-' + (alert.triage_status||'ready') + '">' + (alert.triage_status||'READY').toUpperCase() + '</span>'
+    + '<span style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:' + tierColor2 + '15;color:' + tierColor2 + ';border:1px solid ' + tierColor2 + '25">' + tierLabel + ' SOURCE</span>'
+    + '</div>'
+    + '<h2 style="margin-top:8px">' + alert.title + '</h2>'
+    + '</div>'
+    + '<div class="modal-body">'
+    + '<p>' + alert.description + '</p>'
+    + '<div class="modal-meta">'
+    + '<span>&#x1F4CD; ' + (alert.county||'National') + '</span>'
+    + '<span>&#x1F550; ' + relativeTime(alert.created_at) + '</span>'
+    + '<span>&#x1F4E1; ' + alert.source + '</span>'
+    + '<span style="color:' + (alert.status==='open'?'#EF4444':'#10B981') + '">' + (alert.status==='open'?'&#9888; Open':'&#10003; Resolved') + '</span>'
+    + '</div>'
+    + ecHTML
+    + aiHTML
+    + outHTML
+    + '</div>'
+    + '<div class="modal-actions">'
+    + (alert.status==='open'?'<button class="btn-primary btn-sm" onclick="approveResponse(\''+alert.id+'\')">Approve &amp; Execute Response</button>':'')
+    + (alert.status==='open'?'<button class="btn-secondary btn-sm" onclick="acknowledgeAlert(\''+alert.id+'\')">Acknowledge</button>':'')
+    + (alert.status==='open'?'<button class="btn-danger btn-sm" onclick="resolveAlert(\''+alert.id+'\')">Resolve</button>':'')
+    + '<button class="btn-ghost btn-sm" onclick="closeAlertModal()">Close</button>'
+    + '</div></div>';
   modal.classList.remove('hidden');
+  enterActionMode('alert-modal');
 }
 
 function closeAlertModal() {
-  const modal = document.getElementById('alert-modal');
+  var modal = document.getElementById('alert-modal');
   if(modal) modal.classList.add('hidden');
+  exitActionMode();
 }
 
 function acknowledgeAlert(id) {
-  const alert = STATE.alerts.find(a=>a.id===id);
-  if(alert) { addAudit('Current User','National Ops Director','alert.acknowledged',id,`Alert acknowledged: ${alert.title}`); showToast('Alert acknowledged','info'); }
+  var alert = STATE.alerts.find(function(a){return a.id===id;});
+  if(alert){ addAudit('Current User','National Ops Director','alert.acknowledged',id,'Alert acknowledged: '+alert.title); showToast('Alert acknowledged','info'); }
   closeAlertModal();
 }
 
 function approveResponse(id) {
-  const alert = STATE.alerts.find(a=>a.id===id);
-  if(alert){ addAudit('Current User','National Ops Director','response.approved',id,`Response approved for: ${alert.title}`); showToast('Response approved and queued for deployment','success'); }
+  var alert = STATE.alerts.find(function(a){return a.id===id;});
+  if(alert){
+    addAudit('Current User','National Ops Director','response.approved',id,'Response approved for: '+alert.title);
+    STATE.recOutcomes[id] = {when:'just now', by:'Ops Director', result:'Response queued for deployment'};
+    alert.triage_status = 'resolved';
+    EventBus.emit('response.approved', {alert:alert});
+    showToast('Response approved and queued for deployment','success');
+  }
   closeAlertModal();
 }
 
 function resolveAlert(id) {
-  const alert = STATE.alerts.find(a=>a.id===id);
-  if(alert){ alert.status='resolved'; updateAlertBadge(); addAudit('Current User','National Ops Director','alert.resolved',id,`Alert resolved: ${alert.title}`); showToast('Alert resolved','success'); }
+  var alert = STATE.alerts.find(function(a){return a.id===id;});
+  if(alert){
+    alert.status='resolved';
+    alert.triage_status='resolved';
+    updateAlertBadge();
+    STATE.recOutcomes[id] = {when:'just now', by:'Ops Director', result:'Resolved'};
+    EventBus.emit('alert.resolved', {alert:alert});
+    addAudit('Current User','National Ops Director','alert.resolved',id,'Alert resolved: '+alert.title);
+    showToast('Alert resolved','success');
+  }
   closeAlertModal();
 }
 
@@ -3278,6 +3582,19 @@ function renderHome() {
         </div>`).join('')}
     </div>` : ''}
 
+    <!-- ── GEOGRAPHIC DECISION MATRIX ── -->
+    <div class="rh-sec" style="display:flex;align-items:center;justify-content:space-between">
+      <span>County Intelligence Matrix</span>
+      <span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">${COUNTY_MATRIX.filter(function(c){return c.classification==='battleground';}).length} battleground &middot; ${COUNTY_MATRIX.filter(function(c){return c.trend==='down';}).length} declining &middot; updated 4m ago</span>
+    </div>
+    <div class="card" style="padding:14px" data-panel="panel-coverage">
+      <div class="panel-freshness-row" style="margin:-14px -14px 10px;padding:5px 14px">
+        <span>COUNTY CLASSIFICATION &middot; 24 COUNTIES &middot; SARAL-STYLE MATRIX</span>
+        <span class="freshness-tag ft-aging" id="ft-panel-coverage">4m ago</span>
+      </div>
+      <div id="geo-matrix-home"></div>
+    </div>
+
     <!-- ── MODULE COMMAND GRID ── -->
     <div class="rh-sec">Module Command</div>
     <div class="rh-mods-grid">
@@ -3976,11 +4293,50 @@ function renderSignal() {
       <span style="font-size:11px;color:var(--text-muted)">· All monitored systems nominal</span>
     </div>`}
 
+    <!-- Command Alerts Triage Queue -->
+    ${STATE.alerts.length ? `
+    <div class="card" data-panel="panel-signal-alerts" style="padding:0;overflow:hidden;margin-bottom:16px">
+      <div style="padding:10px 14px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="sig-live-dot" style="flex-shrink:0"></div>
+          <span style="font-size:12px;font-weight:700;letter-spacing:.04em;font-family:var(--font-mono);color:var(--text-primary)">COMMAND ALERTS TRIAGE</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;font-family:var(--font-mono);background:rgba(239,68,68,0.1);color:#EF4444;border:1px solid rgba(239,68,68,0.2)">${STATE.alerts.filter(a=>a.triage_status!=='resolved').length} ACTIVE</span>
+        </div>
+        <span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">AUTO-INVESTIGATING &middot; MTTC TARGET &lt;8s</span>
+      </div>
+      ${STATE.alerts.map(a => {
+        var tsColor = a.triage_status==='escalated'?'#EF4444':a.triage_status==='ready'?'#F59E0B':a.triage_status==='resolved'?'#10B981':'#A78BFA';
+        var tsLabel = a.triage_status==='escalated'?'ESCALATED':a.triage_status==='ready'?'READY FOR REVIEW':a.triage_status==='resolved'?'RESOLVED':'INVESTIGATING';
+        var tsClass = 'ts-'+(a.triage_status||'investigating');
+        var sevColor = a.severity==='CRITICAL'?'#EF4444':a.severity==='HIGH'?'#F59E0B':a.severity==='MEDIUM'?'#A78BFA':'#64748B';
+        return '<div class="triage-row" onclick="openAlertModal(\'' + a.id + '\')" style="border-bottom:1px solid var(--border)">' +
+          '<div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;width:56px">' +
+            '<span style="font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;font-family:var(--font-mono);color:' + sevColor + ';background:' + sevColor + '15;border:1px solid ' + sevColor + '30;text-align:center">' + (a.severity||'MED') + '</span>' +
+            '<span style="font-size:8px;font-family:var(--font-mono);color:var(--text-muted);padding-left:2px">' + a.id + '</span>' +
+          '</div>' +
+          '<div style="flex:1;min-width:0">' +
+            '<div style="font-size:12.5px;font-weight:600;color:var(--text-primary);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + a.title + '</div>' +
+            '<div style="font-size:10.5px;color:var(--text-muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
+              '<span>' + a.county + '</span>' +
+              '<span style="color:var(--border)">|</span>' +
+              '<span>' + (a.evidence ? a.evidence.length + ' evidence links' : 'no evidence') + '</span>' +
+              (a.confidence ? '<span style="color:var(--border)">|</span><span>Confidence: <span style="color:' + (a.confidence>=80?'#10B981':a.confidence>=60?'#F59E0B':'#EF4444') + ';font-weight:700">' + a.confidence + '%</span></span>' : '') +
+            '</div>' +
+            (a.triage_status==='investigating'?'<div style="margin-top:6px;display:flex;align-items:center;gap:8px"><div style="flex:1;height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden"><div class="triage-prog-fill" style="width:' + (a.triage_progress||0) + '%;height:100%"></div></div><span style="font-size:8px;font-family:var(--font-mono);color:#A78BFA;flex-shrink:0">' + (a.triage_progress||0) + '%</span></div>':'') +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">' +
+            '<span class="triage-status ' + tsClass + '" style="font-size:8px;font-weight:800;padding:2px 6px;border-radius:3px;font-family:var(--font-mono)">' + tsLabel + '</span>' +
+            '<span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">' + (a.time||'') + '</span>' +
+          '</div>' +
+        '</div>';
+      }).join('')}
+    </div>` : ''}
+
     <!-- Main 2-col layout -->
     <div class="sig-layout">
 
       <!-- ── LEFT: Feed -->
-      <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column">
+      <div class="card" data-panel="panel-signal-intel" style="padding:0;overflow:hidden;display:flex;flex-direction:column">
         <div style="padding:11px 14px 9px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
           <h3 style="margin:0;font-size:13px">Intelligence Feed</h3>
           <div class="sig-filters">
@@ -3997,7 +4353,7 @@ function renderSignal() {
       <div class="sig-right">
 
         <!-- County signal map -->
-        <div class="card" style="padding:0;overflow:hidden">
+        <div class="card" data-panel="panel-signal-geo" style="padding:0;overflow:hidden">
           <div style="padding:10px 12px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
             <h3 style="margin:0;font-size:12px">Signal Geography</h3>
             <span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">47 COUNTIES</span>
@@ -4566,7 +4922,7 @@ function renderIForce() {
     + '<div id="iforce-content"></div>'
     + '</div>'
     + '<div style="display:flex;flex-direction:column;gap:14px">'
-    + '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div class="card" data-panel="panel-iforce-feed" style="padding:0;overflow:hidden">'
     + '<div class="card-header" style="padding:11px 12px;border-bottom:1px solid var(--border)">'
     + '<div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">FIELD ACTIVITY</span><span class="amp-live-dot"></span></div>'
     + '<span style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono)">LIVE</span>'
@@ -5722,7 +6078,7 @@ function renderLock() {
       + '<div class="if-stat is-pool"><div class="if-stat-label">Contacts (7d)</div><div class="if-stat-val" style="color:#2DD4BF">28,840</div><div class="if-stat-sub">all channels</div></div>'
       + '</div>'
       + '<div class="lck-layout">'
-      + '<div class="card" style="padding:0;overflow:hidden">'
+      + '<div class="card" data-panel="panel-gotv" style="padding:0;overflow:hidden">'
       + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
       + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">GOTV PRIORITY STACK</span>'
       + '<span style="font-size:9px;color:var(--text-muted)">top 10 wards</span>'
@@ -5770,7 +6126,7 @@ function renderLock() {
       + '<div class="if-stat is-watch"><div class="if-stat-label">Incidents</div><div class="if-stat-val" style="color:#F59E0B">2</div><div class="if-stat-sub">1 resolved</div></div>'
       + '<div class="if-stat is-pool"><div class="if-stat-label">Turnout (est.)</div><div class="if-stat-val" style="color:#2DD4BF">34.2%</div><div class="if-stat-sub">above target</div></div>'
       + '</div>'
-      + '<div class="card" style="padding:0;overflow:hidden">'
+      + '<div class="card" data-panel="panel-lock-stations" style="padding:0;overflow:hidden">'
       + '<div class="card-header" style="padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
       + '<span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">POLLING STATION COVERAGE</span>'
       + '<span style="font-size:9px;color:var(--text-muted)">Nakuru County &middot; ' + STATIONS.length + ' stations</span>'
@@ -6058,6 +6414,7 @@ function submitFieldSignal() {
     created_at: new Date()
   });
   addAudit('Current User', 'Field Operator', 'signal.reported', loc, obs.slice(0, 80));
+  EventBus.emit('field.signal', {county:loc.split('—')[0].trim()||'Unknown', type:type, severity:urg, observation:obs});
   document.getElementById('field-signal-modal').classList.add('hidden');
   showToast('Field signal submitted — intelligence model updated', 'success');
   if (STATE.page === 'signal') renderSignal();
@@ -6137,7 +6494,7 @@ function renderCompWatch() {
   }
   cardsHTML += '</div>';
 
-  var pollChartHTML = '<div class="card" style="margin-bottom:14px">'
+  var pollChartHTML = '<div class="card" data-panel="panel-compwatch" style="margin-bottom:14px">'
     + '<div class="card-header"><span style="font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--text-primary)">OPPOSITION POLL SHARE &mdash; COMPOSITE</span>'
     + '<span style="font-size:10px;color:var(--text-muted)">TIFA Jun 2026 &middot; Infotrak Q2 2026</span></div>'
     + '<div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">';
@@ -6174,6 +6531,251 @@ function renderCompWatch() {
     + cardsHTML;
 }
 
+// ═══════════════════════════════════════════════════════════════════
+//  SYSTEM 3: MONITORING / ACTION MODE
+// ═══════════════════════════════════════════════════════════════════
+function enterActionMode(context) {
+  STATE.mode = 'action';
+  STATE.activeAction = context;
+  document.body.classList.add('action-mode');
+  var pill = document.getElementById('mode-pill');
+  var lbl = document.getElementById('mode-pill-label');
+  if(pill){ pill.className = 'mode-pill action'; }
+  if(lbl){ lbl.textContent = 'ACTION'; }
+}
+
+function exitActionMode() {
+  STATE.mode = 'monitoring';
+  STATE.activeAction = null;
+  document.body.classList.remove('action-mode');
+  var pill = document.getElementById('mode-pill');
+  var lbl = document.getElementById('mode-pill-label');
+  if(pill){ pill.className = 'mode-pill monitoring'; }
+  if(lbl){ lbl.textContent = 'MONITORING'; }
+}
+
+function toggleActionMode() {
+  if(STATE.mode === 'action') exitActionMode();
+  else enterActionMode('manual');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  SYSTEM 1: HEARTBEAT + PIPELINE HEALTH
+// ═══════════════════════════════════════════════════════════════════
+function initHeartbeat() {
+  var tick = 0;
+  setInterval(function(){
+    tick++;
+    STATE.lastHeartbeat = Date.now();
+    STATE.pipelineHealth = 'live';
+    var strip = document.getElementById('hb-strip');
+    if(strip){ strip.className = 'hb-strip'; }
+    var banner = document.getElementById('pipeline-banner');
+    if(banner){ banner.classList.remove('visible'); }
+    // Simulate occasional degradation at tick 7 and 15 of every 20
+    var phase = tick % 20;
+    if(phase === 7){
+      STATE.pipelineHealth = 'degraded';
+      if(strip){ strip.className = 'hb-strip degraded'; }
+      if(banner){
+        banner.className = 'pipeline-banner visible degraded';
+        var bt = document.getElementById('pipeline-banner-text');
+        if(bt) bt.textContent = 'DATA PIPELINE DELAYED — last confirmed update 4m 18s ago';
+      }
+    }
+    EventBus.emit('heartbeat', {tick:tick, health:STATE.pipelineHealth, ts:STATE.lastHeartbeat});
+  }, 5000);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  SYSTEM 2: VISUAL DATA DECAY
+// ═══════════════════════════════════════════════════════════════════
+function setFreshness(panelId, ts) {
+  STATE.panelFreshness[panelId] = ts || Date.now();
+}
+
+function getFreshnessTag(panelId) {
+  var ts = STATE.panelFreshness[panelId];
+  if(!ts) return '';
+  var age = Date.now() - ts;
+  var mins = Math.floor(age/60000);
+  var secs = Math.floor((age%60000)/1000);
+  var ageStr = mins > 0 ? mins + 'm ' + secs + 's ago' : secs + 's ago';
+  var cls = age < 120000 ? 'ft-live' : age < 600000 ? 'ft-aging' : 'ft-stale';
+  return '<span class="freshness-tag ' + cls + '">' + ageStr + '</span>';
+}
+
+function runDecayScanner() {
+  setInterval(function(){
+    var cards = document.querySelectorAll('[data-panel]');
+    for(var i=0;i<cards.length;i++){
+      var card = cards[i];
+      var pid = card.getAttribute('data-panel');
+      var ts = STATE.panelFreshness[pid];
+      if(!ts) continue;
+      var age = Date.now() - ts;
+      card.classList.remove('panel-aging','panel-stale');
+      if(age > 600000) card.classList.add('panel-stale');
+      else if(age > 120000) card.classList.add('panel-aging');
+      var ftEl = card.querySelector('.freshness-tag');
+      if(ftEl){
+        var mins = Math.floor(age/60000);
+        var secs = Math.floor((age%60000)/1000);
+        ftEl.textContent = mins>0 ? mins+'m '+secs+'s ago' : secs+'s ago';
+        ftEl.className = 'freshness-tag ' + (age<120000?'ft-live':age<600000?'ft-aging':'ft-stale');
+      }
+    }
+  }, 15000);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  SYSTEM 5: ALERT TRIAGE + AUTO-INVESTIGATION
+// ═══════════════════════════════════════════════════════════════════
+function addAlert(alert) {
+  if(!alert.triage_status) alert.triage_status = 'investigating';
+  if(alert.triage_progress === undefined) alert.triage_progress = 0;
+  if(!alert.confidence) alert.confidence = 65;
+  STATE.alerts.unshift(alert);
+  updateAlertBadge();
+  showAlertBanner(alert);
+  addAudit('System','Alert System','alert.created',alert.id,alert.title);
+  EventBus.emit('alert.new', {alert:alert});
+  // Auto-triage: progress from investigating → ready over ~8s
+  if(alert.triage_status === 'investigating') {
+    var steps = 0;
+    var tid = setInterval(function(){
+      steps++;
+      alert.triage_progress = Math.min(100, steps * 14);
+      if(alert.triage_progress >= 100){
+        alert.triage_status = alert.severity === 'CRITICAL' ? 'escalated' : 'ready';
+        clearInterval(tid);
+        EventBus.emit('alert.triaged', {alert:alert});
+        if(STATE.page === 'signal') renderSignal();
+      }
+      STATE.triageTimers[alert.id] = tid;
+    }, 1200);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  SYSTEM 6: GEOGRAPHIC DECISION MATRIX
+// ═══════════════════════════════════════════════════════════════════
+function renderGeoMatrix(containerId) {
+  var el = document.getElementById(containerId);
+  if(!el) return;
+  var classColors = {safe:'#10B981',favorable:'#A78BFA',battleground:'#F59E0B',difficult:'#EF4444'};
+  var classBg = {safe:'rgba(16,185,129,0.15)',favorable:'rgba(167,139,250,0.12)',battleground:'rgba(245,158,11,0.12)',difficult:'rgba(239,68,68,0.12)'};
+  var trendIcon = {up:'&#9650;',stable:'&#9654;',down:'&#9660;'};
+  var trendCol = {up:'#10B981',stable:'#94A3B8',down:'#EF4444'};
+  var html = '<div class="geo-matrix">';
+  for(var i=0;i<COUNTY_MATRIX.length;i++){
+    var c = COUNTY_MATRIX[i];
+    var cc = classColors[c.classification]||'#94A3B8';
+    var cb = classBg[c.classification]||'rgba(148,163,184,0.1)';
+    var tc = trendCol[c.trend]||'#94A3B8';
+    var ti = trendIcon[c.trend]||'-';
+    html += '<div class="geo-cell" style="background:' + cb + ';border-color:' + cc + '30" '
+      + 'title="' + c.name + ': ' + c.classification + ' | Score ' + c.score + ' | Last: ' + c.last_intervention + ' (' + c.intervention_days + 'd ago)" '
+      + 'onclick="navigate(\'dira\')">'
+      + '<span class="geo-cell-trend" style="color:' + tc + '">' + ti + '</span>'
+      + '<div class="geo-cell-name">' + c.name + '</div>'
+      + '<div class="geo-cell-score" style="color:' + cc + '">' + c.score + '</div>'
+      + '<div class="geo-cell-class" style="color:' + cc + '">' + c.classification.toUpperCase() + '</div>'
+      + '</div>';
+  }
+  html += '</div>'
+    + '<div class="geo-matrix-legend">'
+    + '<div class="geo-legend-item"><div class="geo-legend-dot" style="background:rgba(16,185,129,0.5)"></div>Safe (&ge;75)</div>'
+    + '<div class="geo-legend-item"><div class="geo-legend-dot" style="background:rgba(167,139,250,0.5)"></div>Favorable (60-74)</div>'
+    + '<div class="geo-legend-item"><div class="geo-legend-dot" style="background:rgba(245,158,11,0.5)"></div>Battleground (45-59)</div>'
+    + '<div class="geo-legend-item"><div class="geo-legend-dot" style="background:rgba(239,68,68,0.5)"></div>Difficult (&lt;45)</div>'
+    + '<div class="geo-legend-item" style="margin-left:auto"><span style="color:#10B981">&#9650;</span> Improving &nbsp; <span style="color:#94A3B8">&#9654;</span> Stable &nbsp; <span style="color:#EF4444">&#9660;</span> Declining</div>'
+    + '</div>';
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  EVENT BUS CROSS-MODULE SUBSCRIPTIONS
+// ═══════════════════════════════════════════════════════════════════
+function initEventSubscriptions() {
+  // Field signal → update county matrix + Competition Watch threat
+  EventBus.on('field.signal', function(data){
+    // Update county matrix classification if signal is critical
+    if(data.severity === 'CRITICAL' || data.severity === 'WARNING'){
+      for(var i=0;i<COUNTY_MATRIX.length;i++){
+        if(COUNTY_MATRIX[i].name.toLowerCase().indexOf(data.county.toLowerCase()) > -1){
+          if(data.severity === 'CRITICAL') COUNTY_MATRIX[i].trend = 'down';
+          COUNTY_MATRIX[i].last_intervention = 'Field signal: ' + data.type;
+          COUNTY_MATRIX[i].intervention_days = 0;
+          break;
+        }
+      }
+    }
+    // Update Competition Watch threat levels if signal relates to opposition activity
+    if(data.type === 'opposition_activity' || data.type === 'voter_suppression'){
+      for(var j=0;j<COMPETITORS.length;j++){
+        for(var k=0;k<COMPETITORS[j].counties_targeted.length;k++){
+          if(COMPETITORS[j].counties_targeted[k].toLowerCase().indexOf(data.county.toLowerCase()) > -1){
+            if(COMPETITORS[j].threat === 'low') COMPETITORS[j].threat = 'medium';
+            else if(COMPETITORS[j].threat === 'medium') COMPETITORS[j].threat = 'high';
+            showToast('Competition Watch: threat level updated for ' + COMPETITORS[j].name, 'warn');
+            break;
+          }
+        }
+      }
+    }
+    // If on home, refresh geo matrix
+    if(STATE.page === 'home') renderGeoMatrix('geo-matrix-home');
+    if(STATE.page === 'compwatch') renderCompWatch();
+  });
+
+  // Alert resolved → re-rank geo matrix
+  EventBus.on('alert.resolved', function(data){
+    var al = data.alert;
+    for(var i=0;i<COUNTY_MATRIX.length;i++){
+      if(COUNTY_MATRIX[i].id === al.county_id){
+        if(COUNTY_MATRIX[i].trend === 'down') COUNTY_MATRIX[i].trend = 'stable';
+        break;
+      }
+    }
+    if(STATE.page === 'home') renderGeoMatrix('geo-matrix-home');
+  });
+
+  // Response approved → mark county as recently intervened
+  EventBus.on('response.approved', function(data){
+    var al = data.alert;
+    for(var i=0;i<COUNTY_MATRIX.length;i++){
+      if(COUNTY_MATRIX[i].id === al.county_id){
+        COUNTY_MATRIX[i].last_intervention = 'Alert response';
+        COUNTY_MATRIX[i].intervention_days = 0;
+        if(COUNTY_MATRIX[i].trend !== 'up') COUNTY_MATRIX[i].trend = 'stable';
+        break;
+      }
+    }
+    if(STATE.page === 'home') renderGeoMatrix('geo-matrix-home');
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  BOOT — called once after DOMContentLoaded
+// ═══════════════════════════════════════════════════════════════════
+function bootSystems() {
+  initHeartbeat();
+  runDecayScanner();
+  initEventSubscriptions();
+  // Seed panel freshness with realistic ages
+  var now = Date.now();
+  setFreshness('panel-signal-intel',   now - 180000);
+  setFreshness('panel-signal-geo',     now - 240000);
+  setFreshness('panel-signal-alerts',  now - 60000);
+  setFreshness('panel-coverage',       now - 420000);
+  setFreshness('panel-gotv',           now - 90000);
+  setFreshness('panel-lock-stations',  now - 150000);
+  setFreshness('panel-compwatch',      now - 300000);
+  setFreshness('panel-iforce-feed',    now - 45000);
+  setFreshness('panel-dira-county',    now - 720000);
+}
+
 function navigate(page) {
   STATE.page = page;
   if (window.location.hash.replace(/^#/,'') !== page) history.replaceState(null,'','#'+page);
@@ -6207,6 +6809,9 @@ function navigate(page) {
     compwatch: renderCompWatch
   };
   if (renders[page]) renders[page]();
+  if (page === 'home') {
+    setTimeout(function(){ renderGeoMatrix('geo-matrix-home'); }, 50);
+  }
   document.querySelector('.content-area').scrollTop = 0;
 }
 
@@ -6396,6 +7001,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const appEl = document.getElementById('app');
   if (appEl) appEl.classList.remove('hidden');
   applyRole('national-ops');
+  bootSystems();
   startClock();
   simulateRealTime();
   const _startPage = window.location.hash.replace(/^#/,'');
