@@ -532,6 +532,10 @@ body {
   white-space: nowrap;
   font-family: var(--font-sans);
   vertical-align: middle;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg-base);
 }
 /* — shared body rows */
 .data-table tbody tr,
@@ -743,6 +747,11 @@ body {
   padding: var(--space-3) var(--table-cell-px);
   background: var(--bg-sunken);
   border-bottom: 2px solid var(--border);
+}
+.msingi-ftab.active {
+  color: var(--text-primary) !important;
+  background: var(--bg-surface-3) !important;
+  border-color: var(--border-strong) !important;
 }
 .delta-badge { font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px; }
 .delta-neg { color:#EF4444;background:rgba(239,68,68,0.1); }
@@ -1891,7 +1900,7 @@ function renderCountyRow(c) {
     <td style="padding:10px 14px"><span class="signal-chip ${msingiStatusStyle(c.status)}">${c.status}</span></td>
   </tr>${isExp ? `<tr>
     <td colspan="5" style="padding:0;border-bottom:1px solid var(--border)">
-      <div style="background:rgba(100,116,139,0.04);padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;border-top:1px solid var(--border)">
+      <div style="background:var(--bg-surface-2);padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;border-top:1px solid var(--border);border-left:3px solid ${udaCol}">
         <div>
           <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px">2022 Vote Breakdown (est.)</div>
           <div style="font-size:13px;font-weight:600;color:#10B981">Ruto: ${fmt(udaV)}</div>
@@ -1987,9 +1996,9 @@ function renderMsingi() {
     <!-- § THE SCALE -->
     <div style="display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px">
       <div style="padding:16px 18px;border-right:1px solid var(--border)">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Registered</div>
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Registered '26</div>
         <div style="font-size:26px;font-weight:600;font-family:var(--font-mono);color:var(--text-primary);letter-spacing:-0.02em;line-height:1.1">25.0M</div>
-        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">IEBC · Aug 2026</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:5px">Post-CVR est. · IEBC <span style="opacity:.6">· County table = 2022 base</span></div>
       </div>
       <div style="padding:16px 18px;border-right:1px solid var(--border)">
         <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">IEBC 2027 Target</div>
@@ -2016,20 +2025,20 @@ function renderMsingi() {
     <!-- § THE CONTEST -->
     <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px">
       <div style="padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02)">
-        <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)">The Contest</span>
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-secondary)">The Contest</span>
         <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">Declared &amp; likely candidates · as of Sep 2026</span>
-      </div>
-      <div style="display:grid;grid-template-columns:180px 1fr 150px 130px;align-items:center;padding:13px 18px;background:rgba(139,92,246,0.05);border-bottom:1px solid var(--border);gap:16px">
-        <div style="font-weight:600;font-size:13px;color:var(--text-primary)">William Ruto</div>
-        <div style="font-size:12px;color:var(--text-muted)">UDA · Kenya Kwanza</div>
-        <div style="font-size:11px;color:var(--text-muted)">National</div>
-        <div><span style="font-size:9px;font-weight:700;color:#8B5CF6;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);padding:3px 8px;border-radius:3px;letter-spacing:.05em">INCUMBENT</span></div>
       </div>
       <div style="display:grid;grid-template-columns:180px 1fr 150px 130px;padding:6px 18px;background:rgba(255,255,255,0.015);gap:16px;border-bottom:1px solid var(--border)">
         <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)">Name</div>
         <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)">Vehicle · Notes</div>
         <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)">Base</div>
         <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)">Status</div>
+      </div>
+      <div style="display:grid;grid-template-columns:180px 1fr 150px 130px;align-items:center;padding:13px 18px;background:rgba(139,92,246,0.05);border-bottom:1px solid var(--border);gap:16px">
+        <div style="font-weight:600;font-size:13px;color:var(--text-primary)">William Ruto</div>
+        <div style="font-size:12px;color:var(--text-muted)">UDA · Kenya Kwanza</div>
+        <div style="font-size:11px;color:var(--text-muted)">National</div>
+        <div><span style="font-size:9px;font-weight:700;color:#8B5CF6;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);padding:3px 8px;border-radius:3px;letter-spacing:.05em">INCUMBENT</span></div>
       </div>
       ${[
         {name:'Kalonzo Musyoka', vehicle:'Wiper · WPF', note:'Coalition frontrunner in preference surveys', base:'Ukambani + Eastern', col:'#10B981'},
@@ -2053,7 +2062,7 @@ function renderMsingi() {
         <span style="font-size:11px;color:var(--text-muted);margin-left:8px">Unity Pact signed Aug 24, 2026 (Windsor Hotel, Kiambu). No flagbearer nominated. Deliberations ongoing as of Sep 2026.</span>
       </div>
       <div style="padding:12px 18px;border-top:1px solid var(--border)">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Field Reports — Access Directly</div>
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px">Data Sources</div>
         <div style="display:flex;gap:7px;flex-wrap:wrap">
           ${[
             ['TIFA Research','Independent tracking polls'],
@@ -2072,7 +2081,7 @@ function renderMsingi() {
     <!-- § THE GATE -->
     <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:16px">
       <div style="padding:11px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02)">
-        <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)">The Gate — Constitutional Threshold</span>
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-secondary)">The Gate — Constitutional Threshold</span>
         <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">Article 138 · Constitution of Kenya 2010</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr">
@@ -2126,13 +2135,13 @@ function renderMsingi() {
     <!-- § OPEN VARIABLES -->
     <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:4px">
       <div style="padding:11px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02)">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)">Open Variables</div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-secondary)">Open Variables</div>
         <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Unresolved factors that will materially shift the election calculus</div>
       </div>
       ${[
         {label:'Coalition Flagbearer', status:'PENDING', sc:'#F59E0B',
          note:'Unity Pact signed Aug 24, 2026. Kalonzo leads preference surveys. No selection methodology or deadline announced as of Sep 2026.'},
-        {label:'Gachagua · Court of Appeal', status:'PENDING', sc:'#F87171',
+        {label:'Gachagua · Court of Appeal', status:'URGENT', sc:'#EF4444',
          note:'High Court upheld impeachment but awarded KES 50M for violated fair-hearing rights. Appeal filed. If upheld: ballot candidacy in Mt. Kenya. If dismissed: kingmaker role — his bloc decides the coalition.'},
         {label:"Sifuna's Decision", status:'PENDING', sc:'#F59E0B',
          note:'Will he join Kalonzo-led coalition or run independently? At 15% TIFA (Jun 2026), he is indispensable to any opposition ticket — and a viable solo candidate for Gen Z and Nyanza votes.'},
