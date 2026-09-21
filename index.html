@@ -231,7 +231,51 @@ body {
   z-index: 100;
   overflow-y: auto;
   overflow-x: hidden;
+  transition: width 220ms ease, min-width 220ms ease, border-color 220ms ease;
 }
+.sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  border-color: transparent;
+  overflow: hidden;
+}
+/* floating re-expand tab when sidebar is collapsed */
+.sidebar-expand-tab {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  padding: 10px 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 150ms, background 150ms;
+}
+.sidebar.collapsed ~ .main-wrapper .sidebar-expand-tab,
+body.sidebar-collapsed .sidebar-expand-tab {
+  display: flex;
+}
+.sidebar-expand-tab:hover { color: var(--text-primary); background: var(--bg-elevated); }
+/* collapse toggle button inside sidebar brand */
+.sidebar-collapse-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: color 150ms, background 150ms;
+  flex-shrink: 0;
+}
+.sidebar-collapse-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
 .sidebar::-webkit-scrollbar { width: 3px; }
 .sidebar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
 .sidebar-brand {
@@ -314,6 +358,28 @@ body {
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 3px 10px;
+}
+/* Global select + option dark-theme fix */
+select {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 13px;
+  padding: 8px 14px;
+  outline: none;
+  cursor: pointer;
+  appearance: auto;
+  color-scheme: dark;
+}
+select option {
+  background: #1a1625;
+  color: #e2e8f0;
+}
+select option:checked,
+select option:hover {
+  background: #2d2040;
+  color: #ffffff;
 }
 .topbar-center { display: flex; flex-direction: column; align-items: center; gap: 1px; }
 .live-clock { font-size: 14px; font-weight: 600; color: var(--text-primary); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
@@ -1619,6 +1685,9 @@ body.action-mode .card.action-focal { z-index:60; position:relative; box-shadow:
         <span class="brand-main">DIRA</span>
         <span class="brand-sub">Command · v3.0</span>
       </div>
+      <button class="sidebar-collapse-btn" onclick="toggleSidebar()" title="Collapse sidebar" aria-label="Collapse sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
     </div>
 
     <div class="sidebar-nav">
@@ -1717,14 +1786,19 @@ body.action-mode .card.action-focal { z-index:60; position:relative; box-shadow:
   <!-- ── MAIN WRAPPER ─────────────────────────────────────── -->
   <div class="main-wrapper">
 
+    <!-- Floating expand tab (visible only when sidebar is collapsed) -->
+    <button class="sidebar-expand-tab" id="sidebar-expand-tab" onclick="toggleSidebar()" title="Expand sidebar" aria-label="Expand sidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
     <!-- TOPBAR -->
     <header class="topbar">
       <div class="topbar-left">
         <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="Menu">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
-        <span class="topbar-title" id="topbar-title">Rungu</span>
-        <span class="topbar-subtitle" id="topbar-subtitle">National Dashboard</span>
+        <span class="topbar-title" id="topbar-title">Dira Command</span>
+        <span class="topbar-subtitle" id="topbar-subtitle">National Overview</span>
       </div>
       <div class="topbar-center">
         <div class="live-clock" id="live-clock">--:--:--</div>
@@ -3031,9 +3105,6 @@ function msingiStatusStyle(s) {
 }
 
 function renderMsingi() {
-  document.getElementById('topbar-title').textContent = 'Msingi';
-  document.getElementById('topbar-subtitle').textContent = 'Battlefield Brief';
-
   _msingiFilter = 'ALL';
   _msingiExpanded = null;
 
@@ -6554,6 +6625,13 @@ function exitActionMode() {
   if(lbl){ lbl.textContent = 'MONITORING'; }
 }
 
+function toggleSidebar() {
+  var sb = document.getElementById('sidebar');
+  var tab = document.getElementById('sidebar-expand-tab');
+  var isCollapsed = sb.classList.toggle('collapsed');
+  if (tab) tab.style.display = isCollapsed ? 'flex' : 'none';
+}
+
 function toggleActionMode() {
   if(STATE.mode === 'action') exitActionMode();
   else enterActionMode('manual');
@@ -6791,6 +6869,29 @@ function navigate(page) {
   document.querySelectorAll('.nav-item[data-page]').forEach(function(item) {
     item.classList.toggle('active', item.dataset.page === page);
   });
+  var PAGE_LABELS = {
+    home:      ['Dira Command',        'National Overview'],
+    msingi:    ['Battlefield Brief',   'AI Situation Assessment'],
+    rungu:     ['National Command',    '47-County Dashboard'],
+    dira:      ['County Intelligence', 'Deep-Dive Analysis'],
+    signal:    ['Signal Intelligence', 'Threat Monitor'],
+    iforce:    ['I-Force',             'Ground Command'],
+    amplifier: ['Amplifier',           'Narrative Operations'],
+    kura:      ['Kura Connect',        'Voter Registration'],
+    story:     ['The Story',           'Campaign Narrative'],
+    wasikie:   ['Wasikie',             'Gen Z Strategy'],
+    sauti:     ['Sauti Shield',        'Sentiment & Safety'],
+    lock:      ['Lock Wards',          'GOTV Operations'],
+    health:    ['System Health',       'Pipeline Status'],
+    audit:     ['Audit Log',           'Actions & Decisions'],
+    compwatch: ['Competition Watch',   'Opposition Intelligence']
+  };
+  var lbl = PAGE_LABELS[page] || ['Dira Command', 'National Overview'];
+  var tt = document.getElementById('topbar-title');
+  var ts = document.getElementById('topbar-subtitle');
+  if (tt) tt.textContent = lbl[0];
+  if (ts) ts.textContent = lbl[1];
+
   var renders = {
     home: renderHome,
     msingi: renderMsingi,
