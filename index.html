@@ -382,8 +382,16 @@ select option:hover {
   color: #ffffff;
 }
 .topbar-center { display: flex; flex-direction: column; align-items: center; gap: 1px; }
-.live-clock { font-size: 14px; font-weight: 600; color: var(--text-primary); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
-.topbar-date { font-size: 11px; color: var(--text-muted); }
+.topbar-countdown {
+  font-size: 15px; font-weight: 700; font-family: var(--font-mono);
+  color: var(--text-primary); font-variant-numeric: tabular-nums;
+  letter-spacing: .05em; line-height: 1;
+  animation: countdown-pulse 3s ease-in-out infinite;
+}
+.topbar-countdown-label {
+  font-size: 8px; font-weight: 600; color: var(--text-muted);
+  letter-spacing: .07em; text-transform: uppercase; margin-top: 3px;
+}
 .topbar-right { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: flex-end; }
 .classification-badge {
   display: flex; align-items: center; gap: 5px;
@@ -425,11 +433,9 @@ select option:hover {
 .alert-badge.clear { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.25); color: #10B981; }
 .alert-badge.clear .badge-dot { background: #10B981; animation: none; }
 
-/* ── DEMO BUTTON ───────────────────────────────────────────────────────── */
+/* ── DEMO BUTTON (removed) ─────────────────────────────────────────────── */
 .btn-demo {
-  display: flex; align-items: center; gap: 6px;
-  background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(59,130,246,0.15));
-  border: 1px solid rgba(124,58,237,0.35);
+  display: none;
   border-radius: 20px; padding: 6px 14px;
   font-size: 12px; font-weight: 600;
   color: #8B5CF6; cursor: pointer;
@@ -1801,23 +1807,18 @@ body.action-mode .card.action-focal { z-index:60; position:relative; box-shadow:
         <span class="topbar-subtitle" id="topbar-subtitle">National Overview</span>
       </div>
       <div class="topbar-center">
-        <div class="live-clock" id="live-clock">--:--:--</div>
-        <div class="topbar-date" id="topbar-date">EAT — Kenya</div>
+        <div class="topbar-countdown" id="topbar-countdown">---:--:--:--</div>
+        <div class="topbar-countdown-label">Days &middot; Hrs &middot; Min &middot; Sec &middot; to Election</div>
       </div>
       <div class="topbar-right">
         <div class="alert-badge" id="global-alert-badge" onclick="navigate('signal')">
           <span class="badge-dot"></span>
           <span id="alert-badge-label">3 alerts</span>
         </div>
-        <span class="classification-badge">Restricted &mdash; Campaign Intelligence</span>
         <div class="mode-pill monitoring" id="mode-pill" onclick="toggleActionMode()" title="Click to toggle action mode">
           <span class="mode-dot"></span>
           <span id="mode-pill-label">MONITORING</span>
         </div>
-        <button class="btn-demo" id="demo-toggle" onclick="toggleDemoMode()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Demo
-        </button>
         <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch to light mode">
           <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
@@ -7025,15 +7026,23 @@ function simulateRealTime() {
 // startClock()
 // ============================================================
 function startClock() {
+  var ELECTION = new Date('2027-08-10T06:00:00+03:00').getTime();
+  function pad2(n) { return String(n).padStart(2, '0'); }
+  function pad3(n) { return String(n).padStart(3, '0'); }
   function tick() {
-    const now = new Date();
-    const pad = n => String(n).padStart(2, '0');
-    const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-    const date = now.toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-    const sysClock = document.getElementById('system-clock');
-    if (sysClock) sysClock.textContent = `${time} EAT · ${date}`;
-    const liveClock = document.getElementById('live-clock');
-    if (liveClock) liveClock.textContent = time;
+    var diff = Math.max(0, ELECTION - Date.now());
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    var el = document.getElementById('topbar-countdown');
+    if (el) el.textContent = pad3(d) + ':' + pad2(h) + ':' + pad2(m) + ':' + pad2(s);
+    // keep system-clock for health page
+    var sysClock = document.getElementById('system-clock');
+    if (sysClock) {
+      var now = new Date();
+      sysClock.textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes()) + ':' + pad2(now.getSeconds()) + ' EAT';
+    }
   }
   tick();
   setInterval(tick, 1000);
